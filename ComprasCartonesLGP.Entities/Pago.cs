@@ -11,8 +11,7 @@ namespace ComprasCartonesLGP.Entities
     [Table("tblPago")]
     public class Pago
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; } //id Integer
         public string type { get; set; } //type String  
         public string state { get; set; } //state String

@@ -11,15 +11,15 @@ namespace ComprasCartonesLGP.Entities
     {
         public int ID { get; set; }
 
-        [ForeignKey("Solicitud")]
-        public int SolicitudID { get; set; }
+        public string NroAsociado { get; set; }
 
+        [NotMapped]
+        public virtual Asociado Asociado { get; set; }
+
+        public string NroSolicitud { get; set; }
+
+        [NotMapped]
         public virtual Solicitud Solicitud { get; set; }
-
-        [ForeignKey("Asociado")]
-        public int AsociadoID { get; set; }
-
-        public virtual Asociado Cliente { get; set; }
 
         public DateTime FechaVenta { get; set; }
 

@@ -168,6 +168,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -238,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Clientes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -251,6 +253,20 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComprasCartonesLGP.Dal\ComprasCartonesLGP.Dal.csproj">
+      <Project>{238de7f8-f7d6-4d12-aac3-240e5c218db0}</Project>
+      <Name>ComprasCartonesLGP.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ComprasCartonesLGP.Entities\ComprasCartonesLGP.Entities.csproj">
+      <Project>{d2ebc4e4-22c7-46d2-8a38-e6914cfae6fe}</Project>
+      <Name>ComprasCartonesLGP.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ComprasCartonesLGP.Utilities\ComprasCartonesLGP.Utilities.csproj">
+      <Project>{62bf9396-594b-41d9-9a00-0ec27765a6c3}</Project>
+      <Name>ComprasCartonesLGP.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

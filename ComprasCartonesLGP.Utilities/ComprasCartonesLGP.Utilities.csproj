@@ -46,5 +46,11 @@
     <Compile Include="Mensajes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComprasCartonesLGP.Entities\ComprasCartonesLGP.Entities.csproj">
+      <Project>{d2ebc4e4-22c7-46d2-8a38-e6914cfae6fe}</Project>
+      <Name>ComprasCartonesLGP.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

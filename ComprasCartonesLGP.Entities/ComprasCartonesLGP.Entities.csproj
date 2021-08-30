@@ -51,8 +51,11 @@
     <Compile Include="AdhesionCard.cs" />
     <Compile Include="AdhesionCbu.cs" />
     <Compile Include="Asociado.cs" />
+    <Compile Include="CodigoAcceso.cs" />
     <Compile Include="CompraDeSolicitud.cs" />
     <Compile Include="CuotaCompraDeSolicitud.cs" />
+    <Compile Include="DebitoCard.cs" />
+    <Compile Include="DebitoCBU.cs" />
     <Compile Include="Pago.cs" />
     <Compile Include="Pago360\Request\AdhesionCardPago360Request.cs" />
     <Compile Include="Pago360\Request\AdhesionCbuPago360Request.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Pago360\Response\Pago360Response.cs" />
     <Compile Include="Pago360\Response\CbuDebitResponse.cs" />
     <Compile Include="Pago360\Webhook.cs" />
+    <Compile Include="Promocion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solicitud.cs" />
     <Compile Include="TipoDePago.cs" />
