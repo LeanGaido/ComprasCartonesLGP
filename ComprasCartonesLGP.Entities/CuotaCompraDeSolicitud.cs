@@ -20,9 +20,14 @@ namespace ComprasCartonesLGP.Entities
 
         public string PeriodoCuota { get { return MesCuota.ToString() + "/" + AnioCuota.ToString(); } }
 
-        public decimal TotalCuota { get; set; }
+        public DateTime PrimerVencimiento { get; set; }
 
-        [ForeignKey("TipoDePago")]
+        public float PrimerPrecioCuota { get; set; }
+
+        public DateTime SeguntoVencimiento { get; set; }
+
+        public float SeguntoPrecioCuota { get; set; }
+
         public int TipoPagoID { get; set; }
 
         public int PagoID { get; set; }

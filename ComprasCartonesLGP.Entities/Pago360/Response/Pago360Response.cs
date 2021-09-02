@@ -1,4 +1,4 @@
-﻿using SueñoCelestePagos.Models.Pago360.Response;
+﻿using ComprasCartonesLGP.Models.Pago360.Response;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

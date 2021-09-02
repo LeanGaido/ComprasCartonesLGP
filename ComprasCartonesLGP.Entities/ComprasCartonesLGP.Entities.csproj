@@ -56,11 +56,13 @@
     <Compile Include="CuotaCompraDeSolicitud.cs" />
     <Compile Include="DebitoCard.cs" />
     <Compile Include="DebitoCBU.cs" />
+    <Compile Include="Localidades.cs" />
     <Compile Include="Pago.cs" />
     <Compile Include="Pago360\Request\AdhesionCardPago360Request.cs" />
     <Compile Include="Pago360\Request\AdhesionCbuPago360Request.cs" />
     <Compile Include="Pago360\Request\CardDebitRequest.cs" />
     <Compile Include="Pago360\Request\ItemPago360Request.cs" />
+    <Compile Include="Pago360\Request\NextBusinessDayRequest.cs" />
     <Compile Include="Pago360\Request\Pago360Request.cs" />
     <Compile Include="Pago360\Request\CbuDebitRequest.cs" />
     <Compile Include="Pago360\Response\AdhesionCardPago360Response.cs" />
@@ -72,8 +74,11 @@
     <Compile Include="Pago360\Webhook.cs" />
     <Compile Include="Promocion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provincias.cs" />
+    <Compile Include="ReservaDeSolicitud.cs" />
     <Compile Include="Solicitud.cs" />
     <Compile Include="TipoDePago.cs" />
+    <Compile Include="ViewsModels\AsociadoVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

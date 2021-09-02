@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "ValidarEmail";
+}
+
+<div class="global-container">
+    <div class="card login-form">
+        <div class="card-body">
+            <h3 class="card-title text-center">Bienvenido</h3>
+            <div class="card-text">
+                @using (Html.BeginForm())
+                {
+                    if (!string.IsNullOrEmpty(ViewBag.MensajeError))
+                    {
+                        <div class="alert alert-danger alert-dismissable">
+                            @ViewBag.MensajeError
+                        </div>
+                    }
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="Area">Email</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="email" class="form-control" name="Email" id="Email" value="@ViewBag.Email" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <hr />
+                            <label for="codigo">Cod de Verificacion<small>(Solo numeros, sin puntos o guiones)</small></label>
+                            <input type="number" class="form-control" name="codigo" id="codigo">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <hr />
+                            <button type="submit" class="btn btn-primary btn-block">Siguiente</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "RegistroEmail";
+}
+
+<div class="global-container">
+    <div class="card login-form">
+        <div class="card-body">
+            <h3 class="card-title text-center">Bienvenido</h3>
+            <div class="card-text">
+                @using (Html.BeginForm())
+                {
+                    <div class="form-group">
+                        <label for="Dni">DNI<small>(Solo numeros, sin puntos o guiones)</small></label>
+                        <input type="number" class="form-control" name="Dni" id="Dni" value="@ViewBag.Dni" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="Area">Telefono<small>(Solo numeros, sin puntos o guiones)</small></label>
+                        <input type="email" class="form-control" name="Email" id="Email" placeholder="Email">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Siguiente</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

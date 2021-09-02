@@ -49,6 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LGPContext.cs" />
+    <Compile Include="Migrations\202109021501368_init.cs" />
+    <Compile Include="Migrations\202109021501368_init.Designer.cs">
+      <DependentUpon>202109021501368_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +65,11 @@
       <Project>{d2ebc4e4-22c7-46d2-8a38-e6914cfae6fe}</Project>
       <Name>ComprasCartonesLGP.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202109021501368_init.resx">
+      <DependentUpon>202109021501368_init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

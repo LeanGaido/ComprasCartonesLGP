@@ -31,7 +31,7 @@ namespace ComprasCartonesLGP.Entities
 
         public virtual TipoDePago TipoDePago { get; set; }
 
-        public decimal TotalAPagar { get; set; }
+        public float TotalAPagar { get; set; }
 
         public int? CantCuotas { get; set; }
 

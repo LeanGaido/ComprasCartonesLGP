@@ -1,0 +1,1138 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&amp;display=swap');
+
+@font-face {
+  font-family: "Ford Antenna Cond Regular";
+  src: url("http://db.onlinewebfonts.com/t/9bf8d97dc76c21ccf6da3143e3d3ea5f.eot");
+  src: url("http://db.onlinewebfonts.com/t/9bf8d97dc76c21ccf6da3143e3d3ea5f.eot?#iefix") format("embedded-opentype"), url("http://db.onlinewebfonts.com/t/9bf8d97dc76c21ccf6da3143e3d3ea5f.woff2") format("woff2"), url("http://db.onlinewebfonts.com/t/9bf8d97dc76c21ccf6da3143e3d3ea5f.woff") format("woff"), url("http://db.onlinewebfonts.com/t/9bf8d97dc76c21ccf6da3143e3d3ea5f.ttf") format("truetype"), url("http://db.onlinewebfonts.com/t/9bf8d97dc76c21ccf6da3143e3d3ea5f.svg#Ford Antenna Cond Regular") format("svg");
+}
+
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
+  background-color: #4F1253;
+  color: #2a2a2a;
+}
+
+.bg-header{
+  background: #430E47;
+}
+
+.bg-gradient-primary {
+  background: #000 !important;
+}
+
+.btn-primary {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
+
+.btn-primary:hover {
+  background-color: #1d1d1b !important;
+  border-color: #1d1d1b !important;
+}
+
+.sd-btn {
+  padding: 1rem 4rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.md-btn {
+  padding: 1.5rem 6rem;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.big-btn {
+  padding: 2rem 8rem;
+  font-size: 3rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.lgp-footer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.lgp-footer a {
+  color: #fff;
+}
+
+.lgp-footer-h3 {
+  font-family: 'Ford Antenna Cond Regular', sans-serif;
+  color: #f1b535 !important;
+}
+
+.lgp-footer-img {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+}
+
+/* Vertical Slider */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-inner, .carousel, .item, .container, .fill {
+  height: 100%;
+  width: 100%;
+  background-position: center center;
+  background-size: cover;
+}
+
+.slide-wrapper {
+  display: inline;
+}
+
+.slide-wrapper .container {
+  padding: 0px;
+}
+
+/*------------------------------ vertical bootstrap slider----------------------------*/
+
+.carousel-inner > .item.next, .carousel-inner > .item.active.right {
+  transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  top: 0;
+  left: 0;
+}
+
+.carousel-inner > .item.prev, .carousel-inner > .item.active.left {
+  transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  top: 0;
+  left: 0;
+}
+
+.carousel-inner > .item.next.left, .carousel-inner > .item.prev.right, .carousel-inner > .item.active {
+  transform: translateY(0);
+  -webkit-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -o-transform: translateY(0);
+  top: 0;
+  left: 0;
+}
+
+/*------------------------------- vertical carousel indicators ------------------------------*/
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  margin: auto;
+  height: 20px;
+  left: auto;
+  width: 100%;
+}
+
+.carousel-indicators li {
+  display: block;
+  margin-bottom: 5px;
+  border: 1px solid #fff;
+}
+
+.carousel-indicators li.active {
+  margin-bottom: 5px;
+  background: #fff;
+}
+
+.carousel-indicators li {
+  width: 15px;
+  height: 15px;
+}
+
+.carousel-indicators .active {
+  width: 15px;
+  height: 15px;
+}
+
+/*-------- Animation slider ------*/
+
+.animated {
+  animation-duration: 3s;
+  -webkit-animation-duration: 3s;
+  -moz-animation-duration: 3s;
+  -ms-animation-duration: 3s;
+  -o-animation-duration: 3s;
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.carousel-img {
+  display: inline-block;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+
+.item1 .carousel-img img, .item1.active .carousel-img img {
+  max-height: 500px;
+}
+
+.item1.active .carousel-img img.animated {
+  visibility: visible;
+  opacity: 1;
+  transition: all 1s ease;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  animation-duration: 2s;
+  -webkit-animation-duration: 2s;
+  -moz-animation-duration: 2s;
+  -ms-animation-duration: 2s;
+  -o-animation-duration: 2s;
+  animation-delay: 0.3s;
+  -webkit-animation-delay: 0.3s;
+  -moz-animation-delay: 0.3s;
+  -ms-animation-delay: 0.3s;
+}
+
+.item .carousel-desc {
+  color: #fff;
+  text-align: left;
+}
+
+.item h2 {
+  font-size: 50px;
+  animation-delay: 1.5s;
+  animation-duration: 1s;
+}
+
+.item p {
+  animation-delay: 2.5s;
+  animation-duration: 1s;
+  width: 50%;
+  margin: auto;
+}
+
+.item2 .carousel-img img, .item2.active .carousel-img img {
+  max-height: 500px;
+}
+
+.item2.active .carousel-img img.animated {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease;
+  animation-duration: 3s;
+  animation-delay: 0.3s
+}
+
+.item2 h2, item2.active h2 {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 5s ease;
+}
+
+.item2.active h2.animated {
+  visibility: visible;
+  opacity: 1;
+  animation-delay: 3s;
+}
+
+.item .fill {
+  padding: 0px 6px;
+  display: table;
+}
+
+.item .inner-content {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.item3 {
+  float: none;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.item3.active .carousel-img img.animated {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease;
+  animation-duration: 2s;
+  animation-delay: 0.3s
+}
+
+.item3 h2, item3.active h2 {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 5s ease;
+}
+
+.item.item3 .carousel-desc {
+  text-align: left;
+}
+
+.item3.active h2.animated {
+  visibility: visible;
+  opacity: 1;
+  animation-delay: 1.5s
+}
+
+.item3 p, item3.active p {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 5s ease;
+  width: 100%;
+}
+
+.item3.active p.animated {
+  visibility: visible;
+  opacity: 1;
+  animation-delay: 2.5s;
+}
+
+.item4 .col-md-6 {
+  float: none;
+  display: inline-block;
+  vertical-align: middle;
+  width: 49%;
+}
+
+.item4.active .carousel-img img.animated {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease;
+  animation-duration: 2s;
+  animation-delay: 0.3s
+}
+
+.item4 h2, item4.active h2 {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 5s ease;
+}
+
+.item.item4 .carousel-desc {
+  text-align: left;
+}
+
+.item4.active h2.animated {
+  visibility: visible;
+  opacity: 1;
+  animation-delay: 1.5s
+}
+
+.item4 p, item4.active p {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 5s ease;
+  width: 100%;
+}
+
+.item4.active p.animated {
+  visibility: visible;
+  opacity: 1;
+  animation-delay: 2.5s;
+}
+
+.lgp-buy-section-btn-container{
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 991px) {
+  .item .carousel-desc, .item.item3 .carousel-desc {
+    text-align: center;
+  }
+
+  .item .carousel-desc, .item.item4 .carousel-desc {
+    text-align: center;
+  }
+
+  .item .carousel-desc p {
+    width: 80%;
+  }
+
+  .item3 .col-md-6 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .item4 .col-md-6 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .item4 .col-md-12 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .lgp-buy-section-btn-container{
+    display: flex;
+    flex-direction:  column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .md-btn{
+    margin-bottom: 1rem;
+  }
+}
+
+.fb-font {
+  font-size: 35px;
+}
+
+.bg-yellow {
+  background-color: #f1b535;
+}
+
+@media (max-width: 768px) {
+  .item .carousel-img img, .item.active .carousel-img img {
+    max-height: 155px;
+  }
+
+  .item h2 {
+    font-size: 30px;
+    margin-top: 0px;
+  }
+
+  .item .carousel-desc p {
+    width: 100%;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .item h2 {
+    font-size: 30px;
+  }
+
+  .item .carousel-desc p {
+    width: 100%;
+  }
+}
+
+.lgp-fixed-left-img {
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.lgp-fixed-right-img {
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.lgp-section-title {
+  font-family: 'Ford Antenna Cond Regular', sans-serif;
+  font-weight: bolder;
+  text-transform: uppercase;
+  font-size: 88px !important;
+  text-align: left;
+}
+
+.lgp-shadow-title {
+  text-shadow: 7px 7px 0 #873f7f;
+}
+
+.lgp-section-subtitle {
+  font-family: 'Ford Antenna Cond Regular', sans-serif;
+  font-weight: bolder;
+  text-transform: uppercase;
+  font-size: 35px !important;
+  text-align: left;
+}
+
+.lgp-pl-200 {
+  padding-left: 200px;
+}
+
+.navbar-nav {
+  float: right !important;
+}
+
+.lgp-nav-link {
+  color: #fff !important;
+}
+
+.footer .nav-link {
+  font-size: 20px;
+}
+
+.footer-dark .footer-link:hover, .footer-dark .list-unstyled li a:hover, .footer-dark .nav .nav-item .nav-link:hover {
+  color: black;
+}
+
+.lgp-winners-card {
+  background: #f19a2d;
+  border: 2px solid #f19a2d;
+  color: #fff;
+  font-family: 'Ford Antenna Cond Regular', sans-serif;
+  text-align: center;
+  cursor: pointer;
+}
+
+.lgp-winners-award-shadow {
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+  color: #f19a2d;
+}
+
+.modal-backdrop {
+  z-index: 0 !important;
+}
+
+.lgp-modal-body {
+  font-family: 'Ford Antenna Cond Regular', sans-serif;
+}
+
+.lgp-slice {
+  padding-top: 200px;
+}
+
+.lgp-contact-cards {
+  min-height: 260px;
+}
+
+.footer-dark .footer-link:hover, .footer-dark .list-unstyled li a:hover, .footer-dark .nav .nav-item .nav-link:hover {
+  color: #f1b535 !important;
+  text-transform: none;
+  text-decoration: none;
+}
+
+.lgp-winner-info {
+  cursor: pointer;
+  background: #fff;
+  padding: 6px;
+  border-radius: 5px;
+  color: #7b7b7b;
+}
+
+.lgp-winners-title {
+  font-size: 18px;
+}
+
+.btn:hover, .btn:focus, .btn.focus {
+  color: #f1b535;
+}
+
+.lgp-section-title-3 {
+  font-family: 'Ford Antenna Cond Regular', sans-serif;
+  font-weight: bolder;
+  text-transform: uppercase;
+  font-size: 90px !important;
+  text-align: left;
+}
+
+.btn-purple {
+  background-color: #572449 !important;
+  border-color: #572449 !important;
+  color: #fff;
+}
+
+.btn-purple:hover {
+  background-color: #aa4b8d !important;
+  border-color: #aa4b8d !important;
+  color: #fff;
+}
+
+.btn-light-purple {
+  background-color: #aa4b8d !important;
+  border-color: #aa4b8d !important;
+  color: #fff;
+}
+
+.btn-light-purple:hover {
+  background-color: #572449 !important;
+  border-color: #572449 !important;
+  color: #fff;
+}
+
+.lgp-img-1 {
+  margin: 0 !important;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+  color: #ffffff;
+  background-color: initial;
+  outline: none;
+}
+
+.lgp-raffles-card {
+  text-transform: uppercase;
+  border: none;
+  color: #fff;
+  font-family: 'Ford Antenna Cond Regular', sans-serif;
+  text-align: center;
+  cursor: pointer;
+}
+
+.lgp-raffles-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lgp-raffles-title {
+  color: #179de1;
+  text-transform: uppercase;
+}
+
+.lgp-raffles-date {
+  border: 3px solid #c84e83;
+  padding: 7px;
+  border-radius: 25px;
+}
+
+.lgp-raffles-big-prize {
+  text-transform: uppercase;
+  color: #fdec33;
+  margin-bottom: 0;
+}
+
+.lgp-raffles-yellow-title {
+  text-transform: uppercase;
+  color: #fdec33;
+}
+
+.lgp-raffles-info {
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #87428e;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.lgp-raffles-plays {
+  font-style: italic;
+  padding: 7px;
+  border-radius: 25px;
+}
+
+.modal-raffles {
+  background-color: #5e2e63 !important;
+}
+
+.splide {
+  width: 99vw;
+}
+
+.splide img {
+  margin: auto;
+  visibility: visible;
+  opacity: 1;
+  padding: 7px;
+  width: 435px
+}
+
+#splide-news img {
+  margin: auto;
+  visibility: visible;
+  opacity: 1;
+  margin-left: 3rem !important;
+  width: 875px;
+  max-height: 500px;
+}
+
+.lgp-burguer {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+
+/* RESPONSIVE IMG */
+@media (max-width: 1850px) {
+  .lgp-fixed-left-img {
+    width: 500px;
+  }
+
+  .lgp-img-1 {
+    width: 1100px;
+  }
+
+  .lgp-fixed-right-img {
+    width: 550px;
+  }
+}
+
+@media (max-width: 1693px) {
+  .lgp-fixed-left-img {
+    width: 500px;
+  }
+
+  .lgp-img-1 {
+    width: 980px;
+  }
+
+}
+
+@media (max-width: 1567px) {
+  .lgp-fixed-left-img {
+    width: 400px;
+  }
+
+  .lgp-img-1 {
+    width: 875px;
+  }
+
+  .lgp-fixed-right-img {
+    width: 485px;
+  }
+
+  .splide img {
+    width: 300px
+  }
+}
+
+@media (max-width: 1400px) {
+  .item1 .carousel-img img, .item1.active .carousel-img img, #splide-news img {
+    max-height: 450px;
+  }
+
+  .lgp-fixed-right-img {
+    width: 400px;
+  }
+
+  .item2 .carousel-img img, .item2.active .carousel-img img {
+    max-height: 345px;
+  }
+
+  .lgp-section-title {
+    font-size: 70px !important;
+  }
+
+  .big-btn {
+    padding: 1rem 4rem;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 1350px) {
+  .lgp-fixed-left-img {
+    width: 300px;
+  }
+
+  .lgp-img-1 {
+    width: 750px;
+  }
+
+  .lgp-fixed-right-img {
+    width: 325px;
+  }
+
+  .lgp-section-title-3 {
+    font-size: 55px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .lgp-fixed-left-img {
+    width: 200px;
+  }
+
+  .lgp-img-1 {
+    width: 680px;
+  }
+
+  .lgp-fixed-right-img {
+    width: 340px;
+  }
+
+  .lgp-section-title {
+    font-size: 50px !important;
+    text-shadow: 4px 4px 0 #873f7f;
+  }
+
+  .item2 .carousel-img img, .item2.active .carousel-img img {
+    max-height: 400px;
+  }
+
+  .splide img {
+    width: 320px
+  }
+}
+
+@media (max-width: 991px) {
+  .lgp-burguer {
+    background-color: #fff;
+  }
+
+  .lgp-slice {
+    padding-top: 100px;
+  }
+
+  .lgp-mobile-navbar {
+    text-align: center;
+  }
+
+  .lgp-mobile-navbar ul {
+    float: unset !important;
+  }
+
+  .lgp-mobile-navbar a:not(.btn-dark) {
+    color: #000 !important;
+  }
+
+  .lgp-mobile-navbar .btn-dark {
+    margin-bottom: 1.6rem;
+  }
+
+  .lgp-section-title {
+    font-size: 40px !important;
+    text-align: center;
+  }
+
+  .item2 .carousel-img img, .item2.active .carousel-img img {
+    max-height: 230px;
+  }
+
+  .item3 .carousel-img img, .item2.active .carousel-img img {
+    max-height: 300px;
+  }
+
+  .lgp-section-title-3 {
+    font-family: 'Ford Antenna Cond Regular', sans-serif;
+    font-weight: bolder;
+    text-transform: uppercase;
+    font-size: 40px !important;
+    text-align: center;
+  }
+
+  .lgp-section-subtitle {
+    font-size: 25px !important;
+    text-align: center;
+  }
+
+  .big-btn {
+    padding: 1rem 8rem;
+    font-size: 2rem;
+  }
+
+  .lgp-pl-200 {
+    padding-left: unset !important;
+  }
+
+  .lgp-container-header {
+    align-items: flex-start !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .lgp-img-1 {
+    width: 680px;
+    margin: auto !important;
+  }
+
+  .lgp-fixed-right-img {
+    width: 260px;
+  }
+}
+
+@media (max-width: 481px) {
+  .lgp-fixed-right-img {
+    width: 200px;
+  }
+
+  .lgp-section-title {
+    font-size: 35px !important;
+    text-shadow: 3px 3px 0 #873f7f;
+    text-align: center;
+  }
+
+  .item2 .carousel-img img, .item2.active .carousel-img img {
+    max-height: 200px;
+  }
+
+  .big-btn {
+    padding: 1rem 4rem;
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .lgp-fixed-right-img {
+    width: 170px;
+  }
+}
+
+.faq-container p{
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.faq-container h4{
+  margin-bottom: 0.8rem;
+}
+
+.accordion p, .accordion li{
+  font-size: 1.8rem;
+}
+
+.custom-logo-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.background-logo{
+  width: 50%;
+  height: auto;
+}
+
+.h-80{
+  height: 80vh;
+}
+
+.overflow-y-auto{
+  overflow-y: auto;
+}
+
+.lgp-paginator-container{
+  flex-direction: column;
+  align-items: center;
+}
+
+.lgp-paginator{
+  text-align: center;
+  width: 100%;
+  margin: 0 0 5px 0 !important;
+}
+
+.lgp-paginator .btn-sm{
+  margin: 0.3rem !important;
+}
+
+@media(max-width: 449px){
+  .lgp-footer-menu{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .lgp-mw-footer{
+    padding: 0 100px;
+  }
+}
+
+#splide-news .splide__arrow--next{
+  left: 890px;
+}
+
+@media(max-width: 991px) and (min-width: 350px){
+  .lgp-footer-menu{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #splide-news .splide__arrow--next{
+    right: 1rem !important;
+    left: unset;
+  }
+
+  #splide-news img{
+    width: 90vw;
+    margin: auto !important;
+  }
+}
+
+.lgp-ganadores-img{
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 999px){
+  .lgp-modal-img{
+    max-width: 1000px;
+    width: 1000px;
+  }
+}
+
+.musesStyleReset{
+  width: 51px !important;
+  height: 51px !important;
+}
+
+.musesStyleReset > img{
+  width: 132px !important;
+}
+
+.musesStyleReset div{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+[title=play] img {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+[title=stop] img {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.radio-container{
+  display: flex;
+  align-items: center;
+}
+
+.radio-container > img {
+  width: 51px;
+  height: 51px;
+  z-index: 2;
+}
+
+#radio-nav{
+  z-index: 3;
+  width: 51px;
+}
+
+.radio-container > p{
+  padding-top: 15.5px;
+  padding-bottom: 15.5px;
+}
+
+@media(max-width: 1000px){
+  .nav-radio{
+    display: flex;
+    justify-content: center;
+  }
+
+  .radio-container{
+    width: 100px;
+  }
+
+  #navbar-main{
+  }
+
+  #navbar-main-collapse{
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .collapsing{
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  .header-collapse-show .colapsing{
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+}
+
+@media (max-width: 1150px) and (min-width: 992px) {
+  #splide-news img {
+    margin: auto;
+    visibility: visible;
+    opacity: 1;
+    margin-left: 3rem !important;
+    width: 700px;
+    max-height: 500px;
+  }
+
+  #splide-news .splide__arrow--next{
+    left: calc(750px - 3rem) !important;
+  }
+}
+
+/*  3. Slider CSS
+/*----------------------------------------*/
+.slider-area {
+  position: relative;
+}
+.nivo-caption {
+  background: transparent none repeat scroll 0 0;
+  bottom: 0;
+  box-sizing: border-box;
+  color: #000;
+  display: none;
+  left: 15%;
+  opacity: 0.8;
+  overflow: hidden;
+  padding: 5px 10px;
+  position: absolute;
+  top: 37%;
+  width: 50%;
+  z-index: 8;
+}
+h1.title1 {
+  color: #fff;
+  font-size: 60px;
+  font-weight: bold;
+}
+.nivo-caption p {
+  color: #fff;
+  font-family: roboto;
+  font-size: 15px;
+  margin-bottom: 40px;
+  margin-top: 18px;
+}
+.slider-button-area a {
+  margin-right: 15px;
+}
+.nivo-directionNav a {
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  color: #fff;
+  top: 52%;
+  z-index: 9;
+}
+.nivo-prevNav .left {
+  margin-left: 160px;
+}
+.nivo-prevNav .left:hover i{
+  color: #DC9F02;
+}
+.nivo-nextNav .right {
+  margin-right: 160px;
+}
+.nivo-nextNav .right:hover i{
+  color: #DC9F02;
+}
+.slider-area .nivo-controlNav {
+  bottom: 0;
+  left: 48%;
+  position: absolute;
+  z-index: 9;
+}
+.slider-area .nivo-controlNav a.active, .slider-area .nivo-controlNav a:hover {
+  background: #fff none repeat scroll 0 0;
+  box-shadow: 0 0 0 3px #DC9F02 inset;
+}
+.slider-area .nivo-controlNav a {
+  background: #ebebeb none repeat scroll 0 0;
+  border-radius: 100%;
+  box-shadow: 0 0 0 3px #acacac inset;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0;
+  height: 13px;
+  margin: 0 3px;
+  width: 13px;
+}

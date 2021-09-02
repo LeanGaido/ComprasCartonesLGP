@@ -20,9 +20,9 @@ namespace ComprasCartonesLGP.Utilities
         public Email()
         {
             mail = new MailMessage();
-            SmtpServer = new SmtpClient("{host}");
-            From = new MailAddress("no-reply@{dominio}.com", "Avisos La Gran Promocion", Encoding.Default);
-            cuenta = new NetworkCredential("no-reply@{dominio}.com", "{password}");
+            SmtpServer = new SmtpClient("mail.lagranpromocion.ar");
+            From = new MailAddress("avisos@lagranpromocion.ar", "Avisos La Gran Promocion", Encoding.Default);
+            cuenta = new NetworkCredential("avisos@lagranpromocion.ar", "YdrG2HBdrL");
             puerto = 587;
             autenticacion = false;
         }

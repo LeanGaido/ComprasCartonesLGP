@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "IngresarSinCuenta";
+    Layout = null;
+}
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+          content="Purpose is a unique and beautiful collection of UI elements that are all flexible and modular. A complete and customizable solution to building the website of your dreams.">
+    <meta name="author" content="Webpixels">
+    <title>La Gran Promoción</title>
+    <!-- Favicon -->
+    <link rel="icon" href="~/Content/assets/img/brand/favicon.png" type="image/png">
+    <!-- Font Awesome 5 -->
+    <link rel="stylesheet" href="~/Content/assets/libs/fortawesome/fontawesome-free/css/all.min.css"><!-- Page CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Oswald:400,700" rel="stylesheet">
+    <link type="text/css" href="~/Content/assets/libs/fancyapps/fancybox/dist/jquery.fancybox.min.css" rel="stylesheet">
+    <link type="text/css" href="~/Content/assets/libs/swiper/dist/css/swiper.min.css" rel="stylesheet">
+
+    <!-- Purpose CSS -->
+    <link rel="stylesheet" href="~/Content/assets/css/purpose.css" id="stylesheet">
+
+    <script src="code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/custom-styles.css">
+</head>
+<body>
+    <header class="header header-transparent mt-lg-5" id="header-main">
+        <!-- Main navbar -->
+        <nav class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light bg-white" id="navbar-main">
+            <div class="container px-lg-0 justify-content-center lgp-container-header">
+                <div class="d-flex justify-content-center">
+                    <!-- Logo -->
+                    <a class="mr-lg-5" href="index.html">
+                        <img src="~/Content/assets/img/landing/logo.png" alt="logo" width="250px">
+                    </a>
+                </div>
+                <!-- Navbar nav -->
+            </div>
+        </nav>
+    </header>
+    <br>
+
+    <div class="main-content">
+        <section class="slice slice-lg bg-section-secondary lgp-slice">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="card shadow zindex-100 mb-0">
+                            <div class="card-body px-md-5 py-5">
+                                <div class="mb-5">
+                                    <h6 class="h3"><b>Jugar en Línea</b></h6>
+                                </div>
+                                <span class="clearfix"></span>
+                                @using (Html.BeginForm("Identificarse", "Clientes", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "Identificarse" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="form-group">
+                                        <label><b>Ingrese su DNI (sin puntos)</b></label>
+                                        <input type="text" class="form-control " name="dni" id="dni" placeholder="DNI">
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label><b>Seleccione el Sexo</b></label>
+                                        <br>
+                                        <input type="radio" checked name="Sexo" value="1"> Femenino
+                                        <input type="radio" name="Sexo" value="2"> Masculino
+                                    </div>
+                                    <div class="mt-4">
+                                        <a href="#" onclick="document.getElementById('Identificarse').submit()" class="btn btn-sm btn-primary btn-icon rounded-pill">
+                                            <span class="btn-inner--text">Acceder</span>
+                                            <span class="btn-inner--icon">
+                                                <i class="fas fa-long-arrow-alt-right"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    <!-- Core JS - includes jquery, bootstrap, popper, in-view and sticky-kit -->
+    <script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="~/Content/assets/js/purpose.core.js"></script>
+    <!-- Page JS -->
+    <script src="~/Content/assets/libs/jquery-countdown/dist/jquery.countdown.min.js"></script>
+    <script src="~/Content/assets/libs/%40fancyapps/fancybox/dist/jquery.fancybox.min.js"></script>
+    <script src="~/Content/assets/libs/swiper/dist/js/swiper.min.js"></script>
+    <!-- Google maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBuyKngB9VC3zgY_uEB-DKL9BKYMekbeY"></script>
+    <!-- Purpose JS -->
+    <script src="~/Content/assets/js/purpose.js"></script>
+
+    <!-- Radio -->
+    <script type="text/javascript" src="hosted.muses.org/mrp.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F558X1B8YK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-F558X1B8YK');
+    </script>
+    <script>
+        MRP.insert({
+            'url': 'https://server.laradio.online/proxy/sociedad_cosmopolita?mp=/stream',
+            'codec': 'aac',
+            'volume': 100,
+            'autoplay': false,
+            'jsevents': true,
+            'buffering': 0,
+            'title': '',
+            'wmode': 'transparent',
+            'skin': 'alberto',
+            'width': 250,
+            'height': 95
+        });
+
+        const radio = document.querySelector(".musesStyleReset");
+        const radioNav = document.querySelector("#radio-nav");
+
+        radioNav.appendChild(radio);
+
+    </script>
+</body>
+</html>

@@ -1,10 +1,14 @@
 ﻿using ComprasCartonesLGP.Dal;
 using ComprasCartonesLGP.Entities;
+using ComprasCartonesLGP.Entities.Pago360.Request;
 using ComprasCartonesLGP.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -44,31 +48,120 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (Cliente == null)
             {
-                return RedirectToAction("RegistroTelefono");
+                //return RedirectToAction("RegistroTelefono");
+                return RedirectToAction("RegistroEmail");
             }
             else
             {
                 if (!Admin)
                 {
-                    Session["ClienteTelefono"] = Cliente.AreaCelular + "-" + Cliente.NumeroCelular;
-                    /*
-                    Codigo para generar y enviar mensaje de texto con codigo de autentificacion
-                    */
-                    CodigoTelefono codigo = ObtenerCodigo(Cliente.Celular);
+                    Session["ClienteContacto"] = Cliente.Email;
 
-                    string respuesta = EnviarSms(Cliente.Celular, codigo.Codigo);
+                    CodigoAcceso codigo = ObtenerCodigo(Cliente.Email);
 
-                    //if (respuesta == "OK\r\n" || respuesta.Contains("probando sin enviar"))
-                    //{
-                    //    return RedirectToAction("Autenticación");
-                    //}
-                    return RedirectToAction("Autenticación");
+                    string emailBody = "Por Favor ingrese este codigo: " + codigo.Codigo + " para poder ingresar";
+                    Email nuevoEmail = new Email();
+                    
+                    string respuesta = nuevoEmail.SendEmail(emailBody, Cliente.Email, "Verificacion de Ingreso - La Gran Promocion");
+
+                    if (respuesta == "OK\r\n" || respuesta.Contains("probando sin enviar"))
+                    {
+                        return RedirectToAction("Autenticación");
+                    }
+
+                    return RedirectToAction("Identificarse");
                 }
                 else
                 {
                     return RedirectToAction("ComprobarCompra", "Compras");
                 }
             }
+        }
+
+        /***************************************************************************************/
+
+        public ActionResult RegistroEmail()
+        {
+            string dni = Session["ClienteDni"].ToString();
+            ViewBag.Dni = dni;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RegistroEmail(string Email)
+        {
+            var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo" });
+
+            if (!valida)
+            {
+                return RedirectToAction("Identificarse", "Clientes");
+            }
+
+            string dni = Session["ClienteDni"].ToString();
+            Session["ClienteContacto"] = Email;
+
+            var cliente = db.Asociados.Where(x => x.Email == Email && x.Dni != dni).FirstOrDefault();
+
+            if (cliente != null)
+            {
+                return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente Distinto registrado con ese Email" });
+            }
+
+            CodigoAcceso codigo = ObtenerCodigo(Email);
+
+            string emailBody = "Por Favor ingrese este codigo: " + codigo.Codigo + " para poder ingresar";
+            Email nuevoEmail = new Email();
+
+            string respuesta = nuevoEmail.SendEmail(emailBody, Email, "Verificacion de Ingreso - La Gran Promocion");
+
+            if (respuesta == "Enviado Correctamente" || respuesta.Contains("probando sin enviar"))
+            {
+                return RedirectToAction("Autenticación");
+            }
+            return RedirectToAction("ErrorRegistro", "Clientes", new { MensajeError = "A Ocurrido un error, por favor intente mas tarde" });
+        }
+
+        /***************************************************************************************/
+
+        public ActionResult ValidarEmail(string Email)
+        {
+            ViewBag.Email = Email;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ValidarEmail(string Email, int codigo)
+        {
+            var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo", "ClienteContacto" });
+
+            if (!valida)
+            {
+                return RedirectToAction("Identificarse", "Clientes");
+            }
+
+            if (!string.IsNullOrEmpty(Email))
+            {
+                DateTime ahora = DateTime.Now;
+                var confirmacion = db.CodigosAccesos.Where(x => x.MedioDeAcceso == Email && x.Codigo == codigo && x.Expira >= ahora).FirstOrDefault();
+
+                if (confirmacion == null)
+                {
+                    ViewBag.Email = Email;
+                    ViewBag.MensajeError = "Codigo Incorrecto";
+
+                    return View();
+                }
+
+                Session["ClienteContacto"] = Email;
+
+
+                return RedirectToAction("ComprobarCompra", "Compras");
+                //return RedirectToAction("RegistroDatos");
+            }
+
+            return View();
         }
 
         /***************************************************************************************/
@@ -85,7 +178,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         [HttpPost]
         public ActionResult Autenticación(int CodVerificacion)
         {
-            var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo", "ClienteTelefono" });
+            var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo", "ClienteContacto" });
 
             if (!valida)
             {
@@ -93,16 +186,14 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
 
             string dni = Session["ClienteDni"].ToString();
-            string telefono = Session["ClienteTelefono"].ToString();
+            string contacto = Session["ClienteContacto"].ToString();
 
-            string area = telefono.Substring(0, telefono.IndexOf('-'));
-            string numero = telefono.Substring(telefono.IndexOf('-') + 1);
 
             /*
             Codigo para validar codigo de autentificacion
             */
             DateTime ahora = DateTime.Now;
-            var confirmacion = db.CodigosTelefonos.Where(x => x.Telefono == area + numero && x.Codigo == CodVerificacion && x.Expira >= ahora).FirstOrDefault();
+            var confirmacion = db.CodigosAccesos.Where(x => x.MedioDeAcceso == contacto && x.Codigo == CodVerificacion && x.Expira >= ahora).FirstOrDefault();
 
             if (confirmacion == null)
             {
@@ -112,97 +203,18 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return View();
             }
 
-            return RedirectToAction("ComprobarCompra", "Compras");
-            //return RedirectToAction("ComprobarCompra", "Compras");
-        }
+            var Cliente = ObtenerCliente();
 
-        /***************************************************************************************/
-
-        public ActionResult RegistroTelefono()
-        {
-            string dni = Session["ClienteDni"].ToString();
-            ViewBag.Dni = dni;
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult RegistroTelefono(string Prefijo, string Numero)
-        {
-            var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo" });
-
-            if (!valida)
+            if (Cliente == null)
             {
-                return RedirectToAction("Identificarse", "Clientes");
+                //return RedirectToAction("RegistroTelefono");
+                return RedirectToAction("RegistroDatos");
             }
-
-            string dni = Session["ClienteDni"].ToString();
-            Session["ClienteTelefono"] = Prefijo + "-" + Numero;
-
-            string telefono = Prefijo + Numero;
-
-            var cliente = db.Clientes.Where(x => x.AreaCelular == Prefijo && x.NumeroCelular == Numero).FirstOrDefault();
-
-            if (cliente != null)
+            else
             {
-                return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Telefono" });
-            }
-
-            CodigoTelefono codigo = ObtenerCodigo(telefono);
-
-            string respuesta = EnviarSms(telefono, codigo.Codigo);
-
-            if (respuesta == "OK\r\n" || respuesta.Contains("probando sin enviar"))
-            {
-                return RedirectToAction("ValidarTelefono", "Clientes", new { Prefijo, Numero });
-            }
-            return RedirectToAction("ValidarTelefono", "Clientes", new { Prefijo, Numero });
-        }
-
-        /***************************************************************************************/
-
-        public ActionResult ValidarTelefono(string Prefijo, string Numero)
-        {
-            string telefono = Prefijo + Numero;
-            ViewBag.AreaTelefono = Prefijo;
-            ViewBag.NumeroTelefono = Numero;
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult ValidarTelefono(string Prefijo, string Numero, int codigo)
-        {
-            var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo", "ClienteTelefono" });
-
-            if (!valida)
-            {
-                return RedirectToAction("Identificarse", "Clientes");
-            }
-
-            string telefono = Prefijo + Numero;
-            if (!string.IsNullOrEmpty(telefono))
-            {
-                DateTime ahora = DateTime.Now;
-                var confirmacion = db.CodigosTelefonos.Where(x => x.Telefono == telefono && x.Codigo == codigo && x.Expira >= ahora).FirstOrDefault();
-
-                if (confirmacion == null)
-                {
-                    ViewBag.AreaTelefono = Prefijo;
-                    ViewBag.NumeroTelefono = Numero;
-                    ViewBag.MensajeError = "Codigo Incorrecto";
-
-                    return View();
-                }
-
-                Session["ClienteTelefono"] = Prefijo + "-" + Numero;
-
-
                 return RedirectToAction("ComprobarCompra", "Compras");
-                //return RedirectToAction("RegistroDatos");
             }
-
-            return View();
+            //return RedirectToAction("ComprobarCompra", "Compras");
         }
 
         /***************************************************************************************/
@@ -217,24 +229,25 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
 
             string dni = Session["ClienteDni"].ToString();
-            string sexo = Session["ClienteSexo"].ToString(); ;
-            string telefono = Session["ClienteTelefono"].ToString();
+            string sexo = Session["ClienteSexo"].ToString();
 
-            int CartonReservadoId = 0;
+            string telefono = Session["ClienteContacto"].ToString();
 
-            if (!int.TryParse(Session["ReservaCarton"].ToString(), out CartonReservadoId))
+            int SolicitudReservadaId = 0;
+
+            if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
             {
                 return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
             }
 
-            var cartonReservado = db.CartonesReservados.Where(x => x.ID == CartonReservadoId).FirstOrDefault();
+            var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
 
             if (cartonReservado.FechaExpiracionReserva <= DateTime.Now)
             {
                 return RedirectToAction("ErrorCompra", new { MensajeError = "La Reserva del Carton Expiro" });
             }
 
-            var reservado = db.CartonesReservados.Where(x => x.Dni == dni && x.Sexo == sexo && x.FechaReserva < hoy && x.FechaExpiracionReserva > hoy).FirstOrDefault();
+            var reservado = db.ReservaDeSolicitudes.Where(x => x.Dni == dni && x.Sexo == sexo && x.FechaReserva < hoy && x.FechaExpiracionReserva > hoy).FirstOrDefault();
 
             var tiempoRestante = reservado.FechaExpiracionReserva - hoy;
 
@@ -251,7 +264,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegistroDatos(string Nombre, string Apellido, string Email, DateTime FechaNacimiento, string Calle, string Altura, int LocalidadID)
+        public ActionResult RegistroDatos(Asociado asociado)
         {
             try
             {
@@ -263,19 +276,19 @@ namespace ComprasCartonesLGP.Web.Controllers
                 }
 
                 string dni = Session["ClienteDni"].ToString();
-                string telefono = Session["ClienteTelefono"].ToString();
+                string telefono = Session["ClienteContacto"].ToString();
                 string sexo = Session["ClienteSexo"].ToString();
 
                 string area = telefono.Substring(0, telefono.IndexOf('-'));
                 string numero = telefono.Substring(telefono.IndexOf('-') + 1);
 
-                var cliente = db.Clientes.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
+                var cliente = db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
                 if (cliente != null)
                 {
                     return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Dni" });
                 }
 
-                cliente = db.Clientes.Where(x => x.AreaCelular == area && x.NumeroCelular == numero).FirstOrDefault();
+                cliente = db.Asociados.Where(x => x.AreaCelular == area && x.NumeroCelular == numero).FirstOrDefault();
                 if (cliente != null)
                 {
                     return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Telefono" });
@@ -289,35 +302,43 @@ namespace ComprasCartonesLGP.Web.Controllers
                 }
                 */
 
-                cliente = new Cliente()
+                cliente = new Asociado()
                 {
-                    Nombre = Nombre,
-                    Apellido = Apellido,
-                    Sexo = sexo,
-                    Dni = dni,
-                    AreaCelular = area,
-                    NumeroCelular = numero,
-                    CelularConfirmado = true,
-                    Email = Email,
-                    EmailConfirmado = false,
-                    FechaNacimiento = FechaNacimiento,
-                    Calle = Calle,
-                    Altura = Altura,
-                    LocalidadID = LocalidadID
+                    NumeroDeAsociado = "00000",
+                    Nombre = asociado.Nombre,
+                    Apellido = asociado.Apellido,
+                    FechaNacimiento = asociado.FechaNacimiento,
+                    Sexo = asociado.Sexo,
+                    Dni = asociado.Dni,
+                    Direccion = asociado.Direccion,
+                    Altura = asociado.Altura,
+                    Piso = asociado.Piso,
+                    Dpto = asociado.Dpto,
+                    Barrio = asociado.Barrio,
+                    LocalidadID = asociado.LocalidadID,
+                    AreaTelefonoFijo = asociado.AreaTelefonoFijo,
+                    NumeroTelefonoFijo = asociado.NumeroTelefonoFijo,
+                    Email = asociado.Email,
+                    AreaCelular = asociado.AreaCelular,
+                    NumeroCelular = asociado.NumeroCelular,
+                    AreaCelularAux = asociado.AreaCelularAux,
+                    NumeroCelularAux = asociado.NumeroCelularAux,
+                    TipoDeAsociado = 1,
+                    FechaAlta = DateTime.Now
                 };
 
-                db.Clientes.Add(cliente);
+                db.Asociados.Add(cliente);
                 db.SaveChanges();
 
 
-                int CartonReservadoId = 0;
+                int SolicitudReservadaId = 0;
 
-                if (!int.TryParse(Session["ReservaCarton"].ToString(), out CartonReservadoId))
+                if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
                 {
                     return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
                 }
 
-                var cartonReservado = db.CartonesReservados.Where(x => x.ID == CartonReservadoId).FirstOrDefault();
+                var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
 
                 if (cartonReservado.FechaExpiracionReserva <= DateTime.Now)
                 {
@@ -328,7 +349,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
             catch (Exception e)
             {
-                ViewBag.LocalidadID = new SelectList(db.Localidades, "ID", "Descripcion", LocalidadID);
+                ViewBag.LocalidadID = new SelectList(db.Localidades, "ID", "Descripcion", asociado.LocalidadID);
 
                 return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
             }
@@ -459,14 +480,31 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             string sexo = Session["ClienteSexo"].ToString();
 
-            int sexoCliente = 0;
-
-            if (string.IsNullOrEmpty(dni) || string.IsNullOrEmpty(sexo) || !int.TryParse(sexo, out sexoCliente))
+            if (string.IsNullOrEmpty(dni) || string.IsNullOrEmpty(sexo))
             {
                 return null;
             }
 
-            return db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexoCliente).FirstOrDefault();
+            return db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
+        }
+
+        [HttpPost]
+        public JsonResult KeepSessionAlive()
+        {
+            return new JsonResult { Data = "Success" };
+        }
+
+        public bool checkSessions(List<string> nombreSessiones)
+        {
+            foreach (var sessionName in nombreSessiones)
+            {
+                if (Session[sessionName] == null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

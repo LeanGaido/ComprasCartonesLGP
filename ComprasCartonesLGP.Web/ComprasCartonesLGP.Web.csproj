@@ -169,6 +169,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
+    <Compile Include="Controllers\ComprasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -236,10 +237,18 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Clientes\Identificarse.cshtml" />
+    <Content Include="Views\Clientes\RegistroEmail.cshtml" />
+    <Content Include="Views\Clientes\ValidarEmail.cshtml" />
+    <Content Include="Views\Clientes\Autenticación.cshtml" />
+    <Content Include="Views\Clientes\RegistroDatos.cshtml" />
+    <Content Include="Views\Clientes\ActualizarDatos.cshtml" />
+    <Content Include="Views\Clientes\ReportarProblema.cshtml" />
+    <Content Include="Views\Clientes\ErrorRegistro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Clientes\" />
+    <Folder Include="Views\Compras\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
