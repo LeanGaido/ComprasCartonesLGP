@@ -30,6 +30,8 @@ namespace ComprasCartonesLGP.Dal
 
         public virtual DbSet<Pago> Pagos { get; set; }
 
+        public virtual DbSet<Provincias> Provincias { get; set; }
+
         public virtual DbSet<ReservaDeSolicitud> ReservaDeSolicitudes { get; set; }
 
         public virtual DbSet<Solicitud> Solicitudes { get; set; }

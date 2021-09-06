@@ -30,7 +30,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (Cliente != null)
             {
-                var compra = db.ComprasDeSolicitudes.Include(t => t.Solicitud).Where(x => x.NroAsociado == Cliente.NumeroDeAsociado && 
+                var compra = db.ComprasDeSolicitudes.Include(t => t.Solicitud).Where(x => x.AsociadoID == Cliente.ID && 
                                                                                           x.Solicitud.Promocion.Anio == hoy.Year && 
                                                                                           x.PagoCancelado == false).ToList();
 
@@ -266,6 +266,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 CompraDeSolicitud cartonVendido = new CompraDeSolicitud();
 
                 cartonVendido.NroSolicitud = Carton.NroSolicitud;
+                cartonVendido.AsociadoID = Cliente.ID;
                 cartonVendido.NroAsociado = Cliente.NumeroDeAsociado;
                 cartonVendido.TipoDePagoID = TipoDePago;
                 cartonVendido.FechaVenta = hoy;
@@ -443,7 +444,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             AdhesionCbuPago360Request adhesionPago360 = new AdhesionCbuPago360Request();
 
-            var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroAsociado == Cliente.NumeroDeAsociado && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+            var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
             var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
 
@@ -451,9 +452,9 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             adhesionPago360.adhesion_holder_name = adhesion_holder_name;
             adhesionPago360.email = Email;
-            adhesionPago360.description = "Pago Total de la Solicitud Nro°: " + CartonComprado.NroSolicitud + " - La Gran Promocion";
-            adhesionPago360.short_description = "S. Celeste";
-            adhesionPago360.external_reference = CartonComprado.ID.ToString();
+            adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
+            adhesionPago360.short_description = "LGP";
+            adhesionPago360.external_reference = Cliente.ID.ToString();
             adhesionPago360.cbu_number = cbu_number;
             adhesionPago360.cbu_holder_id_number = cbu_holder_id_number;
             adhesionPago360.cbu_holder_name = adhesion_holder_name;
@@ -514,7 +515,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return RedirectToAction("Identificarse", "Clientes", new { returnUrl = "/Compras/CancelarAdhesion" });
             }
 
-            var CartonComprado = db.ComprasDeSolicitudes.AsNoTracking().Include(t => t.Solicitud).Where(x => x.NroAsociado == Cliente.NumeroDeAsociado && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+            var CartonComprado = db.ComprasDeSolicitudes.AsNoTracking().Include(t => t.Solicitud).Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
             var adhesion = db.AdhesionCbu.Where(x => x.external_reference == CartonComprado.ID.ToString()).FirstOrDefault();
 

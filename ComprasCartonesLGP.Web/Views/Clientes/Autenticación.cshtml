@@ -3,32 +3,38 @@
     ViewBag.Title = "Autenticación";
 }
 
-<div class="heading main centered">
-    <h3 class="uppercase lg-title">PROCESO DE COMPRA: <span class="main-color">Paso 1</span></h3><b class="head-sep"><u></u></b><b class="head-sep"><u></u></b>
-</div>
-
-<div class="global-container">
-    <div class="card login-form">
-        <div class="card-body">
-            <div class="card-text">
-                @using (Html.BeginForm())
-                {
-                    if (!string.IsNullOrEmpty(ViewBag.MensajeError))
-                    {
-                        <div class="alert alert-danger alert-dismissable">
-                            @ViewBag.MensajeError
-                        </div>
-                    }
-                    <div class="form-group">
-                        <label for="Dni">DNI<small>(Solo numeros, sin puntos o guiones)</small></label>
-                        <input type="number" class="form-control form-control-sm" name="Dni" id="Dni" value="@ViewBag.Dni" readonly>
+<div class="container">
+    <div class="row">
+        <div class="heading main" style="margin:auto;">
+            <h3 class="uppercase lg-title">PROCESO DE COMPRA: <span class="main-color">Paso 1</span></h3>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="global-container" style="margin:auto">
+            <div class="card login-form">
+                <div class="card-body">
+                    <div class="card-text">
+                        @using (Html.BeginForm())
+                        {
+                            if (!string.IsNullOrEmpty(ViewBag.MensajeError))
+                            {
+                                <div class="alert alert-danger alert-dismissable">
+                                    @ViewBag.MensajeError
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label for="Dni">DNI<small>(Solo numeros, sin puntos o guiones)</small></label>
+                                <input type="number" class="form-control form-control-sm" name="Dni" id="Dni" value="@ViewBag.Dni" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="CodVerificacion">Cod de Verificacion<small>(Solo numeros, sin puntos o guiones)</small></label>
+                                <input type="number" class="form-control form-control-sm" name="CodVerificacion" id="CodVerificacion">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Siguiente</button>
+                        }
                     </div>
-                    <div class="form-group">
-                        <label for="CodVerificacion">Cod de Verificacion<small>(Solo numeros, sin puntos o guiones)</small></label>
-                        <input type="number" class="form-control form-control-sm" name="CodVerificacion" id="CodVerificacion">
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Siguiente</button>
-                }
+                </div>
             </div>
         </div>
     </div>

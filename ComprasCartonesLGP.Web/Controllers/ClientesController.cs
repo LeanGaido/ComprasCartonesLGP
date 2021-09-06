@@ -157,8 +157,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                 Session["ClienteContacto"] = Email;
 
 
-                return RedirectToAction("ComprobarCompra", "Compras");
-                //return RedirectToAction("RegistroDatos");
+                //return RedirectToAction("ComprobarCompra", "Compras");
+                return RedirectToAction("RegistroDatos");
             }
 
             return View();
@@ -231,34 +231,38 @@ namespace ComprasCartonesLGP.Web.Controllers
             string dni = Session["ClienteDni"].ToString();
             string sexo = Session["ClienteSexo"].ToString();
 
-            string telefono = Session["ClienteContacto"].ToString();
+            string email = Session["ClienteContacto"].ToString();
 
             int SolicitudReservadaId = 0;
 
-            if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
+            if(Session["ReservaSolicitud"] != null)
             {
-                return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
+                {
+                    return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                }
+
+                var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
+
+                if (cartonReservado.FechaExpiracionReserva <= DateTime.Now)
+                {
+                    return RedirectToAction("ErrorCompra", new { MensajeError = "La Reserva del Carton Expiro" });
+                }
+
+                var reservado = db.ReservaDeSolicitudes.Where(x => x.Dni == dni && x.Sexo == sexo && x.FechaReserva < hoy && x.FechaExpiracionReserva > hoy).FirstOrDefault();
+
+                var tiempoRestante = reservado.FechaExpiracionReserva - hoy;
+
+                ViewBag.Expira = tiempoRestante.Minutes.ToString().PadLeft(2, '0') + ":" + tiempoRestante.Seconds.ToString().PadLeft(2, '0');
             }
-
-            var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
-
-            if (cartonReservado.FechaExpiracionReserva <= DateTime.Now)
-            {
-                return RedirectToAction("ErrorCompra", new { MensajeError = "La Reserva del Carton Expiro" });
-            }
-
-            var reservado = db.ReservaDeSolicitudes.Where(x => x.Dni == dni && x.Sexo == sexo && x.FechaReserva < hoy && x.FechaExpiracionReserva > hoy).FirstOrDefault();
-
-            var tiempoRestante = reservado.FechaExpiracionReserva - hoy;
-
-            ViewBag.Expira = tiempoRestante.Minutes.ToString().PadLeft(2, '0') + ":" + tiempoRestante.Seconds.ToString().PadLeft(2, '0');
+            
 
             ViewBag.Dni = dni;
-            ViewBag.Dni = telefono;
+            ViewBag.Email = email;
 
-            var localidades = db.Localidades.ToList();
+            var provincias = db.Provincias.ToList();
 
-            ViewBag.LocalidadID = new SelectList(localidades, "ID", "Descripcion");
+            ViewBag.ProvinciaID = new SelectList(provincias, "Id", "Descripcion");
 
             return View();
         }
@@ -268,7 +272,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         {
             try
             {
-                var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo", "ClienteTelefono" });
+                var valida = checkSessions(new List<string>() { "ClienteDni", "ClienteSexo", "ClienteContacto" });
 
                 if (!valida)
                 {
@@ -276,11 +280,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                 }
 
                 string dni = Session["ClienteDni"].ToString();
-                string telefono = Session["ClienteContacto"].ToString();
+                string email = Session["ClienteContacto"].ToString();
                 string sexo = Session["ClienteSexo"].ToString();
-
-                string area = telefono.Substring(0, telefono.IndexOf('-'));
-                string numero = telefono.Substring(telefono.IndexOf('-') + 1);
 
                 var cliente = db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
                 if (cliente != null)
@@ -288,7 +289,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Dni" });
                 }
 
-                cliente = db.Asociados.Where(x => x.AreaCelular == area && x.NumeroCelular == numero).FirstOrDefault();
+                cliente = db.Asociados.Where(x => x.Email == email).FirstOrDefault();
                 if (cliente != null)
                 {
                     return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Telefono" });
@@ -505,6 +506,13 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
 
             return true;
+        }
+
+        public JsonResult getLocalidades(int ProvinciaId)
+        {
+            var localidades = db.Localidades.Where(x => x.ProvinciaID == ProvinciaId).ToList();
+
+            return Json(localidades, JsonRequestBehavior.AllowGet);
         }
     }
 }

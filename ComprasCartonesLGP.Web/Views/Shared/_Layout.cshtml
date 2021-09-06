@@ -99,7 +99,7 @@
     </header>
 
     <div class="slice slice-lg bg-section-secondary lgp-slice"
-         style="background: url(../../Content/assets/img/landing/home-bg.jpg)center fixed;">
+         style="background: url(../../Content/assets/img/landing/home-bg.jpg)center fixed; background-size: cover; min-height: 80vh ">
         <div class="row justify-content-center mx-0" style="background-color: #fff;">
             <div class="container mt-4">
                 <div class="row">
@@ -214,6 +214,33 @@
 
     <script>
         $(document).ready(function () {
+            if ($('#ProvinciaID').length) {
+                $('#ProvinciaID').change(function () {
+                    $.ajax({
+                        type: "GET",
+                        traditional: true,
+                        async: false,
+                        cache: false,
+                        url: '/Clientes/getLocalidades',
+                        data: {
+                            ProvinciaId: $('#ProvinciaID').val()
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#LocalidadId').empty();
+                            $.each(data, function (i, data) {
+                                $("#LocalidadId").append('<option value="'
+                                    + data.ID + '">'
+                                    + data.Descripcion + '</option>');
+                            });
+                        },
+                        error: function (ex) {
+                            alert('Ocurrio un Error, Por Favor intente nuevamente mas tarde.');
+                        }
+                    });
+                });
+            }
+
             // Function to clear all dabs from the card
             function cleanCard() {
                 $('td').css('background-color', 'rgb(119, 119, 119)');

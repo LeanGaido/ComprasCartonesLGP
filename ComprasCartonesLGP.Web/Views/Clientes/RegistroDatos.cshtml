@@ -6,179 +6,157 @@
 <div class="col-md-12">
     <h2 class="mt-4 text-center"><b>Registrarse</b></h2>
     <div class="card-body">
-        <form method="POST" action="proceso_register.php">
+        @using (Html.BeginForm())
+        {
             <div class="form-group row">
-                <label for="name" class="col-md-4 col-form-label text-md-right">Apellido y Nombre</label>
+                <div class="col-md-12 text-center">
+                </div>
 
                 <div class="col-md-6">
-                    <input id="Nombre" type="text" class="form-control " name="Nombre" value="" required="" autofocus="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                    <label for="Nombre" class="col-md-4 col-form-label text-md-right">Nombre</label>
+                    <input id="Nombre" type="text" class="form-control " name="Nombre" value="" required="" autofocus="">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="Apellido" class="col-md-4 col-form-label text-md-right">Apellido</label>
+                    <input id="Apellido" type="text" class="form-control " name="Apellido" value="" required="" autofocus="">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <label for="Dni" class="col-form-label text-md-right">Dni (sin puntos)</label>
+                    <input id="Dni" type="number" class="form-control " name="Dni" value="" required="" autofocus="">
 
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="surname" class="col-md-4 col-form-label text-md-right">Dni (sin puntos)</label>
-
-                <div class="col-md-6">
-                    <input id="dni" type="text" class="form-control " name="dni" value="" required="" autofocus="">
-
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="surname" class="col-md-4 col-form-label text-md-right">CUIT (sin guiones)</label>
-
-                <div class="col-md-6">
-                    <input id="cuit" type="text" class="form-control " name="cuit" value="" required="" autofocus="">
+                <div class="col-md-12">
+                    <label for="Cuit" class="col-form-label text-md-right">CUIT (sin guiones)</label>
+                    <input id="Cuit" type="number" class="form-control " name="Cuit" value="" required="" autofocus="">
 
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="birthday" class="col-md-4 col-form-label text-md-right">Fecha de nacimiento</label>
-
-                <div class="col-md-6">
-                    <input id="fechaNacimiento" type="date" class="form-control " name="fechaNacimiento" value="" required="" autofocus="">
+                <div class="col-md-12">
+                    <label for="FechaNacimiento" class="col-form-label text-md-right">Fecha de nacimiento</label>
+                    <input id="FechaNacimiento" type="date" class="form-control " name="FechaNacimiento" value="" required="" autofocus="">
 
                 </div>
             </div>
 
             <div class="form-group row mt-3 focused">
-                <label for="Sexo" class="col-md-4 col-form-label text-md-right">Sexo</label>
-                <div class="col-md-6">
+                <div class="col-md-12">
+                    <label for="Sexo" class="col-form-label text-md-right">Sexo</label>
                     <select name="Sexo" id="Sexo" class="form-control">
-                        <option value="Femenino">Femenino</option>
-                        <option value="Masculino">Masculino</option>
+                        <option value="1">Femenino</option>
+                        <option value="2">Masculino</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="address" class="col-md-4 col-form-label text-md-right">Calle</label>
 
-                <div class="col-md-6">
+                <div class="col-md-12">
+                    <label for="Direccion" class="col-form-label text-md-right">Calle</label>
                     <input id="Direccion" type="text" class="form-control " name="Direccion" value="" required="">
 
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="address" class="col-md-4 col-form-label text-md-right">Número</label>
-
-                <div class="col-md-6">
-                    <input id="Numero" type="text" class="form-control " name="Numero" value="" required="">
+                <div class="col-md-12">
+                    <label for="Altura" class="col-form-label text-md-right">Número</label>
+                    <input id="Altura" type="text" class="form-control " name="Altura" value="" required="">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="address" class="col-md-4 col-form-label text-md-right">Piso</label>
+                <div class="col-md-12">
+                    <label for="Torre" class="col-form-label text-md-right">Torre</label>
+                    <input id="Torre" type="text" class="form-control " name="Torre" value="" required="">
+                </div>
+            </div>
 
-                <div class="col-md-6">
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <label for="Piso" class="col-form-label text-md-right">Piso</label>
                     <input id="Piso" type="text" class="form-control " name="Piso" value="" required="">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="address" class="col-md-4 col-form-label text-md-right">Departamento</label>
-
-                <div class="col-md-6">
-                    <input id="Departamento" type="text" class="form-control " name="Departamento" value="" required="">
+                <div class="col-md-12">
+                    <label for="Dpto" class="col-form-label text-md-right">Departamento</label>
+                    <input id="Dpto" type="text" class="form-control " name="Dpto" value="" required="">
                 </div>
             </div>
 
             <div class="form-group row mt-3 focused">
-                <label for="city" class="col-md-4 col-form-label text-md-right">Provincia</label>
-                <div class="col-md-6">
-                    <select name="Provincia" class="form-control">
-                        <option value="Buenos Aires">Buenos Aires</option>
-                        <option value="Catamarca">Catamarca</option>
-                        <option value="Chaco">Chaco</option>
-                        <option value="Chubut">Chubut</option>
-                        <option value="Cordoba">Cordoba</option>
-                        <option value="Corrientes">Corrientes</option>
-                        <option value="Entre Ríos">Entre Ríos</option>
-                        <option value="Formosa">Formosa</option>
-                        <option value="Jujuy">Jujuy</option>
-                        <option value="La Pampa">La Pampa</option>
-                        <option value="La Rioja">La Rioja</option>
-                        <option value="Mendoza">Mendoza</option>
-                        <option value="Misiones">Misiones</option>
-                        <option value="Neuquén">Neuquén</option>
-                        <option value="Río Negro">Río Negro</option>
-                        <option value="Salta">Salta</option>
-                        <option value="San Juan">San Juan</option>
-                        <option value="San Luis">San Luis</option>
-                        <option value="Santa Cruz">Santa Cruz</option>
-                        <option value="Santa Fe">Santa Fe</option>
-                        <option value="Santiago del Estero">Santiago del Estero</option>
-                        <option value="Tierra del Fuego">Tierra del Fuego</option>
-                        <option value="Tucumán">Tucumán</option>
-                    </select>
+                <div class="col-md-12">
+                    <label for="ProvinciaID" class="col-form-label text-md-right">Provincia</label>
+                    @Html.DropDownList("ProvinciaID", null, new { @class = "form-control" })
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="city" class="col-md-4 col-form-label text-md-right">Localidad</label>
                 <!--- TODO: add select with cities -->
-                <div class="col-md-6">
-                    <input id="Localidad" type="text" class="form-control " name="Localidad" value="" required="">
-
+                <div class="col-md-12">
+                    <label for="LocalidadId" class="col-form-label text-md-right">Localidad</label>
+                    <select class="form-control" name="LocalidadId" id="LocalidadId"></select>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="city" class="col-md-4 col-form-label text-md-right">Cod. Postal</label>
-                <!--- TODO: add select with cities -->
-                <div class="col-md-6">
-                    <input id="codPostal" type="text" class="form-control " name="codPostal" required="">
+                <div class="col-md-12">
+                    <label for="" class="col-form-label text-md-right">Teléfono Fijo</label>
+                </div>
 
+                <div class="col-md-6">
+                    <label for="AreaTelefonoFijo" class="col-form-label text-md-right">Caracteristica del Teléfono Fijo</label>
+                    <input id="AreaTelefonoFijo" type="text" class="form-control " name="AreaTelefonoFijo" value="">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="NumeroTelefonoFijo" class="col-form-label text-md-right">Numero del Teléfono Fijo</label>
+                    <input id="NumeroTelefonoFijo" type="text" class="form-control " name="NumeroTelefonoFijo" value="">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="Telefono" class="col-md-4 col-form-label text-md-right">Teléfono Fijo</label>
-                <div class="col-md-6">
-                    <input id="Telefono" type="text" class="form-control " name="Telefono" value="" required="">
+                <div class="col-md-12">
+                    <label for="" class="col-form-label text-md-right">Teléfono Celular</label>
+                </div>
 
+                <div class="col-md-6">
+                    <label for="AreaTelefonoFijo" class="col-form-label text-md-right">Caracteristica del Teléfono Fijo</label>
+                    <input id="AreaTelefonoFijo" type="text" class="form-control " name="AreaCelular" value="" required="">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="NumeroTelefonoFijo" class="col-form-label text-md-right">Numero del Teléfono Fijo</label>
+                    <input id="NumeroTelefonoFijo" type="text" class="form-control " name="NumeroCelular" value="" required="">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="phoneNumber" class="col-md-4 col-form-label text-md-right">Característica Celular</label>
-                <div class="col-md-6">
-                    <input id="Telefono" type="text" class="form-control " name="Telefono" value="" required="" autocomplete="phoneNumber">
-
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="phoneNumber" class="col-md-4 col-form-label text-md-right">Teléfono Celular</label>
-                <div class="col-md-6">
-                    <input id="TelCelular" type="text" class="form-control " name="TelCelular" value="" required="">
-
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
-
-                <div class="col-md-6">
-                    <input id="Email" type="email" class="form-control " name="Email" value="" required="">
-
+                <div class="col-md-12">
+                    <label for="Email" class="col-form-label text-md-right">Email</label>
+                    <input id="Email" type="email" class="form-control " name="Email" value="@ViewBag.Email" readonly>
                 </div>
             </div>
 
             <div class="mt-4">
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">
-                        <a href="eleccion_solicitud.html" class="btn btn-primary">REGISTRARSE</a>
+                        @*<a href="eleccion_solicitud.html" class="btn btn-primary">REGISTRARSE</a>*@
+                        <input type="submit" class="btn btn-primary" value="REGISTRARSE" />
                     </div>
                 </div>
             </div>
-        </form>
+        }
 
     </div>
-
-
 </div>
-

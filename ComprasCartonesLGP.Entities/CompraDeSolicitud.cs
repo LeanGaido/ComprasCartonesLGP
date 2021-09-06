@@ -11,6 +11,8 @@ namespace ComprasCartonesLGP.Entities
     {
         public int ID { get; set; }
 
+        public int AsociadoID { get; set; }
+
         public string NroAsociado { get; set; }
 
         [NotMapped]

@@ -33,6 +33,8 @@ namespace ComprasCartonesLGP.Entities
 
         public int Altura { get; set; }//6) Número: 5 caracteres.-
 
+        public string Torre { get; set; }
+
         public string Piso { get; set; }//8) Piso: No necesario.-
 
         public string Dpto { get; set; }//9) Departamento: No necesario.-
