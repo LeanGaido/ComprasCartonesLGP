@@ -157,8 +157,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                 Session["ClienteContacto"] = Email;
 
 
-                //return RedirectToAction("ComprobarCompra", "Compras");
-                return RedirectToAction("RegistroDatos");
+                return RedirectToAction("ComprobarCompra", "Compras");
+                //return RedirectToAction("RegistroDatos");
             }
 
             return View();

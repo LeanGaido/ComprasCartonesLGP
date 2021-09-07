@@ -98,7 +98,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ReservarCarton(int SolicitudId)
+        public ActionResult ReservarCarton(string CodigoVendedor, int SolicitudId)
         {
             DateTime hoy = DateTime.Now;
 

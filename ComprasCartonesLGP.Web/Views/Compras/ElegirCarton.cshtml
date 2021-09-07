@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "ElegirCarton";
+}
+
+<div class="col-md-12">
+    <h1 class="mt-4 text-center"><b>Elija el Número de Solicitud</b></h1>
+    <br><br>
+    <h3><b>Paso 1: Ingresá el Vendedor</b></h3>
+    Si la compra es inducida a través de un Vendedor, debe ingresar el código del vendedor. En caso contrario debe ingresar el código 0.
+    <br><br>
+    <form method="POST" action="proceso_register.php">
+        <div class="form-group row">
+            <label for="name" class="col-md-4 col-form-label text-md-right"><b>INGRESÁ AQUÍ EL CÓDIGO DEL VENDEDOR</b></label>
+            <div class="col-md-6">
+                <input id="CodigoVendedor" type="text" class="form-control" name="CodigoVendedor" value="" required autofocus>
+            </div>
+        </div>
+        <br>
+        <h3><b>Paso 2: Elegí tu Número de Solicitud de la Suerte</b></h3>
+        Para elegir el número de solcitud podes utilizar el trébol de la suerte o bien podés ingresar un número de tu preferencia.
+        <br><br>
+        <div class="row">
+            <div class="col-md-12">
+                <table border="1" width="100%">
+                    <tr>
+                        <td class="text-center">
+                            <br>
+                            <h1><b>Trébol de la Suerte</b></h1>
+                            <b>
+                                ELEGÍ AQUÍ TU NÚMERO DE SOLICITUD DE LA SUERTE<b />
+                                <br><br>
+                                <img src="assets/img/trebol.jpg" width="100%">
+                                <br><br>
+                                <input type="submit" class="btn btn-primary" value="ELEGIR NÚMERO">
+                                <br><br>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <table border="1" width="100%">
+                    <tr>
+                        <td class="text-center">
+                            <br>
+                            <h1><b>Buscá tu Número de Solicitud de la Suerte</b></h1>
+                            
+                            <div class="form-group row">
+                                <label for="name" class="col-md-12 col-form-label text-md-center"><b>INGRESÁ AQUÍ TU NÚMERO DE LA SUERTE</b></label>
+                                <div class="col-md-12">
+                                    <input type="number" class="form-control" id="NumeroBusqueda">
+                                </div>
+                                <br><br><br>
+                                <div class="col-md-12">
+                                    <a href="#" id="BuscarCartones" class="btn btn-primary">BUSCAR NUMERO</a>
+                                    @*<input type="submit" class="btn btn-primary" value="BUSCAR NÚMERO">*@
+                                </div>
+                            </div>
+                            <br><br>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br><br>
+        <div class="mt-4">
+            <div class="form-group row">
+                <div class="col-md-12 text-center">
+
+                    <a href="resumen_compra.html" class="btn btn-primary">CONFIRMAR COMPRA</a>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
