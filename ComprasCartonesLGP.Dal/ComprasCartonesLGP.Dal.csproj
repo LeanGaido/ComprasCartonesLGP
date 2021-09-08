@@ -61,6 +61,10 @@
     <Compile Include="Migrations\202109061736004_cambiosCompraSolicitud.Designer.cs">
       <DependentUpon>202109061736004_cambiosCompraSolicitud.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202109081235318_Promociones.cs" />
+    <Compile Include="Migrations\202109081235318_Promociones.Designer.cs">
+      <DependentUpon>202109081235318_Promociones.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202109061736004_cambiosCompraSolicitud.resx">
       <DependentUpon>202109061736004_cambiosCompraSolicitud.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109081235318_Promociones.resx">
+      <DependentUpon>202109081235318_Promociones.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

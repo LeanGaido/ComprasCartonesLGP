@@ -9,7 +9,8 @@
     <h3><b>Paso 1: Ingresá el Vendedor</b></h3>
     Si la compra es inducida a través de un Vendedor, debe ingresar el código del vendedor. En caso contrario debe ingresar el código 0.
     <br><br>
-    <form method="POST" action="proceso_register.php">
+    @using (Html.BeginForm("ReservarCarton", "Compras", FormMethod.Post))
+    {
         <div class="form-group row">
             <label for="name" class="col-md-4 col-form-label text-md-right"><b>INGRESÁ AQUÍ EL CÓDIGO DEL VENDEDOR</b></label>
             <div class="col-md-6">
@@ -18,7 +19,7 @@
         </div>
         <br>
         <h3><b>Paso 2: Elegí tu Número de Solicitud de la Suerte</b></h3>
-        Para elegir el número de solcitud podes utilizar el trébol de la suerte o bien podés ingresar un número de tu preferencia.
+        <span>Para elegir el número de solcitud podes utilizar el trébol de la suerte o bien podés ingresar un número de tu preferencia.</span>
         <br><br>
         <div class="row">
             <div class="col-md-12">
@@ -46,17 +47,28 @@
                     <tr>
                         <td class="text-center">
                             <br>
-                            <h1><b>Buscá tu Número de Solicitud de la Suerte</b></h1>
-                            
-                            <div class="form-group row">
-                                <label for="name" class="col-md-12 col-form-label text-md-center"><b>INGRESÁ AQUÍ TU NÚMERO DE LA SUERTE</b></label>
-                                <div class="col-md-12">
-                                    <input type="number" class="form-control" id="NumeroBusqueda">
+                            <h1><b>BUSCA TU NUMERO DE LA SUERTE</b></h1>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="NumeroCarton">Buscar Nro que </label>
                                 </div>
-                                <br><br><br>
-                                <div class="col-md-12">
-                                    <a href="#" id="BuscarCartones" class="btn btn-primary">BUSCAR NUMERO</a>
-                                    @*<input type="submit" class="btn btn-primary" value="BUSCAR NÚMERO">*@
+                                <div class="col-md-4">
+                                    <select class="form-control" name="SearchType" id="SearchType">
+                                        <option value="2">Termine con:</option>
+                                        <option value="1">Contenga:</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="SearchString" id="SearchString" />
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="#" id="BtnBuscarCarton" class="btn btn-primary btn-block">BUSCAR</a>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row" style="max-height:200px;overflow-y:scroll;overflow-x:hidden;padding:20px">
+                                <div class="text-center" id="ResultadosBuscarCartones" style="padding:10px;">
+
                                 </div>
                             </div>
                             <br><br>
@@ -65,17 +77,109 @@
                 </table>
             </div>
         </div>
+        <div class="card-text">
+            <div class="form-group" style="overflow:visible">
+                <input type="hidden" name="SolicitudId" id="SolicitudId" />
+            </div>
+        </div>
         <br><br>
         <div class="mt-4">
             <div class="form-group row">
                 <div class="col-md-12 text-center">
 
-                    <a href="resumen_compra.html" class="btn btn-primary">CONFIRMAR COMPRA</a>
+                    <input type="submit" class="btn btn-primary" value="CONFIRMAR COMPRA" />
+                    @*<a href="resumen_compra.html" class="btn btn-primary">CONFIRMAR COMPRA</a>*@
 
                 </div>
             </div>
         </div>
-    </form>
+    }
 
 </div>
 
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    function initialize() {
+        function obtenerNumeros() {
+
+            var SearchType = $('#SearchType').val();
+            var SearchString = $('#SearchString').val();
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                async: false,
+                cache: false,
+                url: '/Compras/ObtenerNumeros',
+                data: {
+                    SearchType: SearchType,
+                    SearchString: SearchString
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#ResultadosBuscarCartones').empty();
+                    if (!$.trim(data)) {
+                        $('#ResultadosBuscarCartones').append('<h3>No hay resultados para la busqueda</h3>');
+                    }
+                    else {
+                        $.each(data, function (index, value) {
+                            $('#ResultadosBuscarCartones').append('<a class="btn btn btn-primary BtnSeleccionarCarton" style="color:white" data-id="' + value.ID + '">' + value.NroCarton + '</a>');
+                        });
+
+
+                        $('.BtnSeleccionarCarton').click(function (e) {
+                            e.preventDefault();
+
+                            var id = $(this).data("id");
+                            var numero = $(this).text();
+
+                            $.ajax({
+                                type: "POST",
+                                traditional: true,
+                                async: false,
+                                cache: false,
+                                url: '/Compras/GetReserva',
+                                data: {
+                                    id: id
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data == false) {
+                                        /***********************/
+                                        $('#SolicitudId').val(id);
+
+                                        /***********************/
+
+                                        //roulette.start(pad(numero,5));
+
+                                        /***********************/
+                                    } else if (data == true) {
+                                        /***********************/
+                                        //$('#NumeroCarton').val("");
+                                        //$('a[data-id="' + id + '"]').remove();
+                                        //roulette.reset();
+                                        /***********************/
+                                    }
+                                },
+                                error: function (ex) {
+                                    alert('Error, por favor intente mas tarde.');
+                                }
+                            });
+                        });
+                    }
+
+                },
+                error: function (ex) {
+                    alert('Error, por favor intente mas tarde.');
+                }
+            });
+        }
+
+        $('#BtnBuscarCarton').click(function (e) {
+            e.preventDefault();
+            obtenerNumeros();
+        });
+    }
+
+    initialize();
+</script>

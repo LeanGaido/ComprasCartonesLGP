@@ -30,11 +30,21 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (Cliente != null)
             {
-                var compra = db.ComprasDeSolicitudes.Include(t => t.Solicitud).Where(x => x.AsociadoID == Cliente.ID && 
-                                                                                          x.Solicitud.Promocion.Anio == hoy.Year && 
-                                                                                          x.PagoCancelado == false).ToList();
+                //var compra = db.ComprasDeSolicitudes.Include(t => t.Solicitud)
+                //                                    .Include(t => t.Solicitud.Promocion)
+                //                                    .Where(x => x.AsociadoID == Cliente.ID && 
+                //                                                x.Solicitud.Promocion.Anio == hoy.Year && 
+                //                                                x.PagoCancelado == false).ToList();
 
-                if (compra != null && compra.Count > 0) //Check si el cliente ya compro algun carton de este año
+                var compras =  (from oCompras in db.ComprasDeSolicitudes
+                               join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
+                               join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
+                               where oCompras.AsociadoID == Cliente.ID &&
+                                     !oCompras.PagoCancelado &&
+                                     oPromocion.Anio == hoy.Year
+                               select oCompras).ToList();
+
+                if (compras != null && compras.Count > 0) //Check si el cliente ya compro algun carton de este año
                 {
                     //EStado de cuenta para todas las solicitudes del cliente
                 }
@@ -64,11 +74,8 @@ namespace ComprasCartonesLGP.Web.Controllers
             //}
 
             string dni = Session["ClienteDni"].ToString();
-            string telefono = Session["ClienteTelefono"].ToString();
+            string contacto = Session["ClienteContacto"].ToString();
             string sexo = Session["ClienteSexo"].ToString();
-
-            string area = telefono.Substring(0, telefono.IndexOf('-'));
-            string numero = telefono.Substring(telefono.IndexOf('-') + 1);
 
             var reservado = db.ReservaDeSolicitudes.Where(x => x.Dni == dni && x.Sexo == sexo && x.FechaReserva < hoy && x.FechaExpiracionReserva > hoy).FirstOrDefault();
 
@@ -265,6 +272,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                 CompraDeSolicitud cartonVendido = new CompraDeSolicitud();
 
+                cartonVendido.SolicitudID = Carton.ID;
                 cartonVendido.NroSolicitud = Carton.NroSolicitud;
                 cartonVendido.AsociadoID = Cliente.ID;
                 cartonVendido.NroAsociado = Cliente.NumeroDeAsociado;
@@ -282,11 +290,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                 #region Envio de Correo
                 try
                 {
-                    string from = "no-reply@xn--sueocelestepago-0qb.com";
-                    string usuario = "no-reply@xn--sueocelestepago-0qb.com";
-                    string password = "GVbE3UMeME";
+                    string from = "";
+                    string usuario = "";
+                    string password = "";
 
-                    string subject = "Sueño Celeste la Gran Promocion";
+                    string subject = "";
 
                     string emailBody = ObtenerBodyEmailCompraPagoContado(Carton.NroSolicitud);
 
@@ -780,7 +788,12 @@ namespace ComprasCartonesLGP.Web.Controllers
             //    hoy = new DateTime(hoy.Year, hoy.Month, 1).AddMonths(1);
             //}
 
-            var compra = db.ComprasDeSolicitudes.Include(t => t.Solicitud).Where(x => x.Solicitud.Promocion.Anio == hoy.Year && x.PagoCancelado == false).ToList();
+            var compra = (from oCompras in db.ComprasDeSolicitudes
+                           join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
+                           join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
+                           where !oCompras.PagoCancelado &&
+                                 oPromocion.Anio == hoy.Year
+                           select oCompras).ToList();
 
             var Cartones = db.Solicitudes.Where(x => x.Promocion.Anio == hoy.Year).ToList();
 
@@ -810,6 +823,56 @@ namespace ComprasCartonesLGP.Web.Controllers
             listaCartones = listaCartones.Where(x => !cartonesReservados.Any(y => y.SolicitudID == x.ID)).ToList();
 
             return listaCartones;
+        }
+
+        public JsonResult ObtenerNumeros(int? SearchType, string SearchString)
+        {
+            List<Solicitud> cartones = new List<Solicitud>();
+            if (string.IsNullOrEmpty(SearchString))
+            {
+                cartones = ObtenerCartonesDisponibles(null, null);
+            }
+            else
+            {
+                cartones = ObtenerCartonesDisponibles(SearchType, SearchString);
+            }
+
+            //var numeros = cartones.Select(x => x.ID).ToArray();
+
+            //Random _rdm = new Random();
+
+            //int random = _rdm.Next(0, numeros.Length);
+
+            return Json(cartones, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetReserva(int id)
+        {
+            bool reserva = true;
+            try
+            {
+                DateTime hoy = DateTime.Now;
+
+                string dni = Session["ClienteDni"].ToString();
+
+                var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.FechaReserva <= hoy &&
+                                                                         x.FechaExpiracionReserva >= hoy &&
+                                                                         x.SolicitudID == id &&
+                                                                         x.Dni != dni)
+                                                             .FirstOrDefault();
+
+                if (cartonReservado == null)
+                {
+                    reserva = false;
+                }
+
+                return Json(reserva, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(reserva, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         public string ObtenerBodyEmailCompraPagoContado(string NroSolicitud)

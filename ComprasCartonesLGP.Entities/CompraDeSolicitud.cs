@@ -18,6 +18,8 @@ namespace ComprasCartonesLGP.Entities
         [NotMapped]
         public virtual Asociado Asociado { get; set; }
 
+        public int SolicitudID { get; set; }
+
         public string NroSolicitud { get; set; }
 
         [NotMapped]

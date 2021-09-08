@@ -246,6 +246,7 @@
     <Content Include="Views\Clientes\ReportarProblema.cshtml" />
     <Content Include="Views\Clientes\ErrorRegistro.cshtml" />
     <Content Include="Views\Compras\ElegirCarton.cshtml" />
+    <Content Include="Views\Compras\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
