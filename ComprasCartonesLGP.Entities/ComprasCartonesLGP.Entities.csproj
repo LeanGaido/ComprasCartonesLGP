@@ -54,6 +54,7 @@
     <Compile Include="CodigoAcceso.cs" />
     <Compile Include="CompraDeSolicitud.cs" />
     <Compile Include="CuotaCompraDeSolicitud.cs" />
+    <Compile Include="Cuotas.cs" />
     <Compile Include="DebitoCard.cs" />
     <Compile Include="DebitoCBU.cs" />
     <Compile Include="Localidades.cs" />

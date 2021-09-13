@@ -19,7 +19,7 @@
         </div>
         <br>
         <h3><b>Paso 2: Elegí tu Número de Solicitud de la Suerte</b></h3>
-        <span>Para elegir el número de solcitud podes utilizar el trébol de la suerte o bien podés ingresar un número de tu preferencia.</span>
+        <span>Para elegir el número de solcitud de socio podes utilizar el trébol de la suerte o bien podés ingresar un número de tu preferencia.</span>
         <br><br>
         <div class="row">
             <div class="col-md-12">
@@ -29,12 +29,19 @@
                             <br>
                             <h1><b>Trébol de la Suerte</b></h1>
                             <b>
-                                ELEGÍ AQUÍ TU NÚMERO DE SOLICITUD DE LA SUERTE<b />
-                                <br><br>
-                                <img src="assets/img/trebol.jpg" width="100%">
-                                <br><br>
-                                <input type="submit" class="btn btn-primary" value="ELEGIR NÚMERO">
-                                <br><br>
+                                ELEGÍ AQUÍ TU NÚMERO DE SOLICITUD DE LA SUERTE
+                                <b>
+                                    <br><br>
+
+                                    <img src="https://lagranpromocion.com.ar/venta-online/assets/img/trebol.jpg">
+                                    <br><br>
+
+                                    <a href="#" class="btn btn-primary btnSortearNumero">ELEGIR NÚMERO</a>
+
+                                    <br><br>
+
+                                </b>
+                            </b>
                         </td>
                     </tr>
                 </table>
@@ -49,24 +56,28 @@
                             <br>
                             <h1><b>BUSCA TU NUMERO DE LA SUERTE</b></h1>
                             <div class="row">
-                                <div class="col-md-2">
-                                    <label for="NumeroCarton">Buscar Nro que </label>
+                                <label for="name" class="col-md-12 col-form-label text-md-center"><b>INGRESÁ AQUÍ TU NÚMERO ELEGIDO, SI ESTA DISPONIBLE, YA ES TUYO!!</b></label>
+                                <div class="col-sm-12 col-md-2">
+                                    <label for="NumeroCarton"><b>Buscar Nro que </b></label>
                                 </div>
-                                <div class="col-md-4">
+                                <br><br>
+                                <div class="col-sm-5 col-md-4">
                                     <select class="form-control" name="SearchType" id="SearchType">
                                         <option value="2">Termine con:</option>
                                         <option value="1">Contenga:</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <br class="visible-xs" /><hr class="visible-xs" /><br class="visible-xs" />
+                                <div class="col-sm-7 col-md-4">
                                     <input type="text" class="form-control" name="SearchString" id="SearchString" />
                                 </div>
-                                <div class="col-md-2">
+                                <br class="visible-xs" /><hr class="visible-xs" /><br class="visible-xs" />
+                                <div class="col-sm-12 col-md-2">
                                     <a href="#" id="BtnBuscarCarton" class="btn btn-primary btn-block">BUSCAR</a>
                                 </div>
                             </div>
                             <hr />
-                            <div class="row" style="max-height:200px;overflow-y:scroll;overflow-x:hidden;padding:20px">
+                            <div class="row" style="max-height:200px;overflow-y:scroll;overflow-x:hidden;padding:20px;width:100%">
                                 <div class="text-center" id="ResultadosBuscarCartones" style="padding:10px;">
 
                                 </div>

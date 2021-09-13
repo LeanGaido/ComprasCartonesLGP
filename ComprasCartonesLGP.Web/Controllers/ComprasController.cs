@@ -115,11 +115,8 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
 
             string dni = Session["ClienteDni"].ToString();
-            string telefono = Session["ClienteTelefono"].ToString();
+            string contacto = Session["ClienteContacto"].ToString();
             string sexo = Session["ClienteSexo"].ToString();
-
-            string area = telefono.Substring(0, telefono.IndexOf('-'));
-            string numero = telefono.Substring(telefono.IndexOf('-') + 1);
 
             var reservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudId && x.FechaReserva < hoy && x.FechaExpiracionReserva > hoy).FirstOrDefault();
 
@@ -823,6 +820,40 @@ namespace ComprasCartonesLGP.Web.Controllers
             listaCartones = listaCartones.Where(x => !cartonesReservados.Any(y => y.SolicitudID == x.ID)).ToList();
 
             return listaCartones;
+        }
+
+        public List<Cuotas> ObtenerCuotasDebitoPosibles(int CartonId)
+        {
+            List<Cuotas> cuotas = new List<Cuotas>();
+
+            DateTime hoy = DateTime.Today;
+
+            int c = 1;
+
+            //var FechaLimite = db.FechaLimiteVentaCartones.Where(x => x.Vigente).FirstOrDefault();
+
+            var Carton = db.Solicitudes.Where(x => x.ID == CartonId)
+                                       .Include(t => t.Promocion).FirstOrDefault();
+
+            var Meses = 12;
+
+            if (Meses == 0)
+            {
+                Meses = 1;
+            }
+
+            for (int mes = hoy.Month; mes <= Meses; mes++)
+            {
+                var cuota = new Cuotas();
+
+                cuota.key = c;
+                cuota.value = c + " Cuota/s";
+
+                cuotas.Add(cuota);
+                c++;
+            }
+
+            return cuotas;
         }
 
         public JsonResult ObtenerNumeros(int? SearchType, string SearchString)
