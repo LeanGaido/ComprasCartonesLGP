@@ -1136,3 +1136,10 @@ h1.title1 {
   margin: 0 3px;
   width: 13px;
 }
+
+.div-trebol {
+  background-color: 000;
+  width: 500px;
+  height: 500px;
+  text-align: center;
+}

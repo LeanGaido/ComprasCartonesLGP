@@ -125,6 +125,31 @@
                 });
             }
 
+            if ($('#squaredOne').length) {
+                $('#squaredOne').change(function () {
+                    $('#PagoDebitoAutomatico').hide();
+                    $('#adhesionCBU').hide();
+                    $('#adhesionTarjeta').hide();
+                    $(this).prop('checked', true);
+                    $('#squaredTwo').prop('checked', false);
+                });
+                $('#squaredTwo').change(function () {
+                    $(this).prop('checked', true);
+                    $('#squaredOne').prop('checked', false);
+                    $('#PagoDebitoAutomatico').show();
+                });
+                $('#DebitoConTarjeta').change(function () {
+                    $('#adhesionCBU').hide();
+                    $('#adhesionTarjeta').show();
+                });
+                $('#DebitoConCbu').change(function () {
+                    $('#adhesionTarjeta').hide();
+                    $('#adhesionCBU').show();
+                });
+            }
+
+            
+
             //// Function to clear all dabs from the card
             //function cleanCard() {
             //    $('td').css('background-color', 'rgb(119, 119, 119)');

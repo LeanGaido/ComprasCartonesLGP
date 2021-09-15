@@ -64,7 +64,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     
                     string respuesta = nuevoEmail.SendEmail(emailBody, Cliente.Email, "Verificacion de Ingreso - La Gran Promocion");
 
-                    if (respuesta == "OK\r\n" || respuesta.Contains("probando sin enviar"))
+                    if (respuesta == "Enviado Correctamente")
                     {
                         return RedirectToAction("Autenticación");
                     }

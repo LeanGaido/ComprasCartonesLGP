@@ -14,96 +14,99 @@
         <div class="form-group row">
             <label for="name" class="col-md-4 col-form-label text-md-right"><b>INGRESÁ AQUÍ EL CÓDIGO DEL VENDEDOR</b></label>
             <div class="col-md-6">
-                <input id="CodigoVendedor" type="text" class="form-control" name="CodigoVendedor" value="" required autofocus>
+                <input id="CodigoVendedor" type="text" class="form-control" name="CodigoVendedor" value="0" required autofocus style="color:#000;border:1px solid #000">
             </div>
         </div>
         <br>
         <h3><b>Paso 2: Elegí tu Número de Solicitud de la Suerte</b></h3>
-        <span>Para elegir el número de solcitud de socio podes utilizar el trébol de la suerte o bien podés ingresar un número de tu preferencia.</span>
+        <span>Para elegir el número podes utilizar el trébol de la suerte o bien podés ingresar un número de tu preferencia.</span>
         <br><br>
         <div class="row">
-            <div class="col-md-12">
-                <table border="1" width="100%">
+            <div class="col-md-6">
+                <table border="1" width="100%" style="min-height:750px">
                     <tr>
                         <td class="text-center">
                             <br>
+
                             <h1><b>Trébol de la Suerte</b></h1>
+
                             <b>
-                                ELEGÍ AQUÍ TU NÚMERO DE SOLICITUD DE LA SUERTE
-                                <b>
-                                    <br><br>
+                                PRESIONA EL BOTÓN Y OBTENÉ TU NÚMERO <BR>DE SOLICITUD DE LA SUERTE<b />
 
-                                    <img src="https://lagranpromocion.com.ar/venta-online/assets/img/trebol.jpg">
-                                    <br><br>
 
-                                    <a href="#" class="btn btn-primary btnSortearNumero">ELEGIR NÚMERO</a>
+                                <a href="#" id="sortearNumero" class="btn btn-primary">OBTENER NÚMERO DE LA SUERTE</a>
+                                <span id="numeroSorteado" style="position:absolute;top:57.5%;left:38%;font-size:40px;color:#fff;padding:5px 10px;"></span>
+                                <br><br>
 
-                                    <br><br>
+                                <img style="background-color:#000" src="~/assets/img/trebol.png">
 
-                                </b>
-                            </b>
+                                <br><br>
                         </td>
                     </tr>
                 </table>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                <table border="1" width="100%">
-                    <tr>
-                        <td class="text-center">
-                            <br>
-                            <h1><b>BUSCA TU NUMERO DE LA SUERTE</b></h1>
-                            <div class="row">
-                                <label for="name" class="col-md-12 col-form-label text-md-center"><b>INGRESÁ AQUÍ TU NÚMERO ELEGIDO, SI ESTA DISPONIBLE, YA ES TUYO!!</b></label>
-                                <div class="col-sm-12 col-md-2">
-                                    <label for="NumeroCarton"><b>Buscar Nro que </b></label>
+            <div class="col-md-6">
+                <table border="1" width="100%" style="min-height:750px">
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+
+                                <br>
+
+                                <h1><b>Buscá tu Número de la Suerte</b></h1>
+
+
+                                <div class="form-group row">
+
+                                    <label for="name" class="col-md-12 col-form-label text-md-center"><b>INGRESÁ UN NÚMERO, SI ESTÁ DISPONIBLE,<br> YA ES TUYO!!</b></label>
+                                    <br><br>
+                                    <div class="row">
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-8 text-center">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <select name="SearchType" id="SearchType" class="form-control" style="color:#000;border:1px solid #000">
+                                                        <option>
+                                                            Que Contenga (Ej: 17896)
+                                                        </option>
+                                                        <option>
+                                                            Que Termine en (Ej: 25)
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <br><br><br>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" name="SearchString" id="SearchString" placeholder="Ingresá tu número" style="color:#000;border:1px solid #000">
+                                                </div>
+                                            </div>
+                                            <br><br>
+                                            <a href="#" id="BtnBuscarCarton" class="btn btn-primary">BUSCAR NÚMERO DE LA SUERTE</a>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                    </div>
+                                    <div class="row" style="max-height:200px;overflow-y:scroll;overflow-x:hidden;padding:30px;width:100%">
+                                        <input type="hidden" name="SolicitudId" id="SolicitudId" />
+                                        <div class="text-center" id="ResultadosBuscarCartones" style="padding:10px;">
+
+                                        </div>
+                                    </div>
+                                    <br><br>
                                 </div>
                                 <br><br>
-                                <div class="col-sm-5 col-md-4">
-                                    <select class="form-control" name="SearchType" id="SearchType">
-                                        <option value="2">Termine con:</option>
-                                        <option value="1">Contenga:</option>
-                                    </select>
-                                </div>
-                                <br class="visible-xs" /><hr class="visible-xs" /><br class="visible-xs" />
-                                <div class="col-sm-7 col-md-4">
-                                    <input type="text" class="form-control" name="SearchString" id="SearchString" />
-                                </div>
-                                <br class="visible-xs" /><hr class="visible-xs" /><br class="visible-xs" />
-                                <div class="col-sm-12 col-md-2">
-                                    <a href="#" id="BtnBuscarCarton" class="btn btn-primary btn-block">BUSCAR</a>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row" style="max-height:200px;overflow-y:scroll;overflow-x:hidden;padding:20px;width:100%">
-                                <div class="text-center" id="ResultadosBuscarCartones" style="padding:10px;">
-
-                                </div>
-                            </div>
-                            <br><br>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
-        <div class="card-text">
-            <div class="form-group" style="overflow:visible">
-                <input type="hidden" name="SolicitudId" id="SolicitudId" />
-            </div>
-        </div>
-        <br><br>
         <div class="mt-4">
             <div class="form-group row">
                 <div class="col-md-12 text-center">
-
                     <input type="submit" class="btn btn-primary" value="CONFIRMAR COMPRA" />
-                    @*<a href="resumen_compra.html" class="btn btn-primary">CONFIRMAR COMPRA</a>*@
-
                 </div>
             </div>
         </div>
+        <br><br>
     }
 
 </div>
@@ -134,7 +137,7 @@
                     }
                     else {
                         $.each(data, function (index, value) {
-                            $('#ResultadosBuscarCartones').append('<a class="btn btn btn-primary BtnSeleccionarCarton" style="color:white" data-id="' + value.ID + '">' + value.NroCarton + '</a>');
+                            $('#ResultadosBuscarCartones').append('<a class="btn btn btn-primary BtnSeleccionarCarton" style="color:white" data-id="' + value.ID + '" data-numero="' + value.NroSolicitud + '">' + value.NroSolicitud + '</a>');
                         });
 
 
@@ -142,7 +145,7 @@
                             e.preventDefault();
 
                             var id = $(this).data("id");
-                            var numero = $(this).text();
+                            var numero = $(this).data("numero");
 
                             $.ajax({
                                 type: "POST",
@@ -155,22 +158,23 @@
                                 },
                                 dataType: 'json',
                                 success: function (data) {
-                                    if (data == false) {
+                                    //if (data == false) {
                                         /***********************/
                                         $('#SolicitudId').val(id);
+                                        $('#numeroSorteado').text(numero);
 
                                         /***********************/
 
                                         //roulette.start(pad(numero,5));
 
                                         /***********************/
-                                    } else if (data == true) {
+                                    //} else if (data == true) {
                                         /***********************/
                                         //$('#NumeroCarton').val("");
                                         //$('a[data-id="' + id + '"]').remove();
                                         //roulette.reset();
                                         /***********************/
-                                    }
+                                    //}
                                 },
                                 error: function (ex) {
                                     alert('Error, por favor intente mas tarde.');
@@ -189,6 +193,33 @@
         $('#BtnBuscarCarton').click(function (e) {
             e.preventDefault();
             obtenerNumeros();
+        });
+
+        function SortearNumero() {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                async: false,
+                cache: false,
+                url: '/Compras/SortearNumero',
+                data: {
+                    SearchType: SearchType,
+                    SearchString: SearchString
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#SolicitudId').val(data.ID);
+                    $('#numeroSorteado').text(data.NroSolicitud);
+                },
+                error: function (ex) {
+                    alert('Error, por favor intente mas tarde.');
+                }
+            })
+        }
+
+        $('#sortearNumero').click(function (e) {
+            e.preventDefault();
+            SortearNumero();
         });
     }
 

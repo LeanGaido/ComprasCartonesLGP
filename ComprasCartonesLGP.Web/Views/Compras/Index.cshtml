@@ -10,115 +10,117 @@
 
     <div class="row">
         <div class="col-md-12">
+            <h1 class="mt-4 text-center"><b>Elegí la Forma de Pago</b></h1>
+            <br><br>
+            @using (Html.BeginForm())
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="text-center"><b>SELECCIONÁ LA FORMA DE PAGO Y CONFIRMÁ LA COMPRA</b></h4>
+                        <br>
+                        <h3><b>EN UN PAGO</b></h3>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>
+                                    <!-- <section title=".squaredOne" style="display: inline-block;">
+                            <div class="squaredOne">
+                            <input type="checkbox" value="None" id="squaredOne" name="check" checked />
+                            <label for="squaredOne"></label>
+                            </div>
+                            </section> -->
+                                    <input type="radio" value="1" id="squaredOne" name="TipoDePago" checked />
+                                    <b>EN 1 PAGO DE $@ViewBag.Carton.Precio</b> (Tarjeta de Crédito / Débito / Rapipago / Pago Fácil)
+                                </h5>
+                            </div>
+                        </div>
+                        <br>
+                        <h3><b>EN PLAN DE CUOTAS (Hasta 4 Cuotas Sin Interés)</b></h3>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>
+                                    <input type="radio" value="None" id="squaredTwo" name="check" />
+                                    <b>PLAN DE CUOTAS CON DÉBITO AUTOMÁTICO</b>
+                                </h5>
+                            </div>
+                            <div class="col-md-1">
 
-            <h4 class="text-center"><b>SELECCIONÁ LA FORMA DE PAGO Y CONFIRMÁ LA COMPRA</b></h4>
+                            </div>
+                            <div class="col-md-11">
+                                <div id="PagoDebitoAutomatico" style="display:none;">
+                                    <h5 style="display:inline-block;margin-right:20px">Elegí el Número de Cuotas:</h5>
+                                    <select name="CantCuotas" id="CantCuotas" style="display:inline-block">
+                                        <option value="1">1 Cuota sin interés de $@ViewBag.Carton.Precio</option>
+                                        <option value="2">2 Cuotas sin interés de $2950</option>
+                                        <option value="3">3 Cuotas sin interés de $1966,67</option>
+                                        <option value="4">4 Cuotas sin interés de $1475</option>
+                                    </select>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>
+                                                Elegí si lo haces con tarjeta de credito o con CBU.
+                                            </h5>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-11">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input type="radio" value="3" name="TipoDePago" id="DebitoConTarjeta"> <B>CON TARJETA DE CRÉDITO</B>
+                                                </div>
+                                                <div class="col-md-12" id="adhesionTarjeta" style="display:none">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-10">
+                                                        <label>Número de la Tarjeta (sólo números)</label>
+                                                        <input type="text" class="form-control" name="nroCBU" />
+                                                        <br>
 
-            <br>
+                                                        <label>Nombre del Titular de la Tarjeta</label>
+                                                        <input type="text" class="form-control" name="nombreTitular" />
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input type="radio" value="2" name="TipoDePago" id="DebitoConCbu"> <B>CON CBU</B>
+                                                </div>
+                                                <div class="col-md-12" id="adhesionCBU" style="display:none">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-10">
+                                                        <label>Número de CBU (sólo números)</label>
+                                                        <input type="text" class="form-control" name="cbu_number" id="cbu_number">
+                                                        <br>
 
-            <h3><b>EN UN PAGO</b></h3>
-            <br>
+                                                        <label>Nombre del Titular de la Cuenta Bancaria</label>
+                                                        <input type="text" class="form-control" name="adhesion_holder_name" id="adhesion_holder_name">
+                                                        <br>
 
-            <table border="1" width="100%" class="table">
-                <tbody>
-                    <tr>
-                        <td>
-                            <form action="" method="post">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h5><input type="checkbox" value="1" name="pago" id="pagoContado"> <label for="pagoContado"><b>EN 1 PAGO DE $*PrecioCarton*</b></label></h5>
+                                                        <label>Ingrese el CUIL del Titular (sólo números)</label>
+                                                        <input type="text" class="form-control" name="cbu_holder_id_number" id="cbu_holder_id_number">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <h5>Tarjeta de Crédito / Débito / Rapipago / Pago Fácil</h5>
-                                    </div>
-                                </div>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <br>
-
-            <h3><b>EN PLAN DE CUOTAS (Hasta *Cant de Cuotas Disponibles* Cuotas Sin Interés)</b></h3>
-            <br>
-
-
-            <table border="1" width="100%" class="table">
-                <tbody>
-                    <tr>
-                        <td>
-
-                            <br>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5><b>PLAN DE CUOTAS CON DÉBITO AUTOMÁTICO</b> </h5>
-                                </div>
-                                <div class="col-md-6">
-
-                                    <h5>
-                                        Elegí el Número de Cuotas:
-                                        <br><br>
-                                        <select id="CantCuotasDebitoAutomatico" method="post">
-                                            
-                                        </select>
-                                    </h5>
-
-                                    <br /><br />
-
-                                    <h5>
-                                        Elegí si lo haces con tarjeta de credito o con CBU.
-                                        <br><br>
-                                        <input type="checkbox" name="pago" value="2" id="pagoConCbu"> <label for="pagoConCbu"><b>CON CBU</b></label>
-                                        <br><br>
-                                        <input type="checkbox" name="pago" value="3" id="pagoConTarjeta"> <label for="pagoConTarjeta"><b>CON TARJETA DE CRÉDITO</b></label>
-
-</h5>
-
-                                    <br><br>
-
-                                    <div id="DatosAdhesionCbu" style="display:none">
-                                        <label>Número de CBU (sólo números)</label>
-                                        <input type="number" class="form-control" name="nroCBU" required>
-                                        <br>
-
-                                        <label>Nombre del Titular de la Cuenta Bancaria</label>
-                                        <input type="text" class="form-control" name="nombreTitular" required>
-                                        <br>
-
-                                        <label>Ingrese el CUIL del Titular (sólo números)</label>
-                                        <input type="number" class="form-control" name="cuilTitular" required>
-                                    </div>
-
-                                    <div id="DatosAdhesionTarjeta" style="display:none">
-                                        <label>Número de Tajeta(sólo números)</label>
-                                        <input type="number" class="form-control" name="nroCBU" required>
-                                        <br>
-
-                                        <label>Nombre del Titular de la Tarjeta</label>
-                                        <input type="text" class="form-control" name="nombreTitular" required>
-                                    </div>
-
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-
-    <br><br>
-
-    <div class="mt-4">
-        <div class="form-group row">
-            <div class="col-md-12 text-center">
-
-                <a href="resumen_compra.html" class="btn btn-primary">CONFIRMAR COMPRA</a>
-
-            </div>
+                <div class="mt-4">
+                    <div class="form-group row">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="CONFIRMAR COMPRA" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 
