@@ -215,12 +215,13 @@ namespace ComprasCartonesLGP.Web.Controllers
             var reservado = db.ReservaDeSolicitudes.Where(x => x.Dni == Cliente.Dni && x.Sexo == Cliente.Sexo && x.FechaReserva < hoy && x.FechaExpiracionReserva > hoy).FirstOrDefault();
 
             ViewBag.Carton = db.Solicitudes.Where(x => x.ID == cartonReservado.SolicitudID).FirstOrDefault();
+            ViewBag.Cuotas = ObtenerCuotasDebitoPosibles(cartonReservado.SolicitudID);
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(int TipoDePago, string adhesion_holder_name, long cbu_holder_id_number, string cbu_number, string card_number, string card_holder_name, int CantCuotas = 1)
+        public ActionResult Index(int TipoDePago, string adhesion_holder_name, long? cbu_holder_id_number, string cbu_number, string card_number, string card_holder_name, int CantCuotas = 1)
         {
             int CartonVendidoId = 0, PagoCartonId = 0;
             int[] CuotasPlanDePagoId = new int[CantCuotas];
@@ -257,6 +258,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             try
             {
+                var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
                 var Carton = db.Solicitudes.Where(x => x.ID == cartonReservado.SolicitudID).FirstOrDefault();
 
                 CompraDeSolicitud cartonVendido = new CompraDeSolicitud();
@@ -276,23 +278,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 CartonVendidoId = cartonVendido.ID;
 
                 #region Envio de Correo
-                try
-                {
-                    string from = "";
-                    string usuario = "";
-                    string password = "";
-
-                    string subject = "";
-
-                    string emailBody = ObtenerBodyEmailCompraPagoContado(Carton.NroSolicitud);
-
-                    Email nuevoEmail = new Email();
-                    nuevoEmail.SendEmail(emailBody, Cliente.Email, subject);
-                }
-                catch (Exception)
-                {
-
-                }
+                
                 #endregion
 
                 if (cartonVendido.TipoDePagoID == 1)
@@ -339,11 +325,22 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                         PagoUnaCuota.PagoID = pago.ID;
 
-                        var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.ID == SolicitudReservadaId).FirstOrDefault();
-
                         db.ReservaDeSolicitudes.Remove(ReservaCarton);
 
                         db.SaveChanges();
+                        try
+                        {
+                            string subject = "Avisos La Gran Promocion";
+
+                            string emailBody = ObtenerBodyEmailCompraPagoContado(Carton.NroSolicitud);
+
+                            Email nuevoEmail = new Email();
+                            nuevoEmail.SendEmail(emailBody, Cliente.Email, subject);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
 
                         return Redirect(pago.checkout_url);
                     }
@@ -371,17 +368,13 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                     var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
-                    var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
-
-                    db.ReservaDeSolicitudes.Remove(ReservaCarton);
-
                     adhesionPago360.adhesion_holder_name = adhesion_holder_name;
                     adhesionPago360.email = Cliente.Email;
                     adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
                     adhesionPago360.short_description = "LGP";
                     adhesionPago360.external_reference = Cliente.ID.ToString();
                     adhesionPago360.cbu_number = cbu_number;
-                    adhesionPago360.cbu_holder_id_number = cbu_holder_id_number;
+                    adhesionPago360.cbu_holder_id_number = cbu_holder_id_number.Value;
                     adhesionPago360.cbu_holder_name = adhesion_holder_name;
 
                     try
@@ -411,7 +404,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                             db.CuotasCompraDeSolicitudes.Add(cuota);
                         }
 
+                        db.ReservaDeSolicitudes.Remove(ReservaCarton);
+
                         db.SaveChanges();
+
+                        return RedirectToAction("ComprobarCompra");
                     }
                     catch (Exception e)
                     {
@@ -428,8 +425,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                         }
                         return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
                     }
-
-                    return RedirectToAction("ComprobarCompra");
                     //return RedirectToAction("AdherirseCbu", new { CantCuotas });
                 }
                 else if (cartonVendido.TipoDePagoID == 3)//Plan de Pagos Debito Tarjeta
@@ -439,19 +434,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                     AdhesionCardPago360Request adhesionPago360 = new AdhesionCardPago360Request();
 
                     var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
-
-                    var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
-
-                    db.ReservaDeSolicitudes.Remove(ReservaCarton);
-
-                    /*
-                     adhesion_holder_name
-                    email
-                    description
-                    external_reference
-                    card_number
-                    card_holder_name
-                     */
 
                     adhesionPago360.adhesion_holder_name = adhesion_holder_name;
                     adhesionPago360.email = Cliente.Email;
@@ -487,6 +469,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                             db.CuotasCompraDeSolicitudes.Add(cuota);
                         }
 
+                        db.ReservaDeSolicitudes.Remove(ReservaCarton);
                         db.SaveChanges();
                     }
                     catch (Exception e)
@@ -1064,19 +1047,29 @@ namespace ComprasCartonesLGP.Web.Controllers
             var Carton = db.Solicitudes.Where(x => x.ID == CartonId)
                                        .Include(t => t.Promocion).FirstOrDefault();
 
-            var Meses = 12;
+            int Meses = 12, mesInicio = hoy.Month;
 
-            if (Meses == 0)
+            if(hoy.Day > 15)
             {
-                Meses = 1;
+                mesInicio++;
             }
 
-            for (int mes = hoy.Month; mes <= Meses; mes++)
+            int cantCuotas = Meses - mesInicio;
+
+            for (int mes = mesInicio; mes <= Meses; mes++)
             {
                 var cuota = new Cuotas();
 
-                cuota.key = c;
-                cuota.value = c + " Cuota/s";
+                if(c != 1)
+                {
+                    cuota.key = c;
+                    cuota.value = c + " Cuotas sin interés de $" + (Carton.Precio/c);
+                }
+                else
+                {
+                    cuota.key = c;
+                    cuota.value = c + " Cuota sin interés de $" + Carton.Precio;
+                }
 
                 cuotas.Add(cuota);
                 c++;
