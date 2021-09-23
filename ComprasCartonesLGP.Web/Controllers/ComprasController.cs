@@ -47,6 +47,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 if (compras != null && compras.Count > 0) //Check si el cliente ya compro algun carton de este año
                 {
                     //EStado de cuenta para todas las solicitudes del cliente
+                    return RedirectToAction("ListadoSolicitudes");
                 }
                 else
                 {
@@ -1210,6 +1211,31 @@ namespace ComprasCartonesLGP.Web.Controllers
                 }
             }
             return fecha;
+        }
+
+        public ActionResult ListadoSolicitudes(int anio = 0)
+        {
+            var Cliente = ObtenerCliente();
+            List<CompraDeSolicitud> solicitudes = new List<CompraDeSolicitud>();
+            ViewBag.Anio = new SelectList(db.Promociones.OrderByDescending(x => x.Anio), "Anio", "Anio");
+            if (Cliente != null)
+            {
+                if(anio == 0)
+                {
+                    anio = DateTime.Now.Year;
+                }
+                solicitudes = (from oCompras in db.ComprasDeSolicitudes
+                               join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
+                               join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
+                               where oPromocion.Anio == anio
+                               select oCompras).ToList();
+            }
+            return View(solicitudes);
+        }
+
+        public ActionResult DetalleSolicitud()
+        {
+            return View();
         }
     }
 }

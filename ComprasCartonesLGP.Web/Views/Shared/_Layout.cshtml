@@ -4,8 +4,7 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description"
-          content="Purpose is a unique and beautiful collection of UI elements that are all flexible and modular. A complete and customizable solution to building the website of your dreams.">
+    <meta name="description" content="Purpose is a unique and beautiful collection of UI elements that are all flexible and modular. A complete and customizable solution to building the website of your dreams.">
     <meta name="author" content="Webpixels">
     <title>La Gran Promoción</title>
     <!-- Favicon -->
@@ -53,7 +52,6 @@
             <div class="container mt-12">
                 <div class="row">
                     @RenderBody()
-
                     <br><br>
                 </div>
             </div>
@@ -148,7 +146,9 @@
                 });
             }
 
-            
+            $('#Anio').change(function () {
+                $('#btnsubmit').click();
+            })
 
             //// Function to clear all dabs from the card
             //function cleanCard() {

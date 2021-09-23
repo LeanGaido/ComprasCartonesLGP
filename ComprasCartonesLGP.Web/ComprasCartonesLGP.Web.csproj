@@ -286,6 +286,8 @@
     <Content Include="Views\Clientes\ErrorRegistro.cshtml" />
     <Content Include="Views\Compras\ElegirCarton.cshtml" />
     <Content Include="Views\Compras\Index.cshtml" />
+    <Content Include="Views\Compras\ListadoSolicitudes.cshtml" />
+    <Content Include="Views\Compras\DetalleSolicitud.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

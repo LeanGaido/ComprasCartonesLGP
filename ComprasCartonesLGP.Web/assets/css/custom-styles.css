@@ -1143,3 +1143,11 @@ h1.title1 {
   height: 500px;
   text-align: center;
 }
+
+.color-amarillo {
+    color: #f1b535;
+}
+
+.color-negro {
+    color: #1D1D1B;
+}
