@@ -1,5 +1,35 @@
-﻿@{
+﻿@model ComprasCartonesLGP.Entities.CompraDeSolicitud
+
+@{
     ViewBag.Title = "DetalleSolicitud";
 }
 
+<div class="col-md-12">
+    <h2 class="mt-4"><b>Consulta de Solicitud Adquirida</b></h2>
+    <br>
+    <b>Fecha de Compra:</b> @Model.FechaVenta.ToString("dd-MM-yyyy")
+    <br>
+    <b>Número de Solicitud:</b> @Model.NroSolicitud
+    <br>
+    <b>Precio:</b> $@Model.TotalAPagar
+    <br>
+    <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion
+    <br>
+    <b>Cant. Cuotas:</b> @Model.CantCuotas
+    <br>
+    <b>Estado del Pago:</b> @ViewBag.EstadoPago
+    <br><br>
+    <b>Nombre y Apellido:</b> @ViewBag.Nombre @ViewBag.Apellido
+    <br>
+    <b>Dni:</b> @ViewBag.Dni
+    <br>
+    <b>Localidad:</b> @ViewBag.Localidad
+    <br>
+    <b>Provincia:</b> @ViewBag.Provincia
+    </p>
+    <h2 class="mt-4"><b>Pagos Realizados</b></h2>
+    @{ Html.RenderAction("TablaCuotas", "Compras", new { id = Model.ID });}
+    <br /><br />
+</div>
 
+        

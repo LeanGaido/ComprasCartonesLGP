@@ -39,50 +39,40 @@
                         </tr>
                     </thead>
                     <tbody class="text-center tableBody color-negro">
-                        <tr class="">
-                            <td class="">
-                                12345
-                            </td>
-                            <td class="">
-                                12/09/2021
-                            </td>
-                            <td class="">
-                                PAGADO
-                            </td>
-                            <td width="6%">
-                                <div align="center">
-                                    <a class="d-none d-sm-block" href="">
-                                        <i title="VER" class="fas fa-eye color-negro btn-block"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="">
-                            <td class="">
-                                12347
-                            </td>
-                            <td class="">
-                                12/09/2021
-                            </td>
-                            <td class="">
-                                IMPAGO
-                            </td>
-                            <td width="6%">
-                                <div align="center">
-                                    <a class="d-none d-sm-block" href="">
-                                        <i title="VER" class="fas fa-eye color-negro btn-block"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach (var solicitud in Model)
+                        {
+                            <tr class="">
+                                <td class="">
+                                    @solicitud.NroSolicitud
+                                </td>
+                                <td class="">
+                                    @solicitud.FechaVenta.ToString("dd-MM-yyyy")
+                                </td>
+                                @if(solicitud.PagoRealizdo == true)
+                                {
+                                    <td class="">
+                                        Pagado
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="">
+                                        Pendiente
+                                    </td>
+                                }
+                                <td width="6%">
+                                    <div align="center">
+                                        <a class="d-none d-sm-block" href="@Url.Action("DetalleSolicitud","Compras", new { id = solicitud.ID })">
+                                            <i title="VER" class="fas fa-eye color-negro btn-block"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
                 <br /><br />
-            </div>
-            @*@foreach(var solicitud in Model)
-            {
-
-            }*@
+            </div>            
         </div>
     </div>
 </div>

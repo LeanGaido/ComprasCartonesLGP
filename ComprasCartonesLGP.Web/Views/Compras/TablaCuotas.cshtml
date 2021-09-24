@@ -1,0 +1,54 @@
+﻿ @model IEnumerable<ComprasCartonesLGP.Entities.CuotaCompraDeSolicitud>
+@{
+    ViewBag.Title = "TablaCuotas";
+    Layout = null;
+}
+
+<table border="1" width="100%">
+    <thead class="">
+        <tr class="text-center">
+            <th scope="col">
+                <div align="center">Mes Cuota</div>
+            </th>
+            <th scope="col">
+                <div align="center">Importe</div>
+            </th>
+            <th scope="col">
+                <div align="center">Estado</div>
+            </th>
+        </tr>
+    </thead>
+    <tbody class="text-center tableBody color-negro">
+        @foreach (var cuota in Model)
+        {
+            <tr class="">
+                <td class="">
+                    @cuota.MesCuota
+                </td>
+                <td class="">
+                    $@cuota.PrimerPrecioCuota
+                </td>
+                @if (cuota.CuotaPagada == true)
+                {
+                    <td class="">
+                        Pagado
+                    </td>
+
+                }
+                else
+                {
+                    <td class="">
+                        Pendiente
+                    </td>
+
+                }
+            </tr>
+        }
+        <tr>
+            <td><b>Total</b></td>
+            <td class="text-center"><b>$@ViewBag.TotalAPagar</b></td>
+            <td class="text-center"></td>
+        </tr>
+    </tbody>
+</table>
+
