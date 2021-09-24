@@ -166,6 +166,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\ContentAdmin\ContentAdminAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\ComprasController.cs" />
@@ -231,6 +232,7 @@
     <Content Include="assets\libs\fortawesome\fontawesome-free\webfonts\fa-solid-900.woff" />
     <Content Include="assets\libs\fortawesome\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="assets\libs\fortawesome\fontawesome-free\webfonts\fa-solid-900d41d.eot" />
+    <Content Include="Areas\ContentAdmin\Views\web.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -292,6 +294,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\ContentAdmin\Controllers\" />
+    <Folder Include="Areas\ContentAdmin\Data\" />
+    <Folder Include="Areas\ContentAdmin\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
