@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="La Gran Promoción" content="La Gran Promoción">
+    <meta name="La Gran Promoción " content="">
+    <title>La Gran Promoción</title>
+    <!-- Bootstrap core CSS -->
+    <link href="~/Areas/ContentAdmin/Data/sidebar/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <link href="~/Areas/ContentAdmin/Data/sidebar/vendor/bootstrap/js/bootstrap.bundle.min.js" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/Areas/ContentAdmin/Data/sidebar/css/simple-sidebar.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/69d753dab5.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/images/logo/favicon-60x60.png">
+</head>
+<body>
+    <!--Loading-->
+    <div class="loading show">
+        <div class="spin"></div>
+    </div>
+    <div class="d-flex" id="wrapper">
+        @using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+        <!-- Sidebar -->
+        <div class="bg-light background-turquesa3" id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <span class="logo-text textoBlanco" style="font-size:30px;"><b>ContentAdmin</b></span>
+                @*<a href="@Url.Action("Index","Home")"><img class="img-responsive" id="img-logo" src="~/Content/images/logo/logo-web.png" alt="AG EMERGENCIAS" style="margin-left: 50px;"></a>*@
+            </div>
+            <hr />
+            <div class="list-group list-group-flush">
+                <a href="@Url.Action("Index","Home")" class="list-group-item list-group-item-action bg-light textoBlanco background-turquesa3"><b>HOME</b></a>
+                <a href="@Url.Action("","")" class="list-group-item list-group-item-action bg-light textoBlanco background-turquesa3"><b>PROMOCIONES</b></a>
+                <a href="@Url.Action("","")" class="list-group-item list-group-item-action bg-light textoBlanco background-turquesa3"><b>SOLICITUDES</b></a>
+                <a href="@Url.Action("","")" class="list-group-item list-group-item-action bg-light textoBlanco background-turquesa3"><b>DEBITOS</b></a>
+                <a href="@Url.Action("","")" class="list-group-item list-group-item-action bg-light textoBlanco background-turquesa3"><b>COMPRAS</b></a>
+                <a href="@Url.Action("","")" class="list-group-item list-group-item-action bg-light textoBlanco background-turquesa3"><b>CLIENTES</b></a>
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="list-group-item list-group-item-action bg-light textoBlanco background-turquesa3"><b>CERRAR SESIÓN</b></a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-light border-bottom background-turquesa4">
+                <button class="btn btn-default" id="menu-toggle">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+            <div class="container-fluid">
+                @RenderBody()
+                <div id="footer">
+                    <div class="col-sm-12 text-right textoBlanco">
+                        <p class="text-right">Desarrollado y Hosteado por <a href="http://stnt.com.ar/" style="color: black" target="_blank"><b>StartNet</b></a></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Copyright -->
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+</body>
+</html>
+<!-- Bootstrap core JavaScript -->
+<script src="~/Areas/ContentAdmin/Data/sidebar/vendor/jquery/jquery.min.js"></script>
+<script src="~/Areas/ContentAdmin/Data/sidebar/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<!-- Menu Toggle Script -->
+<script>
+    var Loading = (loadingDelayHidden = 0) => {
+        // Variables
+        //-----------------------------------------------------
+        // HTML
+        let loading = null;
+        // Retardo para borrar
+        const myLoadingDelayHidden = loadingDelayHidden;
+
+        /**
+         * Ocultar HTML
+         */
+        function hideLoading() {
+            // Comprueba que exista el HTML
+            if (loading !== null) {
+                // Oculta el HTML de "cargando..." quitando la clase .show
+                loading.classList.remove('show');
+                // Borra el HTML
+                setTimeout(function () {
+                    loading.remove();
+                }, myLoadingDelayHidden);
+            }
+
+        }
+
+        /**
+         * Método que inicia la lógica
+         */
+        function init() {
+            /* Comprobar que el HTML esté cargadas */
+            document.addEventListener('DOMContentLoaded', function () {
+                loading = document.querySelector('.loading');
+                hideLoading();
+            });
+        }
+
+        return {
+            'init': init
+        }
+    }
+
+    //Para usarlo se declara e inicia. El número es el tiempo transcurrido para borra el HTML una vez cargado todos los elementos, en este caso 1 segundo: 1000 milisegundos,
+    Loading(500).init();
+
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+

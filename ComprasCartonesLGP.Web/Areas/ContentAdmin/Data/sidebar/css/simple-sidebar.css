@@ -1,0 +1,441 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template/simple-sidebar)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+
+ #wrapper {
+    overflow-x: hidden;
+ }
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -15rem;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 15rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+  }
+}
+
+.TextoHome {
+    color: #44B2C1 !important;
+}
+
+a.bg-light:focus, a.bg-light:hover, button.bg-light:focus, button.bg-light:hover {
+    background-color: #328D9A !important;
+    /*background: #40516f;*/
+    color: #fff !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,.075);
+    color: #44B2C1;
+}
+
+.BackgroundGrisOscuro {
+    background-color: #e9ecef!important;
+}
+
+.enlaces:hover {
+    background-color: rgba(0,0,0,.075);
+    color: #f4841c!important;
+}
+
+.contenedor {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    max-width: 600px;
+    margin: 10px auto 10px;
+    display: block;
+}
+
+.dni {
+    position: absolute;
+    top: 120px;
+    left: 30px;
+    font-size: 26px;
+}
+
+.codigo {
+    position: absolute;
+    top: 120px;
+    left: 300px;
+    font-size: 26px;
+}
+
+.nombreApellido {
+    position: absolute;
+    top: 170px;
+    left: 30px;
+    font-size: 26px;
+}
+
+.fecNac {
+    position: absolute;
+    top: 220px;
+    left: 30px;
+    font-size: 26px;
+}
+
+.vigencia {
+    position: absolute;
+    top: 270px;
+    left: 30px;
+    font-size: 26px;
+}
+
+.qr {
+    position: absolute;
+    top: 280px;
+    right: 30px;
+    width: 200px;
+    height: 200px;
+}
+
+/*@media (max-width: 768px) {
+    .nombreApellido {
+        position: absolute;
+        top: 80px;
+        left: 10px;
+        font-size: 10px;
+    }
+
+    .dni {
+        position: absolute;
+        top: 90px;
+        left: 10px;
+        font-size: 10px;
+    }
+
+    .codigo {
+        position: absolute;
+        top: 120px;
+        left: 10px;
+        font-size: 10px;
+    }
+
+    .fecNac {
+        position: absolute;
+        top: 150px;
+        left: 10px;
+        font-size: 10px;
+    }
+
+    .vigencia {
+        position: absolute;
+        top: 180px;
+        left: 10px;
+        font-size: 10px;
+    }
+
+    .qr {
+        position: absolute;
+        top: 240px;
+        right: 10px;
+        width: 60px;
+        height: 60px;
+    }
+}*/
+
+@media (max-width: 992px) {
+    .dni {       
+        position: absolute;
+        top: 140px;
+        left: 30px;
+        font-size: 20px;
+    }
+
+    .codigo {
+        position: absolute;
+        top: 140px;
+        left: 200px;
+        font-size: 20px;
+    }
+
+    .nombreApellido {
+        position: absolute;
+        top: 180px;
+        left: 30px;
+        font-size: 20px;
+    }
+
+    .fecNac {
+        position: absolute;
+        top: 220px;
+        left: 30px;
+        font-size: 20px;
+    }
+
+    .vigencia {
+        position: absolute;
+        top: 260px;
+        left: 30px;
+        font-size: 20px;
+    }
+
+    .qr {
+        position: absolute;
+        top: 200px;
+        right: 30px;
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .dni {
+        position: absolute;
+        top: 120px;
+        left: 20px;
+        font-size: 18px;
+    }
+
+    .codigo {
+        position: absolute;
+        top: 120px;
+        left: 180px;
+        font-size: 18px;
+    }
+
+    .nombreApellido {
+        position: absolute;
+        top: 150px;
+        left: 20px;
+        font-size: 18px;
+    }    
+
+    .fecNac {
+        position: absolute;
+        top: 180px;
+        left: 20px;
+        font-size: 18px;
+    }
+
+    .vigencia {
+        position: absolute;
+        top: 210px;
+        left: 20px;
+        font-size: 18px;
+    }
+
+    .qr {
+        position: absolute;
+        top: 130px;
+        right: 30px;
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 400px) {
+    .dni {
+        position: absolute;
+        top: 70px;
+        left: 16px;
+        font-size: 14px;
+    }
+
+    .codigo {
+        position: absolute;
+        top: 70px;
+        left: 140px;
+        font-size: 14px;
+    }
+
+    .nombreApellido {
+        position: absolute;
+        top: 100px;
+        left: 16px;
+        font-size: 14px;
+    }
+
+    .fecNac {
+        position: absolute;
+        top: 130px;
+        left: 16px;
+        font-size: 12px;
+    }
+
+    .vigencia {
+        position: absolute;
+        top: 160px;
+        left: 16px;
+        font-size: 14px;
+    }
+
+    .qr {
+        position: absolute;
+        top: 80px;
+        right: 30px;
+        width: 80px;
+        height: 80px;
+    }
+}
+
+.progress-bar-turquesa {
+    background-color: #D3ECF1 !important;
+}
+
+.panel:hover {
+    background: #40516f;
+    color: #328D9A;
+}
+
+.panel {
+    margin-bottom: 10px !important;
+    background-color: #e9ecef;
+}
+
+.iconoPanel {
+    font-size: 70px !important;
+    margin-top: -25px !important;
+    margin-bottom: 0px !important;
+    float: right !important;
+}
+
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: 1s all;
+    opacity: 0;
+}
+
+    .loading.show {
+        opacity: 1;
+    }
+
+    .loading .spin {
+        border: 3px solid hsla(185, 100%, 62%, 0.2);
+        border-top-color: #44B2C1;
+        border-radius: 50%;
+        width: 3em;
+        height: 3em;
+        animation: spin 1s linear infinite;
+    }
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.turquesa4 {
+    color: #328D9A;
+}
+
+.turquesa3 {
+    color: #44B2C1;
+}
+
+.turquesa2 {
+    color: #B6DFE8;
+}
+
+.turquesa1 {
+    color: #D3ECF1;
+}
+
+.background-turquesa4 {
+    background-color: #328D9A !important;
+}
+
+.background-turquesa3 {
+    background-color: #44B2C1 !important;
+}
+
+.background-turquesa2 {
+    background-color: #B6DFE8 !important;
+}
+
+.background-turquesa1 {
+    background-color: #D3ECF1 !important;
+}
+
+.textoBlanco{
+    color: #fff;
+}
+
+.navbar {
+    border-color: #fff;
+}
+
+.botonPrincipal {
+    color: #fff;
+    background-color: #44B2C1;
+}
+
+.botonPrincipal:hover{
+    color: #fff;
+    text-decoration: none;
+}
+
+#footer {
+    left: 0;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    padding: 5px 0px;
+    background-color: #328D9A;
+}
+
+
+html {
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    margin: 0;
+    margin-bottom: 40px;
+}
+
+.botones-formularios {
+    display: flex;
+    justify-content: center;
+}
+
+.margin-botones-formularios{
+    margin: 5px;
+}

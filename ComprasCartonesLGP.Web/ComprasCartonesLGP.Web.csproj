@@ -167,6 +167,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\ContentAdmin\ContentAdminAreaRegistration.cs" />
+    <Compile Include="Areas\ContentAdmin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\ComprasController.cs" />
@@ -182,6 +183,24 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\ContentAdmin\Data\sidebar\css\simple-sidebar.css" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\imagesIcons\ico_editar.gif" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\imagesIcons\ico_eliminar.png" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\imagesIcons\ico_lupa.png" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-grid.css" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-reboot.css" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap.css" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.bundle.js" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.js" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.js" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.min.js" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.slim.js" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.slim.min.js" />
     <Content Include="assets\css\custom-styles.css" />
     <Content Include="assets\css\purpose.css" />
     <Content Include="assets\img\brand\favicon.png" />
@@ -233,6 +252,21 @@
     <Content Include="assets\libs\fortawesome\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="assets\libs\fortawesome\fontawesome-free\webfonts\fa-solid-900d41d.eot" />
     <Content Include="Areas\ContentAdmin\Views\web.config" />
+    <Content Include="Areas\ContentAdmin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-grid.css.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-grid.min.css.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-reboot.css.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.bundle.js.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.bundle.min.js.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.js.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.min.js.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.min.map" />
+    <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.slim.min.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -294,9 +328,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\ContentAdmin\Controllers\" />
-    <Folder Include="Areas\ContentAdmin\Data\" />
-    <Folder Include="Areas\ContentAdmin\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
