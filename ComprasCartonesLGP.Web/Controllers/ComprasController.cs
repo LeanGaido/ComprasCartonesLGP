@@ -13,6 +13,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ComprasCartonesLGP.Utilities;
+using System.Net.Http;
 
 namespace ComprasCartonesLGP.Web.Controllers
 {
@@ -260,7 +261,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             try
             {
-                var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
+                var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.ID == SolicitudReservadaId).FirstOrDefault();
                 var Carton = db.Solicitudes.Where(x => x.ID == cartonReservado.SolicitudID).FirstOrDefault();
 
                 CompraDeSolicitud cartonVendido = new CompraDeSolicitud();
@@ -374,22 +375,23 @@ namespace ComprasCartonesLGP.Web.Controllers
                     adhesionPago360.email = Cliente.Email;
                     adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
                     adhesionPago360.short_description = "LGP";
-                    adhesionPago360.external_reference = Cliente.ID.ToString();
+                    adhesionPago360.external_reference = CartonComprado.ID.ToString();
                     adhesionPago360.cbu_number = cbu_number;
                     adhesionPago360.cbu_holder_id_number = cbu_holder_id_number.Value;
                     adhesionPago360.cbu_holder_name = adhesion_holder_name;
 
                     try
                     {
-                        /*adhesion = GenerarAdhesionCbu(adhesionPago360);
+                        adhesion = GenerarAdhesionCbu(adhesionPago360);
                         db.AdhesionCbu.Add(adhesion);
 
                         db.SaveChanges();
 
-                        adhesionId = adhesion.id;*/
+                        adhesionId = adhesion.id;
 
                         int mesInicio = hoy.Month;
-                        float precioCuota = CartonComprado.Solicitud.Precio / CantCuotas;
+                        var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
+                        float precioCuota = solicitud.Precio / CantCuotas;
 
                         for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
                         {
@@ -398,9 +400,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                             cuota.CompraDeSolicitudID = CartonComprado.ID;
                             cuota.MesCuota = mes.ToString();
                             cuota.AnioCuota = hoy.Year.ToString();
-                            cuota.PrimerVencimiento = DateTime.MinValue;
+                            //cuota.PrimerVencimiento = DateTime.MinValue;
+                            cuota.PrimerVencimiento = new DateTime(2000, 1, 1); 
                             cuota.PrimerPrecioCuota = precioCuota;
-                            cuota.SeguntoVencimiento = DateTime.MinValue;
+                            cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
                             cuota.SeguntoPrecioCuota = precioCuota;
 
                             db.CuotasCompraDeSolicitudes.Add(cuota);
@@ -427,7 +430,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                         }
                         return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
                     }
-                    return RedirectToAction("AdherirseCbu", new { CantCuotas });
                 }
                 else if (cartonVendido.TipoDePagoID == 3)//Plan de Pagos Debito Tarjeta
                 {
@@ -446,21 +448,17 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                     try
                     {
-                        /*adhesion = GenerarAdhesionCard(adhesionPago360);
+                        adhesion = GenerarAdhesionCard(adhesionPago360);
                         db.AdhesionCard.Add(adhesion);
 
                         db.SaveChanges();
 
-                        adhesionId = adhesion.id;*/
+                        adhesionId = adhesion.id;
 
                         int mesInicio = hoy.Month;
 
-                        //PREGUNTAR A LEANDRO
                         var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
                         float precioCuota = solicitud.Precio / CantCuotas;
-
-
-                        //float precioCuota = CartonComprado.Solicitud.Precio / CantCuotas;
 
                         for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
                         {
@@ -469,9 +467,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                             cuota.CompraDeSolicitudID = CartonComprado.ID;
                             cuota.MesCuota = mes.ToString();
                             cuota.AnioCuota = hoy.Year.ToString();
-                            cuota.PrimerVencimiento = DateTime.MinValue;
+                            cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
                             cuota.PrimerPrecioCuota = precioCuota;
-                            cuota.SeguntoVencimiento = DateTime.MinValue;
+                            cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
                             cuota.SeguntoPrecioCuota = precioCuota;
 
                             db.CuotasCompraDeSolicitudes.Add(cuota);
@@ -704,15 +702,15 @@ namespace ComprasCartonesLGP.Web.Controllers
             string pago360Js = JsonConvert.SerializeObject(pago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
             requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer OTllZDJlZjA3NmNlOWQ4NzYzYzYzNjljMjU3YTNmZGYxNTQ3MGIwZGI2MjIwNjc2MDJkYjNmNmRiNWUyNTcxOA");
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
             HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
@@ -766,15 +764,15 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/AdhesionCbu360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/AdhesionCbu360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
             requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer OTllZDJlZjA3NmNlOWQ4NzYzYzYzNjljMjU3YTNmZGYxNTQ3MGIwZGI2MjIwNjc2MDJkYjNmNmRiNWUyNTcxOA");
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
             HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
@@ -829,7 +827,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
             requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer OTllZDJlZjA3NmNlOWQ4NzYzYzYzNjljMjU3YTNmZGYxNTQ3MGIwZGI2MjIwNjc2MDJkYjNmNmRiNWUyNTcxOA");
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
             HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
@@ -880,7 +878,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
             requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer OTllZDJlZjA3NmNlOWQ4NzYzYzYzNjljMjU3YTNmZGYxNTQ3MGIwZGI2MjIwNjc2MDJkYjNmNmRiNWUyNTcxOA");
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
             HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
@@ -933,7 +931,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
             requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer OTllZDJlZjA3NmNlOWQ4NzYzYzYzNjljMjU3YTNmZGYxNTQ3MGIwZGI2MjIwNjc2MDJkYjNmNmRiNWUyNTcxOA");
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
             HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
@@ -1199,7 +1197,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
             requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer ZTY0Zjk0NThlOTZlYzFkMmVmYWNjZWZiYzJiZDk1YjQ5ZjAzMDVhYzZhYTExZTE3NTM1ZGYwYjRiMmI2OTQxYQ");
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
             HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
@@ -1234,7 +1232,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 solicitudes = (from oCompras in db.ComprasDeSolicitudes
                                join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                                join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
-                               where oPromocion.Anio == anio
+                               where oPromocion.Anio == anio && oCompras.AsociadoID == Cliente.ID
                                select oCompras).ToList();
             }
             return View(solicitudes);
@@ -1279,5 +1277,135 @@ namespace ComprasCartonesLGP.Web.Controllers
             ViewBag.TotalAPagar = compraSolicitud.TotalAPagar;
             return View(cuotas);
         }
+
+        //[System.Web.Http.HttpPost]
+        //public HttpResponseMessage WebhookListener([System.Web.Http.FromBody] Webhook pWebhook)
+        //{
+        //    if (CambiarEstado(pWebhook))
+        //    {
+        //        return new HttpResponseMessage(HttpStatusCode.OK);
+        //    }
+        //    else
+        //    {
+        //        return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        //    }
+        //}
+
+        //public bool CambiarEstado(Webhook pwebhook)
+        //{
+        //    bool cambioEstado = false;
+        //    try
+        //    {
+        //        switch (pwebhook.entity_name)
+        //        {
+        //            case "adhesion":
+        //                if (pwebhook.type == "signed")
+        //                {
+        //                    var id = pwebhook.entity_id;
+        //                    var respuestaAdhesion = ObtenerAdhesionCBU(id);
+        //                    db.AdhesionesCBU.Add(respuestaAdhesion);
+        //                    db.SaveChanges();
+        //                }
+        //                if (pwebhook.type == "canceled")
+        //                {
+        //                    var adherido = db.AdhesionesCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+        //                    adherido.state = pwebhook.type;
+        //                    adherido.canceled_at = DateTime.Now;
+        //                    db.Entry(adherido).State = EntityState.Modified;
+        //                    db.SaveChanges();
+        //                }
+        //                cambioEstado = true;
+        //                break;
+        //            case "card_adhesion":
+        //                if (pwebhook.type == "signed")
+        //                {
+        //                    var id = pwebhook.entity_id;
+        //                    var respuestaAdhesion = ObtenerAdhesionCard(id);
+        //                    db.AdhesionesCard.Add(respuestaAdhesion);
+        //                    db.SaveChanges();
+        //                }
+        //                if (pwebhook.type == "canceled")
+        //                {
+        //                    var adherido = db.AdhesionesCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+        //                    adherido.state = pwebhook.type;
+        //                    adherido.canceled_at = DateTime.Now;
+        //                    db.Entry(adherido).State = EntityState.Modified;
+        //                    db.SaveChanges();
+        //                }
+        //                cambioEstado = true;
+        //                break;
+        //            case "debit_request":
+        //                if (pwebhook.type == "rejected")
+        //                {
+        //                    var entity_name = pwebhook.entity_name;
+        //                    var entity_id = pwebhook.entity_id;
+        //                    var created_at = pwebhook.created_at;
+
+        //                    var rechazo = db.DebitosCbu.Where(x => x.id == entity_id).FirstOrDefault();
+        //                    rechazo.state = pwebhook.type;
+        //                    db.Entry(rechazo).State = EntityState.Modified;
+        //                    db.SaveChanges();
+
+        //                    InformarRechazoDebito(entity_id, entity_name, created_at);
+        //                }
+        //                if (pwebhook.type == "paid")
+        //                {
+        //                    var entity_id = pwebhook.entity_id;
+
+        //                    var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+        //                    pago.state = pwebhook.type;
+        //                    db.Entry(pago).State = EntityState.Modified;
+        //                    db.SaveChanges();
+
+        //                    InformarPagoDebito(entity_id);
+        //                }
+        //                if (pwebhook.type == "canceled")
+        //                {
+        //                    var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+        //                    pago.state = pwebhook.type;
+        //                    db.Entry(pago).State = EntityState.Modified;
+        //                    db.SaveChanges();
+        //                }
+        //                cambioEstado = true;
+        //                break;
+        //            case "card_debit_request":
+        //                if (pwebhook.type == "rejected")
+        //                {
+        //                    var entity_name = pwebhook.entity_name;
+        //                    var entity_id = pwebhook.entity_id;
+        //                    var created_at = pwebhook.created_at;
+
+        //                    var rechazo = db.DebitosCard.Where(x => x.id == entity_id).FirstOrDefault();
+        //                    rechazo.state = pwebhook.type;
+        //                    db.Entry(rechazo).State = EntityState.Modified;
+        //                    db.SaveChanges();
+
+        //                    InformarRechazoDebito(entity_id, entity_name, created_at);
+        //                }
+        //                if (pwebhook.type == "paid")
+        //                {
+        //                    var pago = db.DebitosCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+        //                    pago.state = pwebhook.type;
+        //                    db.Entry(pago).State = EntityState.Modified;
+        //                    db.SaveChanges();
+        //                }
+        //                if (pwebhook.type == "canceled")
+        //                {
+        //                    var pago = db.DebitosCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+        //                    pago.state = pwebhook.type;
+        //                    db.Entry(pago).State = EntityState.Modified;
+        //                    db.SaveChanges();
+        //                }
+        //                cambioEstado = true;
+        //                break;
+        //        }
+        //        return cambioEstado;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        cambioEstado = false;
+        //        return cambioEstado;
+        //    }
+        //}
     }
 }
