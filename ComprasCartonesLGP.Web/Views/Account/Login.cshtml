@@ -75,7 +75,8 @@
                                     <div class="form-group">
                                         @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Contraseña" })
                                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                    </div>                                        
+                                    </div>                   
+                                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
                                 }
                             </div>
                         </div>
