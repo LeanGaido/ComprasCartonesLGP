@@ -369,7 +369,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                     AdhesionCbu adhesion = new AdhesionCbu();
                     AdhesionCbuPago360Request adhesionPago360 = new AdhesionCbuPago360Request();
 
-                    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+                    //var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+                    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == cartonVendido.NroSolicitud && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
                     adhesionPago360.adhesion_holder_name = adhesion_holder_name;
                     adhesionPago360.email = Cliente.Email;
@@ -400,7 +401,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                             cuota.CompraDeSolicitudID = CartonComprado.ID;
                             cuota.MesCuota = mes.ToString();
                             cuota.AnioCuota = hoy.Year.ToString();
-                            //cuota.PrimerVencimiento = DateTime.MinValue;
                             cuota.PrimerVencimiento = new DateTime(2000, 1, 1); 
                             cuota.PrimerPrecioCuota = precioCuota;
                             cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
