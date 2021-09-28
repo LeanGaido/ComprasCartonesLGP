@@ -4,6 +4,7 @@
     ViewBag.Title = "DetalleSolicitud";
 }
 
+
 <div class="col-md-12">
     <h2 class="mt-4"><b>Consulta de Solicitud Adquirida</b></h2>
     <br>
@@ -13,7 +14,14 @@
     <br>
     <b>Precio:</b> $@Model.TotalAPagar
     <br>
-    <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion
+    <div class="row">
+        <div class="col-md-6" style="padding-top: 15px">
+            <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion. @ViewBag.DatosAdhesion
+        </div>
+        <div class="col-md-6">
+            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion"  href="#" @*href=@Url.Action(ViewBag.Action, ViewBag.Controlador, new { id = ViewBag.Id })*@ style="display: @ViewBag.BotonVisible" class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
+        </div>
+    </div>
     <br>
     <b>Cant. Cuotas:</b> @Model.CantCuotas
     <br>
@@ -31,5 +39,21 @@
     @{ Html.RenderAction("TablaCuotas", "Compras", new { id = Model.ID });}
     <br /><br />
 </div>
-
-        
+<!-- Modal Baja adhesión automatica-->
+<div class="modal fade" id="ModalCancelarAdhesion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel">¿Esta seguro que desea dar de baja el débito automático?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="CancelarAdhesionSi">Sí</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <input id="IdAdhesion" type="hidden" />
+            </div>
+        </div>
+    </div>
+</div>

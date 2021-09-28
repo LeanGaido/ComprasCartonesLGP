@@ -259,6 +259,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return RedirectToAction("ErrorCompra", new { MensajeError = "La Reserva del Carton Expiro" });
             }
 
+            var asociado = db.Asociados.Where(x => x.Dni == Cliente.Dni).FirstOrDefault();
+
             try
             {
                 var ReservaCarton = db.ReservaDeSolicitudes.Where(x => x.ID == SolicitudReservadaId).FirstOrDefault();
@@ -372,9 +374,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                     //var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
                     var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == cartonVendido.NroSolicitud && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
-                    adhesionPago360.adhesion_holder_name = adhesion_holder_name;
+                    //adhesionPago360.adhesion_holder_name = adhesion_holder_name;
+                    adhesionPago360.adhesion_holder_name = asociado.NombreCompleto;
                     adhesionPago360.email = Cliente.Email;
-                    adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
+                    adhesionPago360.description = "Adhesion para el Débito automático de La Gran Promocion";
                     adhesionPago360.short_description = "LGP";
                     adhesionPago360.external_reference = CartonComprado.ID.ToString();
                     adhesionPago360.cbu_number = cbu_number;
@@ -437,12 +440,14 @@ namespace ComprasCartonesLGP.Web.Controllers
                     AdhesionCard adhesion = new AdhesionCard();
                     AdhesionCardPago360Request adhesionPago360 = new AdhesionCardPago360Request();
 
-                    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+                    //var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+                    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == cartonVendido.NroSolicitud && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
-                    adhesionPago360.adhesion_holder_name = adhesion_holder_name;
+                    adhesionPago360.adhesion_holder_name = asociado.NombreCompleto;
                     adhesionPago360.email = Cliente.Email;
                     adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
-                    adhesionPago360.external_reference = Cliente.ID.ToString();
+                    //adhesionPago360.external_reference = Cliente.ID.ToString();
+                    adhesionPago360.external_reference = CartonComprado.ID.ToString();
                     adhesionPago360.card_number = card_number;
                     adhesionPago360.card_holder_name = card_holder_name;
 
@@ -1240,6 +1245,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
         public ActionResult DetalleSolicitud(int? id)
         {
+            ViewBag.BotonVisible = "hidden";
             var detalle = db.ComprasDeSolicitudes.Where(x => x.ID == id).FirstOrDefault();
             if(detalle == null)
             {
@@ -1257,6 +1263,27 @@ namespace ComprasCartonesLGP.Web.Controllers
             else
             {
                 ViewBag.EstadoPago = "Pendiente";
+            }
+            if (detalle.TipoDePago.ID == 2)
+            {
+                var adhesionCbu = db.AdhesionCbu.Where(x => x.external_reference == detalle.ID.ToString()).FirstOrDefault();
+                var UltimoNrosCbu = adhesionCbu.cbu_number.Substring(18, 4);
+                ViewBag.DatosAdhesion = "(CBU: XXXXXXXXXXXXXXXXXX" + UltimoNrosCbu + ")";
+                ViewBag.Action = "ConfirmarBajaCbu";
+                ViewBag.Controlador = "Compras";
+                ViewBag.IdAdhesion = adhesionCbu.id;
+                ViewBag.BotonVisible = "";
+                ViewBag.TipoPagoId = detalle.TipoDePago.ID;
+            }
+            if (detalle.TipoDePago.ID == 3)
+            {
+                var adhesionCard = db.AdhesionCard.Where(x => x.external_reference == detalle.ID.ToString()).FirstOrDefault();
+                ViewBag.DatosAdhesion = "(Tarjeta "+ adhesionCard.card + " terminada en " + adhesionCard.last_four_digits + ")";
+                ViewBag.Action = "ConfirmarBajaCard";
+                ViewBag.Controlador = "Compras";
+                ViewBag.IdAdhesion = adhesionCard.id;
+                ViewBag.BotonVisible = "";
+                ViewBag.TipoPagoId = detalle.TipoDePago.ID;
             }
             ViewBag.Nombre = asociado.Nombre;
             ViewBag.Apellido = asociado.Apellido;

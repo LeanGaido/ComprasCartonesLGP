@@ -150,6 +150,65 @@
                 $('#btnsubmit').click();
             })
 
+            $('#ModalCancelarAdhesion').on('show.bs.modal', function (event) {
+                console.log("llego");
+                var button = $(event.relatedTarget);
+                var valores = button.data('idadhesion') + " " + button.data('tipopagoid');
+                let array = valores.split(' ');
+                $("#IdAdhesion").val(array);
+                console.log($("#IdAdhesion").val());
+            })
+
+            $('#CancelarAdhesionSi').click(function () {
+                var array = $("#IdAdhesion").val();
+                var adhesionId = array.split(",")[0];
+                var tipoPagoId = array.split(",")[1];
+                console.log(adhesionId);
+                console.log(tipoPagoId);
+                if (tipoPagoId == 3) {
+                        @*$.ajax({
+                        type: "POST",
+                        traditional: true,
+                        async: false,
+                        cache: false,
+                        url: '@Url.Action("CancelarAdhesionCard360", "Compras")',
+                        data: {
+                            adhesionId = adhesionId,
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                        },
+                        error: function (ex) {
+                            alert('Ocurrio un Error, Por Favor intente nuevamente mas tarde.');
+                        }
+                    });*@
+                }
+                @*if (tipoPagoId == 2) {
+                        $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        async: false,
+                        cache: false,
+                        url: '/Clientes/getLocalidades',
+                        data: {
+                            ProvinciaId: $('#ProvinciaID').val()
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#LocalidadId').empty();
+                            $.each(data, function (i, data) {
+                                $("#LocalidadId").append('<option value="'
+                                    + data.ID + '">'
+                                    + data.Descripcion + '</option>');
+                            });
+                        },
+                        error: function (ex) {
+                            alert('Ocurrio un Error, Por Favor intente nuevamente mas tarde.');
+                        }
+                    });
+                }*@
+            })
+
             //// Function to clear all dabs from the card
             //function cleanCard() {
             //    $('td').css('background-color', 'rgb(119, 119, 119)');
