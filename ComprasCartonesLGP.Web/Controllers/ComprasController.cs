@@ -614,84 +614,84 @@ namespace ComprasCartonesLGP.Web.Controllers
         //    return RedirectToAction("DebitoPendiente");
         //}
 
-        public ActionResult CancelarAdhesionCbu()
-        {
-            //if (Session["ClienteDni"] == null)
-            //{
-            //    return RedirectToAction("Identificarse", "Clientes");
-            //}
+        //public ActionResult CancelarAdhesionCbu()
+        //{
+        //    //if (Session["ClienteDni"] == null)
+        //    //{
+        //    //    return RedirectToAction("Identificarse", "Clientes");
+        //    //}
 
-            return View();
-        }
+        //    return View();
+        //}
 
-        [HttpPost]
-        public ActionResult CancelarAdhesionCbu(int Respuesta)
-        {
-            DateTime hoy = DateTime.Now;
-            string url = "http://www.sueñocelestepagos.com.ar/Compras";
+        //[HttpPost]
+        //public ActionResult CancelarAdhesionCbu(int Respuesta)
+        //{
+        //    DateTime hoy = DateTime.Now;
+        //    string url = "http://www.sueñocelestepagos.com.ar/Compras";
 
-            var Cliente = ObtenerCliente();
+        //    var Cliente = ObtenerCliente();
 
-            if (Cliente == null)
-            {
-                return RedirectToAction("Identificarse", "Clientes", new { returnUrl = "/Compras/CancelarAdhesion" });
-            }
+        //    if (Cliente == null)
+        //    {
+        //        return RedirectToAction("Identificarse", "Clientes", new { returnUrl = "/Compras/CancelarAdhesion" });
+        //    }
 
-            var CartonComprado = db.ComprasDeSolicitudes.AsNoTracking().Include(t => t.Solicitud).Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+        //    var CartonComprado = db.ComprasDeSolicitudes.AsNoTracking().Include(t => t.Solicitud).Where(x => x.AsociadoID == Cliente.ID && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
-            var adhesion = db.AdhesionCbu.Where(x => x.external_reference == CartonComprado.ID.ToString()).FirstOrDefault();
+        //    var adhesion = db.AdhesionCbu.Where(x => x.external_reference == CartonComprado.ID.ToString()).FirstOrDefault();
 
-            AdhesionCbu adhesion360 = CancelarAdhesionCbu360(adhesion.id);
+        //    AdhesionCbu adhesion360 = CancelarAdhesionCbu360(adhesion.id);
 
-            if (adhesion360.state == "canceled")
-            {
-                switch (Respuesta)
-                {
-                    case 1://1 Cancelar Compra de Carton
-                        {
-                            CartonComprado.PagoCancelado = true;
+        //    if (adhesion360.state == "canceled")
+        //    {
+        //        switch (Respuesta)
+        //        {
+        //            case 1://1 Cancelar Compra de Carton
+        //                {
+        //                    CartonComprado.PagoCancelado = true;
 
-                            db.SaveChanges();
-                            break;
-                        }
-                    case 2://2 Pagar restante de un Pago
-                        {
-                            var totalPagar = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == CartonComprado.ID &&
-                                                                                     x.CuotaPagada == false)
-                                                                         .Select(x => x.PrimerPrecioCuota)
-                                                                         .Sum();
+        //                    db.SaveChanges();
+        //                    break;
+        //                }
+        //            case 2://2 Pagar restante de un Pago
+        //                {
+        //                    var totalPagar = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == CartonComprado.ID &&
+        //                                                                             x.CuotaPagada == false)
+        //                                                                 .Select(x => x.PrimerPrecioCuota)
+        //                                                                 .Sum();
 
 
-                            //var FechaDeVencimiento = db.FechasDeVencimiento.Where(x => x.Mes == hoy.Month && x.Año == hoy.Year).FirstOrDefault();
+        //                    //var FechaDeVencimiento = db.FechasDeVencimiento.Where(x => x.Mes == hoy.Month && x.Año == hoy.Year).FirstOrDefault();
 
-                            Pago360Request pago360 = new Pago360Request();
+        //                    Pago360Request pago360 = new Pago360Request();
 
-                            pago360.description = "Pago Total del saldo restante de la Solicitu Nro°: " + CartonComprado.NroSolicitud + " - La Gran Promocion";
-                            pago360.first_due_date = hoy.AddDays(3).ToString("dd-MM-yyyy");
-                            pago360.first_total = totalPagar;
-                            pago360.second_due_date = hoy.AddDays(5).ToString("dd-MM-yyyy");
-                            pago360.second_total = totalPagar;
-                            pago360.payer_name = Cliente.NombreCompleto;
-                            pago360.external_reference = CartonComprado.ID.ToString();
-                            pago360.payer_email = Cliente.Email;
-                            pago360.back_url_success = url + "/Compras/PagoRealizado";
-                            pago360.back_url_pending = url + "/Compras/PagoPendiente";
-                            pago360.back_url_rejected = url + "/Compras/PagoCancelado";
-                            //pago360.excluded_channels = new string[] { "credit_card" };
+        //                    pago360.description = "Pago Total del saldo restante de la Solicitu Nro°: " + CartonComprado.NroSolicitud + " - La Gran Promocion";
+        //                    pago360.first_due_date = hoy.AddDays(3).ToString("dd-MM-yyyy");
+        //                    pago360.first_total = totalPagar;
+        //                    pago360.second_due_date = hoy.AddDays(5).ToString("dd-MM-yyyy");
+        //                    pago360.second_total = totalPagar;
+        //                    pago360.payer_name = Cliente.NombreCompleto;
+        //                    pago360.external_reference = CartonComprado.ID.ToString();
+        //                    pago360.payer_email = Cliente.Email;
+        //                    pago360.back_url_success = url + "/Compras/PagoRealizado";
+        //                    pago360.back_url_pending = url + "/Compras/PagoPendiente";
+        //                    pago360.back_url_rejected = url + "/Compras/PagoCancelado";
+        //                    //pago360.excluded_channels = new string[] { "credit_card" };
 
-                            var pago = Pagar(pago360);
-                            CartonComprado.TipoDePagoID = 1;
+        //                    var pago = Pagar(pago360);
+        //                    CartonComprado.TipoDePagoID = 1;
 
-                            db.Pagos.Add(pago);
+        //                    db.Pagos.Add(pago);
 
-                            db.SaveChanges();
-                            break;
-                        }
-                }
-            }
+        //                    db.SaveChanges();
+        //                    break;
+        //                }
+        //        }
+        //    }
 
-            return View();
-        }
+        //    return View();
+        //}
 
         /***************************************************************************************/
 
@@ -867,109 +867,112 @@ namespace ComprasCartonesLGP.Web.Controllers
             return adhesion;
         }
 
-        public AdhesionCbu CancelarAdhesionCbu360(int adhesionId)
+        [HttpPost]
+        public JsonResult CancelarAdhesionCbu360(int id)
         {
-            AdhesionCbu adhesion = new AdhesionCbu();
-
-            //Respuesta de la Api
-            string respuesta = "";
-
-            //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?id=" + adhesionId);
-
-            //Server
-            Uri uri = new Uri("http://localhost:90/api/Adhesion360?id=" + adhesionId);
-
-            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
-
-            requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
-
-            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
-
-            if (requestFile.HaveResponse)
+            try
             {
-                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                AdhesionCbu adhesionCbu = new AdhesionCbu();
+                adhesionCbu = db.AdhesionCbu.Where(x => x.id == id).FirstOrDefault();
+
+                //Respuesta de la Api
+                string respuesta = "";
+
+                //Local
+                Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCbu?id=" + id);
+
+                //Server
+                //Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCbu?id=" + id);
+
+                HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+                requestFile.ContentType = "application/html";
+                requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+                HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+                if (requestFile.HaveResponse)
                 {
-                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8"/*"iso-8859-1"*/));
+                    if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                    {
+                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
 
-                    respuesta = respReader.ReadToEnd();
+                        respuesta = respReader.ReadToEnd();
 
-                    AdhesionCbuPago360Response adhesionResponse = new AdhesionCbuPago360Response();
+                        AdhesionCbuPago360Response cancelacion = new AdhesionCbuPago360Response();
 
-                    //var jsonObject = JObject.Parse(response.Content);
+                        //var jsonObject = JObject.Parse(response.Content);
 
-                    adhesionResponse = JsonConvert.DeserializeObject<AdhesionCbuPago360Response>(respuesta);
+                        cancelacion = JsonConvert.DeserializeObject<AdhesionCbuPago360Response>(respuesta);
 
-                    adhesion.id = adhesionResponse.id;
-                    adhesion.external_reference = adhesionResponse.external_reference;
-                    adhesion.adhesion_holder_name = adhesionResponse.adhesion_holder_name;
-                    adhesion.email = adhesionResponse.email;
-                    adhesion.cbu_holder_name = adhesionResponse.cbu_holder_name;
-                    adhesion.cbu_holder_id_number = adhesionResponse.cbu_holder_id_number;
-                    adhesion.cbu_number = adhesionResponse.cbu_number;
-                    adhesion.bank = adhesionResponse.bank;
-                    adhesion.description = adhesionResponse.description;
-                    adhesion.short_description = adhesionResponse.short_description;
-                    adhesion.state = adhesionResponse.state;
-                    adhesion.created_at = adhesionResponse.created_at;
-                    adhesion.canceled_at = adhesionResponse.canceled_at;
+                        adhesionCbu.state = cancelacion.state;
+                        adhesionCbu.state_comment = cancelacion.state_comment;
+                        adhesionCbu.canceled_at = cancelacion.canceled_at;
+
+                        db.Entry(adhesionCbu).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
             }
-
-            return adhesion;
+            catch(Exception e)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public AdhesionCard CancelarAdhesionCard360(int adhesionId)
+        [HttpPost]
+        public JsonResult CancelarAdhesionCard360(int id)
         {
-            AdhesionCard adhesion = new AdhesionCard();
-
-            //Respuesta de la Api
-            string respuesta = "";
-
-            //Local
-            //Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?id=" + adhesionId);
-
-            //Server
-            Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?id=" + adhesionId);
-
-            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
-
-            requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
-
-            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
-
-            if (requestFile.HaveResponse)
+            try
             {
-                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                AdhesionCard adhesionCard = new AdhesionCard();
+                adhesionCard = db.AdhesionCard.Where(x => x.id == id).FirstOrDefault();
+
+                //Respuesta de la Api
+                string respuesta = "";
+
+                //Local
+                Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCard?id=" + id);
+
+                //Server
+                //Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCard?id=" + id);
+
+                HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+                requestFile.ContentType = "application/html";
+                requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+                HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+                if (requestFile.HaveResponse)
                 {
-                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8"/*"iso-8859-1"*/));
+                    if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                    {
+                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
 
-                    respuesta = respReader.ReadToEnd();
+                        respuesta = respReader.ReadToEnd();
 
-                    AdhesionCardPago360Response adhesionResponse = new AdhesionCardPago360Response();
+                        AdhesionCardPago360Response cancelacion = new AdhesionCardPago360Response();
 
-                    //var jsonObject = JObject.Parse(response.Content);
+                        cancelacion = JsonConvert.DeserializeObject<AdhesionCardPago360Response>(respuesta);
 
-                    adhesionResponse = JsonConvert.DeserializeObject<AdhesionCardPago360Response>(respuesta);
+                        adhesionCard.state = cancelacion.state;
+                        adhesionCard.state_comment = cancelacion.state_comment;
+                        adhesionCard.canceled_at = cancelacion.canceled_at;
 
-                    adhesion.id = adhesionResponse.id;
-                    adhesion.external_reference = adhesionResponse.external_reference;
-                    adhesion.adhesion_holder_name = adhesionResponse.adhesion_holder_name;
-                    adhesion.email = adhesionResponse.email;
-                    adhesion.card_holder_name = adhesionResponse.card_holder_name;
-                    adhesion.last_four_digits = adhesionResponse.last_four_digits;
-                    adhesion.card = adhesionResponse.card;
-                    adhesion.description = adhesionResponse.description;
-                    adhesion.state = adhesionResponse.state;
-                    adhesion.created_at = adhesionResponse.created_at;
-                    adhesion.state_comment = adhesionResponse.state_comment;
-                    adhesion.canceled_at = adhesionResponse.canceled_at;
+                        db.Entry(adhesionCard).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        //EN QUE ESTADO CAERIA UNA VEZ QUE DESADHIERE????
+                    }
                 }
             }
-
-            return adhesion;
+            catch(Exception e)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         /***************************************************************************************/
