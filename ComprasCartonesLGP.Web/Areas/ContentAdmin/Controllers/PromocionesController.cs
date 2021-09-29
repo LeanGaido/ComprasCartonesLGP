@@ -11,6 +11,7 @@ using ComprasCartonesLGP.Entities;
 
 namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PromocionesController : Controller
     {
         private LGPContext db = new LGPContext();

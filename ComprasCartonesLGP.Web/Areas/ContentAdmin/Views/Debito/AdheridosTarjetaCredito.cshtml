@@ -1,0 +1,92 @@
+﻿@model PagedList.IPagedList<ComprasCartonesLGP.Entities.AdhesionCard>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Débitos Automaticos > Tarjeta de Credito";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+<div class="container col-md-12 row">
+    <div class="col-md-6">
+        <p></p>
+        @using (Html.BeginForm())
+        {
+            <p>
+                <strong class="">Buscar Titular Tarjeta: </strong> @Html.TextBox("searchString", ViewBag.currentFilter as string)
+                <input type="submit" value="Buscar" class="btn botonPrincipal" />
+            </p>
+        }
+    </div>
+    <div class="col-md-2">
+        <p>
+            <h4>@Html.ActionLink("Limpiar filtro", "Index", null, new { @class = "btn botonPrincipal" })</h4>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <p>
+            <h4>@Html.ActionLink("Enviar Solicitud de debito", "Index", null, new { @class = "btn botonPrincipal" })</h4>
+        </p>
+    </div>
+</div>
+<div class="table-responsive" id="tableCtaCte">
+    <table class="table table-hover" id="job-table">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">
+                    <div align="center">Nombre del titular del servicio</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Nombre del titular de la Tarjeta</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Tarjeta</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Email</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Fecha Adhesión</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="text-center tableBody">
+                @foreach (var item in Model)
+                {
+                    <tr class="">
+                        <td class="">
+                            @Html.DisplayFor(modelItem => item.adhesion_holder_name)
+                        </td>
+                        <td class="">
+                            @Html.DisplayFor(modelItem => item.card_holder_name)
+                        </td>
+                        <td class="">
+                            @Html.DisplayFor(modelItem => item.card)
+                        </td>
+                        <td class="">
+                            @Html.DisplayFor(modelItem => item.email)
+                        </td>
+                        <td class="">
+                            @item.created_at.ToString("dd-MM-yyyy")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="12">
+                    <p></p>
+                    <div align="center">
+                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                    </div>
+                    <p></p>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <br /><br />
+</div>
