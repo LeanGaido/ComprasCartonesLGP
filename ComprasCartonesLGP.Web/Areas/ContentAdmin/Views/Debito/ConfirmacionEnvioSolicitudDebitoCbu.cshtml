@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Confirmación Envio Solicitud Debito Cbu";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+<div class="page-content">
+    <div id="tab-general">
+        <div id="sum_box" class="row mbl">
+            <div class="col-lg-12 col-sm-12 col-md-12">
+                <div align="center">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <h3>¿Enviar solicitud de débito automático?</h3>
+                        <p>
+                            <a href="@Url.Action("DebitarCbu","Debito")" type="submit" class="btn btn-primary">SÍ</a>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("AdheridosTarjetaCredito","Debito")" class="btn btn-primary">NO</a>
+                        </p>
+                    }
+                </div>
+                &nbsp;<br>
+            </div>
+            <div class="col-lg-12 col-sm-12 col-md-12">
+                <div align="center">
+                    <h5>Última solicitud enviada: @ViewBag.UltimaSolicitud</h5>
+                </div>
+                &nbsp;<br>
+            </div>
+        </div>
+    </div>
+</div>

@@ -379,7 +379,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     adhesionPago360.email = Cliente.Email;
                     adhesionPago360.description = "Adhesion para el Débito automático de La Gran Promocion";
                     adhesionPago360.short_description = "LGP";
-                    adhesionPago360.external_reference = CartonComprado.ID.ToString();
+                    adhesionPago360.external_reference = CartonComprado.NroSolicitud;
                     adhesionPago360.cbu_number = cbu_number;
                     adhesionPago360.cbu_holder_id_number = cbu_holder_id_number.Value;
                     adhesionPago360.cbu_holder_name = adhesion_holder_name;
@@ -446,8 +446,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     adhesionPago360.adhesion_holder_name = asociado.NombreCompleto;
                     adhesionPago360.email = Cliente.Email;
                     adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
-                    //adhesionPago360.external_reference = Cliente.ID.ToString();
-                    adhesionPago360.external_reference = CartonComprado.ID.ToString();
+                    adhesionPago360.external_reference = CartonComprado.NroSolicitud;
                     adhesionPago360.card_number = card_number;
                     adhesionPago360.card_holder_name = card_holder_name;
 
@@ -1269,7 +1268,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
             if (detalle.TipoDePago.ID == 2)
             {
-                var adhesionCbu = db.AdhesionCbu.Where(x => x.external_reference == detalle.ID.ToString()).FirstOrDefault();
+                var adhesionCbu = db.AdhesionCbu.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
                 var UltimoNrosCbu = adhesionCbu.cbu_number.Substring(18, 4);
                 ViewBag.DatosAdhesion = "(CBU: XXXXXXXXXXXXXXXXXX" + UltimoNrosCbu + ")";
                 ViewBag.Action = "ConfirmarBajaCbu";
@@ -1280,7 +1279,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
             if (detalle.TipoDePago.ID == 3)
             {
-                var adhesionCard = db.AdhesionCard.Where(x => x.external_reference == detalle.ID.ToString()).FirstOrDefault();
+                var adhesionCard = db.AdhesionCard.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
                 ViewBag.DatosAdhesion = "(Tarjeta "+ adhesionCard.card + " terminada en " + adhesionCard.last_four_digits + ")";
                 ViewBag.Action = "ConfirmarBajaCard";
                 ViewBag.Controlador = "Compras";

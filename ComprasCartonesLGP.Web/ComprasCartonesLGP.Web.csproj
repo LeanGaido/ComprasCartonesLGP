@@ -290,6 +290,8 @@
     <Content Include="Areas\ContentAdmin\Views\Promociones\Index.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\AdheridosTarjetaCredito.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\AdheridosCbu.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Debito\ConfirmacionEnvioSolicitudDebitoCbu.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Debito\ConfirmacionEnvioSolicitudDebitoCard.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

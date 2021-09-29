@@ -69,6 +69,10 @@
     <Compile Include="Migrations\202109271720401_changeIntXLong.Designer.cs">
       <DependentUpon>202109271720401_changeIntXLong.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202109292140594_AddTablasDebitos.cs" />
+    <Compile Include="Migrations\202109292140594_AddTablasDebitos.Designer.cs">
+      <DependentUpon>202109292140594_AddTablasDebitos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -97,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202109271720401_changeIntXLong.resx">
       <DependentUpon>202109271720401_changeIntXLong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109292140594_AddTablasDebitos.resx">
+      <DependentUpon>202109292140594_AddTablasDebitos.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -17,8 +17,10 @@ namespace ComprasCartonesLGP.Entities
         public DateTime created_at { get; set; }//created_at	DateTime	Fecha y hora de creación del resultado. .
         public DateTime first_due_date { get; set; }//first_due_date	DateTime	Fecha de vencimiento de la Solicitud de Débito. .
         public float first_total { get; set; }//first_total	Float	Importe a cobrar. Formato: 00000000.00 (hasta 8 enteros y 2 decimales, utilizando punto “.” como separador decimal).
+        public string second_due_date { get; set; }
+        public decimal second_total { get; set; }
         //metadata	Object	Objeto JSON que se puede utilizar para guardar atributos adicionales en la Solicitud de Débito y poder sincronizar con tus sistemas de backend. Pagos360.com no utiliza este objeto.
-        public string descripcion { get; set; }//description	String	Descripción o concepto de la Solicitud de Débito.
+        public string description { get; set; }//description	String	Descripción o concepto de la Solicitud de Débito.
         [ForeignKey("adhesion")]
         public int adhesionId { get; set; }
         public virtual AdhesionCbu adhesion { get; set; }//adhesion	Object	Objeto con el detalle de la Adhesión. .

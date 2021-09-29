@@ -40,6 +40,10 @@ namespace ComprasCartonesLGP.Dal
 
         public virtual DbSet<TipoDePago> TiposDePagos { get; set; }
 
+        public virtual DbSet<DebitoCard> DebitosCard { get; set; }
+
+        public virtual DbSet<DebitoCBU> DebitosCBU { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //DONT DO THIS ANYMORE
