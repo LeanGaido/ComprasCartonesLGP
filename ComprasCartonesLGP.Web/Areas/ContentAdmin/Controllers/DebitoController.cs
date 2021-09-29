@@ -6,10 +6,9 @@ using System.Web.Mvc;
 
 namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class HomeController : Controller
+    public class DebitoController : Controller
     {
-        // GET: ContentAdmin/Home
+        // GET: ContentAdmin/Debito
         public ActionResult Index()
         {
             return View();

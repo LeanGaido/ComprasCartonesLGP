@@ -44,6 +44,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -120,12 +126,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -173,7 +173,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\ContentAdmin\ContentAdminAreaRegistration.cs" />
+    <Compile Include="Areas\ContentAdmin\Controllers\DebitoController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\ContentAdmin\Controllers\PromocionesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\ComprasController.cs" />
@@ -273,6 +275,12 @@
     <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\bootstrap\js\bootstrap.min.js.map" />
     <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.min.map" />
     <Content Include="Areas\ContentAdmin\Data\sidebar\vendor\jquery\jquery.slim.min.map" />
+    <Content Include="Areas\ContentAdmin\Views\Debito\Index.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Promociones\Create.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Promociones\Delete.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Promociones\Details.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Promociones\Edit.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Promociones\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
