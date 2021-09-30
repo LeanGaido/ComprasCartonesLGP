@@ -19,7 +19,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         // GET: ContentAdmin/Promociones
         public ActionResult Index()
         {
-            return View(db.Promociones.ToList());
+            return View(db.Promociones.OrderByDescending(x => x.Anio).ToList());
         }
 
         // GET: ContentAdmin/Promociones/Details/5

@@ -19,7 +19,7 @@
             <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion. @ViewBag.DatosAdhesion
         </div>
         <div class="col-md-6">
-            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion"  href="#" @*href=@Url.Action(ViewBag.Action, ViewBag.Controlador, new { id = ViewBag.Id })*@ style="display: @ViewBag.BotonVisible" class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
+            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion"  href="#"  style="display: @ViewBag.BotonVisible" class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
         </div>
     </div>
     <br>

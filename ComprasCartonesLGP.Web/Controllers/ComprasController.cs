@@ -311,59 +311,60 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                     var numeroCarton = db.Solicitudes.Where(x => x.ID == cartonReservado.SolicitudID).FirstOrDefault();
 
-                    //pago360.description = "Pago Total de la Solicitud Nro°: " + numeroCarton.NroSolicitud + " - La Gran Promocion";
-                    //pago360.first_due_date = PagoUnaCuota.PrimerVencimiento.ToString("dd-MM-yyyy");
-                    //pago360.first_total = Carton.Precio;
-                    //pago360.second_due_date = PagoUnaCuota.SeguntoVencimiento.ToString("dd-MM-yyyy");
-                    //pago360.second_total = Carton.Precio;
-                    //pago360.payer_name = Cliente.NombreCompleto;
+                    pago360.description = "Pago Total de la Solicitud Nro°: " + numeroCarton.NroSolicitud + " - La Gran Promocion";
+                    pago360.first_due_date = PagoUnaCuota.PrimerVencimiento.ToString("dd-MM-yyyy");
+                    pago360.first_total = Carton.Precio;
+                    pago360.second_due_date = PagoUnaCuota.SeguntoVencimiento.ToString("dd-MM-yyyy");
+                    pago360.second_total = Carton.Precio;
+                    pago360.payer_name = Cliente.NombreCompleto;
                     //pago360.external_reference = PagoCartonId.ToString();
-                    //pago360.payer_email = Cliente.Email;
-                    //pago360.back_url_success = url + "/Compras/PagoRealizado";
-                    //pago360.back_url_pending = url + "/Compras/PagoPendiente";
-                    //pago360.back_url_rejected = url + "/Compras/PagoCancelado";
-                    //try
-                    //{
-                    //    pago = Pagar(pago360);
+                    pago360.external_reference = numeroCarton.NroSolicitud;
+                    pago360.payer_email = Cliente.Email;
+                    pago360.back_url_success = url + "/Compras/PagoRealizado";
+                    pago360.back_url_pending = url + "/Compras/PagoPendiente";
+                    pago360.back_url_rejected = url + "/Compras/PagoCancelado";
+                    try
+                    {
+                        pago = Pagar(pago360);
 
-                    //    db.Pagos.Add(pago);
+                        db.Pagos.Add(pago);
 
-                    //    PagoUnaCuota.PagoID = pago.ID;
+                        PagoUnaCuota.PagoID = pago.ID;
 
-                    //    db.ReservaDeSolicitudes.Remove(ReservaCarton);
+                        db.ReservaDeSolicitudes.Remove(ReservaCarton);
 
-                    //    db.SaveChanges();
-                    //    try
-                    //    {
-                    //        string subject = "Avisos La Gran Promocion";
+                        db.SaveChanges();
+                        //try
+                        //{
+                        //    string subject = "Avisos La Gran Promocion";
 
-                    //        string emailBody = ObtenerBodyEmailCompraPagoContado(Carton.NroSolicitud);
+                        //    string emailBody = ObtenerBodyEmailCompraPagoContado(Carton.NroSolicitud);
 
-                    //        Email nuevoEmail = new Email();
-                    //        nuevoEmail.SendEmail(emailBody, Cliente.Email, subject);
-                    //    }
-                    //    catch (Exception)
-                    //    {
+                        //    Email nuevoEmail = new Email();
+                        //    nuevoEmail.SendEmail(emailBody, Cliente.Email, subject);
+                        //}
+                        //catch (Exception)
+                        //{
 
-                    //    }
+                        //}
 
-                    //    return Redirect(pago.checkout_url);
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    if (PagoCartonId != 0)
-                    //    {
-                    //        db.CuotasCompraDeSolicitudes.Remove(PagoUnaCuota);
-                    //        db.SaveChanges();
-                    //    }
+                        return Redirect(pago.checkout_url);
+                    }
+                    catch (Exception e)
+                    {
+                        if (PagoCartonId != 0)
+                        {
+                            db.CuotasCompraDeSolicitudes.Remove(PagoUnaCuota);
+                            db.SaveChanges();
+                        }
 
-                    //    if (CartonVendidoId != 0)
-                    //    {
-                    //        db.ComprasDeSolicitudes.Remove(cartonVendido);
-                    //        db.SaveChanges();
-                    //    }
-                    //    return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
-                    //}
+                        if (CartonVendidoId != 0)
+                        {
+                            db.ComprasDeSolicitudes.Remove(cartonVendido);
+                            db.SaveChanges();
+                        }
+                        return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                    }
                 }
                 else if (cartonVendido.TipoDePagoID == 2)//Plan de Pagos Debito CBU
                 {
@@ -415,8 +416,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                         db.ReservaDeSolicitudes.Remove(ReservaCarton);
 
                         db.SaveChanges();
-
-                        return RedirectToAction("ComprobarCompra");
+                        return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
+                        //return RedirectToAction("ComprobarCompra");
                     }
                     catch (Exception e)
                     {
@@ -498,8 +499,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                         return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
                     }
 
-                    return RedirectToAction("ComprobarCompra");
-                    //return RedirectToAction("AdherirseCard", new { CantCuotas });
+                    return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
+                    //return RedirectToAction("ComprobarCompra");
                 }
             }
             catch (Exception e)
@@ -1271,8 +1272,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                 var adhesionCbu = db.AdhesionCbu.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
                 var UltimoNrosCbu = adhesionCbu.cbu_number.Substring(18, 4);
                 ViewBag.DatosAdhesion = "(CBU: XXXXXXXXXXXXXXXXXX" + UltimoNrosCbu + ")";
-                ViewBag.Action = "ConfirmarBajaCbu";
-                ViewBag.Controlador = "Compras";
                 ViewBag.IdAdhesion = adhesionCbu.id;
                 ViewBag.BotonVisible = "";
                 ViewBag.TipoPagoId = detalle.TipoDePago.ID;
@@ -1281,8 +1280,6 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 var adhesionCard = db.AdhesionCard.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
                 ViewBag.DatosAdhesion = "(Tarjeta "+ adhesionCard.card + " terminada en " + adhesionCard.last_four_digits + ")";
-                ViewBag.Action = "ConfirmarBajaCard";
-                ViewBag.Controlador = "Compras";
                 ViewBag.IdAdhesion = adhesionCard.id;
                 ViewBag.BotonVisible = "";
                 ViewBag.TipoPagoId = detalle.TipoDePago.ID;
@@ -1305,6 +1302,27 @@ namespace ComprasCartonesLGP.Web.Controllers
             var compraSolicitud = db.ComprasDeSolicitudes.Where(x => x.ID == id).FirstOrDefault();
             ViewBag.TotalAPagar = compraSolicitud.TotalAPagar;
             return View(cuotas);
+        }
+
+        public ActionResult ResumenCompra(string nroSolicitud)
+        {
+            var compra = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == nroSolicitud).FirstOrDefault();
+            if (compra == null)
+            {
+                return null;
+            }
+            var asociado = db.Asociados.Where(x => x.ID == compra.AsociadoID).FirstOrDefault();
+            ViewBag.NombreAsociado = asociado.NombreCompleto;
+            ViewBag.DniAsociado = asociado.Dni;
+            if (compra.PagoRealizdo == true)
+            {
+                ViewBag.EstadoPago = "Completo";
+            }
+            else
+            {
+                ViewBag.EstadoPago = "Pendiente";
+            }
+            return View(compra);
         }
 
         //[System.Web.Http.HttpPost]

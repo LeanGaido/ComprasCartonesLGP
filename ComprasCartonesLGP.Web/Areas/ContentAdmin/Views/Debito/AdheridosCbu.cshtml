@@ -38,6 +38,9 @@
         <thead>
             <tr class="text-center">
                 <th scope="col">
+                    <div align="center">Nº Solicitud</div>
+                </th>
+                <th scope="col">
                     <div align="center">Nombre del titular del servicio</div>
                 </th>
                 <th scope="col">
@@ -58,6 +61,9 @@
             @foreach (var item in Model)
             {
                 <tr class="">
+                    <td class="">
+                        @Html.DisplayFor(modelItem => item.external_reference)
+                    </td>
                     <td class="">
                         @Html.DisplayFor(modelItem => item.adhesion_holder_name)
                     </td>

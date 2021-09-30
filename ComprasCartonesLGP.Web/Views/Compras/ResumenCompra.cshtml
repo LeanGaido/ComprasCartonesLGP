@@ -1,0 +1,35 @@
+﻿@model ComprasCartonesLGP.Entities.CompraDeSolicitud
+@{
+    ViewBag.Title = "ResumenCompra";
+}
+
+
+<div class="col-md-12">
+    <h2 class="mt-4"><b>Resumen de Compra</b></h2>
+    <br>
+    <h4>Su compra ha finalizado con éxito</h4>
+    <br>
+    <h5>Datos de la Compra</h5>
+    <b>Nombre y Apellido:</b> @ViewBag.NombreAsociado
+    <br>
+    <b>Dni:</b> @ViewBag.DniAsociado
+    <br>
+    <b>Nro de Solicitud:</b> @Model.NroSolicitud
+    <br>
+    <b>Forma de Pago:</b> @Model.TipoDePago.Descripcion
+    <br>
+    <b>Estado del Pago:</b> @ViewBag.EstadoPago
+    <br><br>
+    <div class="alert alert-danger">
+        <h5>Para finalizar la adhesión automática se le ha enviado un correo electronico de confirmación a su correo</h5>
+    </div>
+    @*<h5>Se ha enviado un mail automático a su correo electrónico con el resumen de los datos de su compra.</h5>*@
+    <br>
+    Desde ya muchas gracias
+    <br><br>
+    <B>LA GRAN PROMOCIÓN</B>
+    <br /><br />
+    <a href="@Url.Action("ListadoSolicitudes","Compras")" class="btn btn-primary btn-block col-md-3">Listado de solicitudes</a>
+    <br />
+</div>
+
