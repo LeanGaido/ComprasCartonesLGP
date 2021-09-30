@@ -1248,7 +1248,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
         public ActionResult DetalleSolicitud(int? id)
         {
-            ViewBag.BotonVisible = "hidden";
+            ViewBag.BotonVisible = "none";
             var detalle = db.ComprasDeSolicitudes.Where(x => x.ID == id).FirstOrDefault();
             if(detalle == null)
             {
