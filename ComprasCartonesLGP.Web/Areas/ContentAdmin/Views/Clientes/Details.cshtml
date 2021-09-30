@@ -1,0 +1,80 @@
+﻿@model ComprasCartonesLGP.Entities.Asociado
+@{
+    ViewBag.Title = "Clientes > Detalle";
+}
+
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+<div class="table-responsive" id="tableCtaCte">
+    <table class="table table-hover" id="job-table">
+        <tbody class="text-center tableBody">
+            <tr class="active">
+                <th width="20%" scope="col">Nombre y Apellido</th>
+                <td>@Model.NombreCompleto</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Fecha Nacimiento</th>
+                <td>@Model.FechaNacimiento.ToString("dd-MM-yyyy")</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Sexo</th>
+                <td>@ViewBag.Sexo</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Cuit</th>
+                <td>@Model.Cuit</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Dni</th>
+                <td>@Model.Dni</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Provincia</th>
+                <td>@Model.Localidad.Provincia.Descripcion</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Localidad</th>
+                <td>@Model.Localidad.Descripcion</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Dirección</th>
+                <td>@Model.Localidad.Descripcion</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Altura</th>
+                <td>@Model.Altura</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Barrio</th>
+                <td>@Model.Barrio</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Piso</th>
+                <td>@Model.Piso</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Departamento</th>
+                <td>@Model.Dpto</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Email</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Nº Celular</th>
+                <td>@Model.AreaCelular - @Model.NumeroCelular</td>
+            </tr>
+        </tbody>
+    </table>
+    <br /><br />
+    <div class="form-group row botones-formularios">
+        <div class="margin-botones-formularios">
+            @Html.ActionLink("Volver", "Index", new { currentFilter = @ViewBag.CurrentFilter, page = @ViewBag.page }, new { @class = "btn botonPrincipal" })
+        </div>
+    </div>
+</div>

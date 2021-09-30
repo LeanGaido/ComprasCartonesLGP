@@ -1,0 +1,77 @@
+﻿@model PagedList.IPagedList<ComprasCartonesLGP.Entities.Asociado>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Clientes";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+<div class="container col-md-12 row">
+    <div class="col-md-6">
+        <p></p>
+        @using (Html.BeginForm())
+        {
+            <p>
+                <strong class="">Buscar Cliente: </strong> @Html.TextBox("searchString", ViewBag.currentFilter as string)
+                <input type="submit" value="Buscar" class="btn botonPrincipal" />
+            </p>
+        }
+    </div>
+    <div class="col-md-2">
+        <p>
+            <h4>@Html.ActionLink("Limpiar filtro", "Index", null, new { @class = "btn botonPrincipal" })</h4>
+        </p>
+    </div>
+</div>
+<div class="table-responsive" id="tableCtaCte">
+    <table class="table table-hover" id="job-table">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">
+                    <div align="center">Nombre y apellido</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Dni</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Email</div>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="text-center tableBody">
+            @foreach (var item in Model)
+            {
+                <tr class="">
+                    <td class="">
+                        @Html.DisplayFor(modelItem => item.NombreCompleto)
+                    </td>
+                    <td class="">
+                        @Html.DisplayFor(modelItem => item.Dni)
+                    </td>
+                    <td class="">
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td width="5%"><a href="@Url.Action("Details", new { id = item.ID, page = ViewBag.page, currentFilter = ViewBag.CurrentFilter })"><div align="center"><i class="fa fa-info" aria-hidden="true"></i></div></a></td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="12">
+                    <p></p>
+                    <div align="center">
+                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                    </div>
+                    <p></p>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <br /><br />
+</div>

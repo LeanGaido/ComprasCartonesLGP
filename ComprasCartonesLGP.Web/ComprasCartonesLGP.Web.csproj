@@ -179,6 +179,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\ContentAdmin\ContentAdminAreaRegistration.cs" />
+    <Compile Include="Areas\ContentAdmin\Controllers\ClientesController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\DebitoController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\HomeController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\PromocionesController.cs" />
@@ -292,6 +293,8 @@
     <Content Include="Areas\ContentAdmin\Views\Debito\AdheridosCbu.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\ConfirmacionEnvioSolicitudDebitoCbu.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\ConfirmacionEnvioSolicitudDebitoCard.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Clientes\Index.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Clientes\Details.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
