@@ -1,0 +1,51 @@
+﻿@model ComprasCartonesLGP.Entities.CompraDeSolicitud
+@{
+    ViewBag.Title = "Compras > Detalle";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+<div class="table-responsive" id="tableCtaCte">
+    <table class="table table-hover" id="job-table">
+        <tbody class="text-center tableBody">
+            <tr class="active">
+                <th width="20%" scope="col">Nº Solicitud</th>
+                <td>@Model.NroSolicitud</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Nombre Asociado</th>
+                <td>@ViewBag.NombreAsociado</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Fecha Compra</th>
+                <td>@Model.NroSolicitud</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Pago</th>
+                <td>@ViewBag.EstadoPago</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Tipo de pago</th>
+                <td>@Model.TipoDePago.Descripcion</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Total a pagar</th>
+                <td>$@Model.TotalAPagar</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Cuotas</th>
+                <td>$@Model.CantCuotas</td>
+            </tr>
+        </tbody>
+    </table>
+    <br /><br />
+    <div class="form-group row botones-formularios">
+        <div class="margin-botones-formularios">
+            @Html.ActionLink("Volver", "Index", new { currentFilter = @ViewBag.CurrentFilter, page = @ViewBag.page }, new { @class = "btn botonPrincipal" })
+        </div>
+    </div>
+</div>
