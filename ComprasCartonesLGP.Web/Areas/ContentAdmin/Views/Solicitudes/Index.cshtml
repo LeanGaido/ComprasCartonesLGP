@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ComprasCartonesLGP.Entities.Solicitud>
+@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+<div class="container col-md-12 row">
+    <div class="col-md-4">
+        <p>
+            <h4>@Html.ActionLink("Cargar Solicitudes", "", null, new { @class = "btn botonPrincipal" })</h4>
+        </p>
+    </div>
+</div>
+<div class="table-responsive" id="tableCtaCte">
+    <table class="table table-hover" id="job-table">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">
+                    <div align="center">Nº Solicitud</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Precio</div>
+                </th>
+                <th scope="col">
+                    <div align="center">Promoción</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="text-center tableBody">
+            @foreach (var item in Model)
+            {
+                <tr class="">
+                    <td class="">
+                        @Html.DisplayFor(modelItem => item.NroSolicitud)
+                    </td>
+                    <td class="">
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td class="">
+                        @Html.DisplayFor(modelItem => item.Promocion.Anio)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br /><br />
+</div>
