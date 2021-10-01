@@ -1,0 +1,59 @@
+﻿@model ComprasCartonesLGP.Entities.Solicitud
+@{
+    ViewBag.Title = "Solicitudes > Cargar";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group row">
+            @Html.Label("PromocionId", "Año", htmlAttributes: new { @class = "col-sm-2 col-form-label col-form-label-sm", @for = "colFormLabelSm" })
+            <div class="col-sm-6">
+                @Html.DropDownList("PromocionId", null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Precio, "Precio", htmlAttributes: new { @class = "col-sm-2 col-form-label col-form-label-sm", @for = "colFormLabelSm" })
+            <div class="col-sm-6">
+                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group row input-file">
+            @Html.LabelFor(model => model., htmlAttributes: new { @class = "col-sm-2 col-form-label col-form-label-sm", @for = "colFormLabelSm" })
+            <div class="input-group mb-3 col-sm-6 ">
+                <div class="input-group-btn">
+                    <button class="btn botonPrincipal btn-choose" type="button" id="inputGroupFileAddon03">Seleccionar</button>
+                </div>
+                <div class="custom-file">
+                    <input type="text" multiple class="form-control custom-file" placeholder='Seleccionar archivo...' required />
+                </div>
+                <div>
+                    <button class="btn botonPrincipal btn-reset" type="button">Limpiar Seleccion</button>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="form-group row botones-formularios">
+            <div class="margin-botones-formularios">
+                <input type="submit" value="Guardar" class="btn botonPrincipal" />
+            </div>
+            <div class="margin-botones-formularios">
+                @Html.ActionLink("Volver", "Index", null, new { @class = "btn botonPrincipal" })
+            </div>
+        </div>
+    </div>
+}

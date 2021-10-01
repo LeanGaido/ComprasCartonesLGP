@@ -300,6 +300,7 @@
     <Content Include="Areas\ContentAdmin\Views\Compras\Index.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Compras\Details.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Solicitudes\Index.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Solicitudes\Create.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
