@@ -97,7 +97,13 @@
     <script>
         $(document).ready(function () {
             if ($('#ProvinciaID').length) {
+                CargarLocalidades();
+
                 $('#ProvinciaID').change(function () {
+                    CargarLocalidades();
+                });
+
+                function CargarLocalidades() {
                     $.ajax({
                         type: "GET",
                         traditional: true,
@@ -120,7 +126,7 @@
                             alert('Ocurrio un Error, Por Favor intente nuevamente mas tarde.');
                         }
                     });
-                });
+                }
             }
 
             if ($('#squaredOne').length) {
@@ -171,85 +177,85 @@
             });
 
             function CancelarAdhesionCard(id) {
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                async: false,
-                cache: false,
-                url: '@Url.Action("CancelarAdhesionCard360", "Compras")',
-                context: document.body,
-                data: {
-                    id: id,
-                },
-                success: function (result) {
-                    if (result) {
-                        $('body').append('<span class = "alert alert-success" style="position: fixed;bottom: 0;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
-                        window.setTimeout(function () {
-                            $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                                $(this).remove();
-                            });
-                        }, 4000);
-                    }
-                    else {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: false,
+                    cache: false,
+                    url: '@Url.Action("CancelarAdhesionCard360", "Compras")',
+                    context: document.body,
+                    data: {
+                        id: id,
+                    },
+                    success: function (result) {
+                        if (result) {
+                            $('body').append('<span class = "alert alert-success" style="position: fixed;bottom: 0;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                            }, 4000);
+                        }
+                        else {
+                            $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                            }, 4000);
+                        }
+                    },
+                    error: function (xhr) {
                         $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+
                         window.setTimeout(function () {
                             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                                 $(this).remove();
                             });
                         }, 4000);
                     }
-                },
-                error: function (xhr) {
-                    $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
-
-                    window.setTimeout(function () {
-                        $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                            $(this).remove();
-                        });
-                    }, 4000);
-                }
-            });
+                });
             }
 
             function CancelarAdhesionCBU(id) {
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                async: false,
-                cache: false,
-                url: '@Url.Action("CancelarAdhesionCbu360", "Compras")',
-                context: document.body,
-                data: {
-                    id: id,
-                },
-                success: function (result) {
-                    if (result) {
-                        $('body').append('<span class = "alert alert-success" style="position: fixed;bottom: 0;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
-                        window.setTimeout(function () {
-                            $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                                $(this).remove();
-                            });
-                        }, 4000);
-                    }
-                    else {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: false,
+                    cache: false,
+                    url: '@Url.Action("CancelarAdhesionCbu360", "Compras")',
+                    context: document.body,
+                    data: {
+                        id: id,
+                    },
+                    success: function (result) {
+                        if (result) {
+                            $('body').append('<span class = "alert alert-success" style="position: fixed;bottom: 0;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                            }, 4000);
+                        }
+                        else {
+                            $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                            }, 4000);
+                        }
+                    },
+                    error: function (xhr) {
                         $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+
                         window.setTimeout(function () {
                             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                                 $(this).remove();
                             });
                         }, 4000);
                     }
-                },
-                error: function (xhr) {
-                    $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
-
-                    window.setTimeout(function () {
-                        $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                            $(this).remove();
-                        });
-                    }, 4000);
-                }
-            });
+                });
             }
 
             //// Function to clear all dabs from the card
