@@ -331,22 +331,25 @@ namespace ComprasCartonesLGP.Web.Controllers
                 db.Asociados.Add(cliente);
                 db.SaveChanges();
 
+                //int SolicitudReservadaId = 0;
 
-                int SolicitudReservadaId = 0;
+                //if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
+                //{
+                //    return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                //}
 
-                if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
-                {
-                    return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
-                }
+                //var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
 
-                var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
+                //if (cartonReservado.FechaExpiracionReserva <= DateTime.Now)
+                //{
+                //    return RedirectToAction("ErrorCompra", new { MensajeError = "La Reserva del Carton Expiro" });
+                //}
 
-                if (cartonReservado.FechaExpiracionReserva <= DateTime.Now)
-                {
-                    return RedirectToAction("ErrorCompra", new { MensajeError = "La Reserva del Carton Expiro" });
-                }
+                Session["ClienteDni"] = asociado.Dni;
+                Session["ClienteContacto"] = asociado.Email;
+                Session["ClienteSexo"] = asociado.Sexo;
 
-                return RedirectToAction("Index", "Compras");
+                return RedirectToAction("ComprobarCompra", "Compras");
             }
             catch (Exception e)
             {
