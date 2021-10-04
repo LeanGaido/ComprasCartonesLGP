@@ -140,158 +140,78 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View();
         }
 
-        [HttpPost]
-        public void Importar(HttpPostedFileBase file, int? PromocionId, float? Precio)
-        {
+        //[HttpPost]
+        //public void Importar(HttpPostedFileBase file, int? PromocionId, float? Precio)
+        //{
 
-            List<Solicitud> solicitudes = new List<Solicitud>();
-            ViewBag.PromocionId = new SelectList(db.Promociones, "ID", "Descripcion");
-            List<Alert> alerts = new List<Alert>();
+        //    List<Solicitud> solicitudes = new List<Solicitud>();
+        //    ViewBag.PromocionId = new SelectList(db.Promociones, "ID", "Descripcion");
+        //    List<Alert> alerts = new List<Alert>();
 
-            if (file.ContentLength > 0)
-            {
-                string extension = Path.GetExtension(file.FileName).ToLower();
+        //    if (file.ContentLength > 0)
+        //    {
+        //        string extension = Path.GetExtension(file.FileName).ToLower();
 
-                string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
+        //        string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
 
-                string path1 = string.Format("{0}/{1}", Server.MapPath("~/Areas/Data/Uploads"), file.FileName);
-                if (!Directory.Exists(path1))
-                {
-                    Directory.CreateDirectory(Server.MapPath("~/Areas/Data/Uploads"));
-                }
+        //        string path1 = string.Format("{0}/{1}", Server.MapPath("~/Areas/Data/Uploads"), file.FileName);
+        //        if (!Directory.Exists(path1))
+        //        {
+        //            Directory.CreateDirectory(Server.MapPath("~/Areas/Data/Uploads"));
+        //        }
 
-                file.SaveAs(path1);
+        //        file.SaveAs(path1);
 
-                List<string> data = new List<string>();
+        //        List<string> data = new List<string>();
 
-                using (var stream = System.IO.File.Open(path1, FileMode.Open, FileAccess.Read))
-                {
-                    using (var reader = ExcelReaderFactory.CreateReader(stream))
-                    {
-                        var result = reader.AsDataSet();
-                        // Ejemplos de acceso a datos
-                        DataTable table = result.Tables[0];
-                        for (int i = 1; i <= (table.Rows.Count - 1); i++)
-                        {
-                            DataRow rows = table.Rows[i];
-                            string dataRow = "";
-                            for (int j = 0; j <= (table.Columns.Count - 1); j++)
-                            {
-                                dataRow += rows[j] + ((j != table.Columns.Count) ? ";" : "");
-                            }
-                            data.Add(dataRow);
-                        }
-                    }
-                }
-            }
-               
+        //        using (var stream = System.IO.File.Open(path1, FileMode.Open, FileAccess.Read))
+        //        {
+        //            using (var reader = ExcelReaderFactory.CreateReader(stream))
+        //            {
+        //                var result = reader.AsDataSet();
+        //                // Ejemplos de acceso a datos
+        //                DataTable table = result.Tables[0];
+        //                for (int i = 1; i <= (table.Rows.Count - 1); i++)
+        //                {
+        //                    DataRow rows = table.Rows[i];
+        //                    string dataRow = "";
+        //                    for (int j = 0; j <= (table.Columns.Count - 1); j++)
+        //                    {
+        //                        dataRow += rows[j] + ((j != table.Columns.Count) ? ";" : "");
+        //                    }
+        //                    data.Add(dataRow);
+        //                }
+        //            }
+        //        }
 
+        //        foreach (var row in data)
+        //        {
+        //            string[] solicitudAuxiliar = row.Split(';');
+        //            if (solicitudAuxiliar.Length == 6)
+        //            {
+        //                Solicitud cliente = new Solicitud();
+        //                if (!int.TryParse(solicitudAuxiliar[0].Trim(), out int nroSolicitud))
+        //                {
+        //                    string errorMessage = "Error en Linea: " + data.IndexOf(row) + ", El numero de solicitud no es valido";
+        //                    alerts.Add(new Alert("danger", errorMessage, true));
+        //                    continue;
+        //                }
+        //                cliente.Asociado = nroSolicitud;                       
 
-                //using (var stream = System.IO.File.Open(path1, FileMode.Open, FileAccess.Read))
-                //{
-                //    using (var reader = ExcelReaderFactory.CreateReader(stream))
-                //    {
-                //        var result = reader.AsDataSet();
-                //        // Ejemplos de acceso a datos
-                //        DataTable table = result.Tables[0];
-                //        for (int i = 1; i <= (table.Rows.Count - 1); i++)
-                //        {
-                //            DataRow rows = table.Rows[i];
-                //            string dataRow = "";
-                //            for (int j = 0; j <= (table.Columns.Count - 1); j++)
-                //            {
-                //                dataRow += rows[j] + ((j != table.Columns.Count) ? ";" : "");
-                //            }
-                //            data.Add(dataRow);
-                //        }
-                //    }
-                //}
-                //foreach (var row in data)
-                //{
-                //    try
-                //    {
-                //        string[] usuarioAux = row.Split(';');
-                //        if (usuarioAux.Length == 9)
-                //        {
-                //            Usuario usuario = new Usuario();
+        //                if (clientesSinCuentas.Where(x => x.Asociado == cliente.Asociado).FirstOrDefault() == null)
+        //                {
+        //                    clientesSinCuentas.Add(cliente);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                string errorMessage = "Error en Linea: " + data.IndexOf(row) + ", Formato no Valido.";
+        //                alerts.Add(new VmAlert("danger", errorMessage, true));
+        //                continue;
+        //            }
+        //        }
+        //    }
 
-                //            usuario.Nombre = usuarioAux[0].Trim();
-                //            usuario.Dni = usuarioAux[1].Trim();
-                //            usuario.Cuit = usuarioAux[2].Trim();
-                //            usuario.TelefonoFijo = usuarioAux[3].Trim();
-                //            usuario.TelefonoCelular = usuarioAux[4].Trim();
-                //            //var email = usuarioAux[5].Trim();
-                //            var VerificacionEmail = email_bien_escrito(usuarioAux[5].Trim());
-
-                //            var tipo = "";
-                //            if (usuarioAux[6].Trim() == "Soy Mecanico")
-                //            {
-                //                tipo = "Mecanico";
-                //            }
-                //            if (usuarioAux[6].Trim() == "Acceso Publico")
-                //            {
-                //                tipo = "Publico";
-                //            }
-
-                //            var activo = usuarioAux[7].Trim();
-
-                //            if (usuario.Nombre != "")
-                //            {
-                //                if (VerificacionEmail == true)
-                //                {
-                //                    if (tipo != "")
-                //                    {
-                //                        if (activo == "Si")
-                //                        {
-                //                            var emailUsuario = usuarioAux[5].Trim();
-                //                            var nombre = usuario.Nombre;
-                //                            var contrasenia = GenerateRandomPassword();
-                //                            var user = new ApplicationUser { UserName = emailUsuario, Email = emailUsuario, LastLogin = null };
-                //                            var result = UserManager.Create(user, contrasenia);
-                //                            if (result.Succeeded)
-                //                            {
-                //                                try
-                //                                {
-                //                                    usuario.IdLocalidad = 7418;
-                //                                    usuario.UserId = user.Id;
-                //                                    UserManager.AddToRole(user.Id, tipo);
-                //                                    db.Usuarios.Add(usuario);
-                //                                    db.SaveChanges();
-                //                                    dbContext.SaveChanges();
-
-                //                                    EnvioUsuarioNuevo(emailUsuario, nombre, contrasenia);
-                //                                    System.Threading.Thread.Sleep(40000);
-                //                                }
-                //                                catch (Exception e)
-                //                                {
-                //                                    var ruta = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/xml/UsuariosNoGuardados.xml");
-
-                //                                    using (TextWriter tw = new StreamWriter(ruta, true))
-                //                                    {
-                //                                        tw.WriteLine("Usuario: " + usuario.Nombre + "; Email: " + user.Email + ";Error: " + e.Message);
-                //                                    }
-                //                                    continue;
-                //                                }
-                //                            }
-                //                        }
-                //                    }
-                //                }
-                //            }
-                //        }
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        var ruta = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/xml/UsuariosNoGuardados.xml");
-
-                //        using (TextWriter tw = new StreamWriter(ruta, true))
-                //        {
-                //            tw.WriteLine("Error: " + e.Message + "Linea: " + row);
-                //        }
-                //        continue;
-                //    }
-
-                //}
-
-            }
+        //}
     }
 }
