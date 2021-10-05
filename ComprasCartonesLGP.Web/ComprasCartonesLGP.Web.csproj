@@ -367,6 +367,7 @@
     <Content Include="Views\Compras\DetalleSolicitud.cshtml" />
     <Content Include="Views\Compras\TablaCuotas.cshtml" />
     <Content Include="Views\Compras\ResumenCompra.cshtml" />
+    <Content Include="Views\Compras\ErrorCompra.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

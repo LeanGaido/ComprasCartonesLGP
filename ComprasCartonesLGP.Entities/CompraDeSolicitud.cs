@@ -55,5 +55,7 @@ namespace ComprasCartonesLGP.Entities
         public bool PagoCancelado { get; set; }
 
         public DateTime? FechaCancelado { get; set; }
+
+        public int CodigoVendedor { get; set; }
     }
 }

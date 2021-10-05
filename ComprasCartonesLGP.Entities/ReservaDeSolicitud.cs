@@ -23,5 +23,7 @@ namespace ComprasCartonesLGP.Entities
         public DateTime FechaReserva { get; set; }
 
         public DateTime FechaExpiracionReserva { get; set; }
+
+        public int CodigoVendedor { get; set; }
     }
 }

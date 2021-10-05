@@ -133,6 +133,14 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (cartonReservado == null) cartonReservado = new ReservaDeSolicitud();
 
+            if(CodigoVendedor == "")
+            {
+                cartonReservado.CodigoVendedor = 125;
+            }
+            else
+            {
+                cartonReservado.CodigoVendedor = Convert.ToInt32(CodigoVendedor);
+            }
             cartonReservado.SolicitudID = SolicitudId;
             cartonReservado.Dni = dni;
             cartonReservado.Sexo = sexo;
@@ -243,7 +251,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
             {
-                return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
             }
 
             //var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.ID == SolicitudReservadaId && x.Dni == Cliente.Dni).Include("Carton").FirstOrDefault();
@@ -276,6 +284,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 cartonVendido.FechaVenta = hoy;
                 cartonVendido.CantCuotas = CantCuotas;
                 cartonVendido.TotalAPagar = Carton.Precio;
+                cartonVendido.CodigoVendedor = ReservaCarton.CodigoVendedor;
 
                 db.ComprasDeSolicitudes.Add(cartonVendido);
                 db.SaveChanges();
@@ -496,7 +505,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                             db.ComprasDeSolicitudes.Remove(cartonVendido);
                             db.SaveChanges();
                         }
-                        return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                        return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
                     }
 
                     return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
@@ -1026,12 +1035,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                 {
                     case 1:
                         {
-                            Cartones = Cartones.Where(x => x.NroCarton.Contains(SearchString)).ToList();
+                            Cartones = Cartones.Where(x => x.NroSolicitud.Contains(SearchString)).ToList();
                             break;
                         }
                     case 2:
                         {
-                            Cartones = Cartones.Where(x => x.NroCarton.EndsWith(SearchString)).ToList();
+                            Cartones = Cartones.Where(x => x.NroSolicitud.EndsWith(SearchString)).ToList();
                             break;
                         }
                     default:
@@ -1323,6 +1332,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                 ViewBag.EstadoPago = "Pendiente";
             }
             return View(compra);
+        }
+
+        public ActionResult ErrorCompra(string MensajeError)
+        {
+            ViewBag.MensajeError = MensajeError;
+            return View();
         }
 
         //[System.Web.Http.HttpPost]

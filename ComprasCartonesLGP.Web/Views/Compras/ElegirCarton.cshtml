@@ -7,14 +7,14 @@
     <h1 class="mt-4 text-center"><b>Elija el Número de Solicitud</b></h1>
     <br><br>
     <h3><b>Paso 1: Ingresá el Vendedor</b></h3>
-    Si la compra es inducida a través de un Vendedor, debe ingresar el código del vendedor. En caso contrario debe ingresar el código 0.
+    Si la compra es inducida a través de un Vendedor, debe ingresar el código del vendedor. En caso contrario deje el campo vacio.
     <br><br>
     @using (Html.BeginForm("ReservarCarton", "Compras", FormMethod.Post))
     {
         <div class="form-group row">
             <label for="name" class="col-md-4 col-form-label text-md-right"><b>INGRESÁ AQUÍ EL CÓDIGO DEL VENDEDOR</b></label>
             <div class="col-md-6">
-                <input id="CodigoVendedor" type="text" class="form-control" name="CodigoVendedor" value="0" required autofocus style="color:#000;border:1px solid #000">
+                <input id="CodigoVendedor" type="text" class="form-control" name="CodigoVendedor" @*value="0"*@ autofocus style="color:#000;border:1px solid #000">
             </div>
         </div>
         <br>
