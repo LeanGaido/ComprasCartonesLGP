@@ -140,78 +140,82 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public void Importar(HttpPostedFileBase file, int? PromocionId, float? Precio)
-        //{
+        [HttpPost]
+        public void Importar(HttpPostedFileBase file, int? PromocionId, float Precio)
+        {
 
-        //    List<Solicitud> solicitudes = new List<Solicitud>();
-        //    ViewBag.PromocionId = new SelectList(db.Promociones, "ID", "Descripcion");
-        //    List<Alert> alerts = new List<Alert>();
+            List<Solicitud> solicitudes = new List<Solicitud>();
+            ViewBag.PromocionId = new SelectList(db.Promociones, "ID", "Descripcion");
+            List<Alert> alerts = new List<Alert>();
 
-        //    if (file.ContentLength > 0)
-        //    {
-        //        string extension = Path.GetExtension(file.FileName).ToLower();
+            if (file.ContentLength > 0)
+            {
+                string extension = Path.GetExtension(file.FileName).ToLower();
 
-        //        string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
+                string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
 
-        //        string path1 = string.Format("{0}/{1}", Server.MapPath("~/Areas/Data/Uploads"), file.FileName);
-        //        if (!Directory.Exists(path1))
-        //        {
-        //            Directory.CreateDirectory(Server.MapPath("~/Areas/Data/Uploads"));
-        //        }
+                string path1 = string.Format("{0}/{1}", Server.MapPath("~/Areas/Data/Uploads"), file.FileName);
+                if (!Directory.Exists(path1))
+                {
+                    Directory.CreateDirectory(Server.MapPath("~/Areas/Data/Uploads"));
+                }
 
-        //        file.SaveAs(path1);
+                file.SaveAs(path1);
 
-        //        List<string> data = new List<string>();
+                List<string> data = new List<string>();
 
-        //        using (var stream = System.IO.File.Open(path1, FileMode.Open, FileAccess.Read))
-        //        {
-        //            using (var reader = ExcelReaderFactory.CreateReader(stream))
-        //            {
-        //                var result = reader.AsDataSet();
-        //                // Ejemplos de acceso a datos
-        //                DataTable table = result.Tables[0];
-        //                for (int i = 1; i <= (table.Rows.Count - 1); i++)
-        //                {
-        //                    DataRow rows = table.Rows[i];
-        //                    string dataRow = "";
-        //                    for (int j = 0; j <= (table.Columns.Count - 1); j++)
-        //                    {
-        //                        dataRow += rows[j] + ((j != table.Columns.Count) ? ";" : "");
-        //                    }
-        //                    data.Add(dataRow);
-        //                }
-        //            }
-        //        }
+                using (var stream = System.IO.File.Open(path1, FileMode.Open, FileAccess.Read))
+                {
+                    using (var reader = ExcelReaderFactory.CreateReader(stream))
+                    {
+                        var result = reader.AsDataSet();
+                        // Ejemplos de acceso a datos
+                        DataTable table = result.Tables[0];
+                        for (int i = 1; i <= (table.Rows.Count - 1); i++)
+                        {
+                            DataRow rows = table.Rows[i];
+                            string dataRow = "";
+                            for (int j = 0; j <= (table.Columns.Count - 1); j++)
+                            {
+                                dataRow += rows[j] + ((j != table.Columns.Count) ? ";" : "");
+                            }
+                            data.Add(dataRow);
+                        }
+                    }
+                }
 
-        //        foreach (var row in data)
-        //        {
-        //            string[] solicitudAuxiliar = row.Split(';');
-        //            if (solicitudAuxiliar.Length == 6)
-        //            {
-        //                Solicitud cliente = new Solicitud();
-        //                if (!int.TryParse(solicitudAuxiliar[0].Trim(), out int nroSolicitud))
-        //                {
-        //                    string errorMessage = "Error en Linea: " + data.IndexOf(row) + ", El numero de solicitud no es valido";
-        //                    alerts.Add(new Alert("danger", errorMessage, true));
-        //                    continue;
-        //                }
-        //                cliente.Asociado = nroSolicitud;                       
+                foreach (var row in data)
+                {
+                    string[] solicitudAuxiliar = row.Split(';');
+                    if (solicitudAuxiliar.Length == 2)
+                    {
+                        Solicitud solicitudNueva = new Solicitud();
+                        if (!int.TryParse(solicitudAuxiliar[0].Trim(), out int nroSolicitud))
+                        {
+                            string errorMessage = "Error en Linea: " + data.IndexOf(row) + ", El numero de solicitud no es valido";
+                            alerts.Add(new Alert("danger", errorMessage, true));
+                            continue;
+                        }
+                        solicitudNueva.NroSolicitud = nroSolicitud.ToString();
+                        solicitudNueva.Precio = Precio;
+                        solicitudNueva.PromocionId = Convert.ToInt32(PromocionId);
 
-        //                if (clientesSinCuentas.Where(x => x.Asociado == cliente.Asociado).FirstOrDefault() == null)
-        //                {
-        //                    clientesSinCuentas.Add(cliente);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                string errorMessage = "Error en Linea: " + data.IndexOf(row) + ", Formato no Valido.";
-        //                alerts.Add(new VmAlert("danger", errorMessage, true));
-        //                continue;
-        //            }
-        //        }
-        //    }
+                        if (solicitudes.Where(x => x.PromocionId == solicitudNueva.PromocionId).FirstOrDefault() == null)
+                        {
+                            //solicitudes.Add(solicitudNueva);
+                            db.Solicitudes.Add(solicitudNueva);
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        string errorMessage = "Error en Linea: " + data.IndexOf(row) + ", Formato no Valido.";
+                        alerts.Add(new Alert("danger", errorMessage, true));
+                        continue;
+                    }
+                }
+            }
 
-        //}
+        }
     }
 }
