@@ -1340,134 +1340,195 @@ namespace ComprasCartonesLGP.Web.Controllers
             return View();
         }
 
-        //[System.Web.Http.HttpPost]
-        //public HttpResponseMessage WebhookListener([System.Web.Http.FromBody] Webhook pWebhook)
-        //{
-        //    if (CambiarEstado(pWebhook))
-        //    {
-        //        return new HttpResponseMessage(HttpStatusCode.OK);
-        //    }
-        //    else
-        //    {
-        //        return new HttpResponseMessage(HttpStatusCode.BadRequest);
-        //    }
-        //}
+        [System.Web.Http.HttpPost]
+        public HttpResponseMessage WebhookListener([System.Web.Http.FromBody] Webhook pWebhook)
+        {
+            if (CambiarEstado(pWebhook))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
 
-        //public bool CambiarEstado(Webhook pwebhook)
-        //{
-        //    bool cambioEstado = false;
-        //    try
-        //    {
-        //        switch (pwebhook.entity_name)
-        //        {
-        //            case "adhesion":
-        //                if (pwebhook.type == "signed")
-        //                {
-        //                    var id = pwebhook.entity_id;
-        //                    var respuestaAdhesion = ObtenerAdhesionCBU(id);
-        //                    db.AdhesionesCBU.Add(respuestaAdhesion);
-        //                    db.SaveChanges();
-        //                }
-        //                if (pwebhook.type == "canceled")
-        //                {
-        //                    var adherido = db.AdhesionesCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-        //                    adherido.state = pwebhook.type;
-        //                    adherido.canceled_at = DateTime.Now;
-        //                    db.Entry(adherido).State = EntityState.Modified;
-        //                    db.SaveChanges();
-        //                }
-        //                cambioEstado = true;
-        //                break;
-        //            case "card_adhesion":
-        //                if (pwebhook.type == "signed")
-        //                {
-        //                    var id = pwebhook.entity_id;
-        //                    var respuestaAdhesion = ObtenerAdhesionCard(id);
-        //                    db.AdhesionesCard.Add(respuestaAdhesion);
-        //                    db.SaveChanges();
-        //                }
-        //                if (pwebhook.type == "canceled")
-        //                {
-        //                    var adherido = db.AdhesionesCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-        //                    adherido.state = pwebhook.type;
-        //                    adherido.canceled_at = DateTime.Now;
-        //                    db.Entry(adherido).State = EntityState.Modified;
-        //                    db.SaveChanges();
-        //                }
-        //                cambioEstado = true;
-        //                break;
-        //            case "debit_request":
-        //                if (pwebhook.type == "rejected")
-        //                {
-        //                    var entity_name = pwebhook.entity_name;
-        //                    var entity_id = pwebhook.entity_id;
-        //                    var created_at = pwebhook.created_at;
+        public bool CambiarEstado(Webhook pwebhook)
+        {
+            bool cambioEstado = false;
+            try
+            {
+                switch (pwebhook.entity_name)
+                {
+                    case "payment_request":
+                        if (pwebhook.type == "paid")
+                        {
+                            var pago = db.Pagos.Where(x => x.ID == pwebhook.entity_id).FirstOrDefault();
+                            if(pago != null)
+                            {
+                                pago.state = pwebhook.type;
+                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference).FirstOrDefault();
+                                solicitudComprada.PagoRealizdo = true;
+                                solicitudComprada.FechaPago = DateTime.Now;
+                                solicitudComprada.TotalAPagar = (float)solicitudComprada.PagoRealizado;
+                                db.Entry(pago).State = EntityState.Modified;
+                                db.Entry(solicitudComprada).State = EntityState.Modified;
+                                db.SaveChanges();
+                                var asociadoId = solicitudComprada.AsociadoID;
+                                var nroSolicitud = solicitudComprada.NroSolicitud;
+                                EnviarEmailPagoContado(asociadoId, nroSolicitud);
+                            }
+                        }
+                        if (pwebhook.type == "expired")
+                        {
+                            var pago = db.Pagos.Where(x => x.ID == pwebhook.entity_id).FirstOrDefault();
+                            if (pago != null)
+                            {
+                                pago.state = pwebhook.type;
+                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference).FirstOrDefault();
+                                solicitudComprada.PagoRealizdo = false;
+                                solicitudComprada.PagoCancelado = true;
+                                db.Entry(pago).State = EntityState.Modified;
+                                db.Entry(solicitudComprada).State = EntityState.Modified;
+                                db.SaveChanges();
+                                //EnviarEmail();
+                            }
+                        }
+                        cambioEstado = true;
+                        break;
+                    case "adhesion":
+                        //if (pwebhook.type == "signed")
+                        //{
+                        //    var id = pwebhook.entity_id;
+                        //    var respuestaAdhesion = ObtenerAdhesionCBU(id);
+                        //    db.AdhesionesCBU.Add(respuestaAdhesion);
+                        //    db.SaveChanges();
+                        //}
+                        if (pwebhook.type == "canceled")
+                        {
 
-        //                    var rechazo = db.DebitosCbu.Where(x => x.id == entity_id).FirstOrDefault();
-        //                    rechazo.state = pwebhook.type;
-        //                    db.Entry(rechazo).State = EntityState.Modified;
-        //                    db.SaveChanges();
+                            //var adherido = db.AdhesionesCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                            //adherido.state = pwebhook.type;
+                            //adherido.canceled_at = DateTime.Now;
+                            //db.Entry(adherido).State = EntityState.Modified;
+                            //db.SaveChanges();
+                            //info @lagranpromocion.com.ar
+                        }
+                        cambioEstado = true;
+                        break;
+                    //case "card_adhesion":
+                    //    if (pwebhook.type == "signed")
+                    //    {
+                    //        var id = pwebhook.entity_id;
+                    //        var respuestaAdhesion = ObtenerAdhesionCard(id);
+                    //        db.AdhesionesCard.Add(respuestaAdhesion);
+                    //        db.SaveChanges();
+                    //    }
+                    //    if (pwebhook.type == "canceled")
+                    //    {
+                    //        var adherido = db.AdhesionesCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                    //        adherido.state = pwebhook.type;
+                    //        adherido.canceled_at = DateTime.Now;
+                    //        db.Entry(adherido).State = EntityState.Modified;
+                    //        db.SaveChanges();
+                    //    }
+                    //    cambioEstado = true;
+                    //    break;
+                        //case "debit_request":
+                        //    if (pwebhook.type == "rejected")
+                        //    {
+                        //        var entity_name = pwebhook.entity_name;
+                        //        var entity_id = pwebhook.entity_id;
+                        //        var created_at = pwebhook.created_at;
 
-        //                    InformarRechazoDebito(entity_id, entity_name, created_at);
-        //                }
-        //                if (pwebhook.type == "paid")
-        //                {
-        //                    var entity_id = pwebhook.entity_id;
+                        //        var rechazo = db.DebitosCbu.Where(x => x.id == entity_id).FirstOrDefault();
+                        //        rechazo.state = pwebhook.type;
+                        //        db.Entry(rechazo).State = EntityState.Modified;
+                        //        db.SaveChanges();
 
-        //                    var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-        //                    pago.state = pwebhook.type;
-        //                    db.Entry(pago).State = EntityState.Modified;
-        //                    db.SaveChanges();
+                        //        InformarRechazoDebito(entity_id, entity_name, created_at);
+                        //    }
+                        //    if (pwebhook.type == "paid")
+                        //    {
+                        //        var entity_id = pwebhook.entity_id;
 
-        //                    InformarPagoDebito(entity_id);
-        //                }
-        //                if (pwebhook.type == "canceled")
-        //                {
-        //                    var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-        //                    pago.state = pwebhook.type;
-        //                    db.Entry(pago).State = EntityState.Modified;
-        //                    db.SaveChanges();
-        //                }
-        //                cambioEstado = true;
-        //                break;
-        //            case "card_debit_request":
-        //                if (pwebhook.type == "rejected")
-        //                {
-        //                    var entity_name = pwebhook.entity_name;
-        //                    var entity_id = pwebhook.entity_id;
-        //                    var created_at = pwebhook.created_at;
+                        //        var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                        //        pago.state = pwebhook.type;
+                        //        db.Entry(pago).State = EntityState.Modified;
+                        //        db.SaveChanges();
 
-        //                    var rechazo = db.DebitosCard.Where(x => x.id == entity_id).FirstOrDefault();
-        //                    rechazo.state = pwebhook.type;
-        //                    db.Entry(rechazo).State = EntityState.Modified;
-        //                    db.SaveChanges();
+                        //        InformarPagoDebito(entity_id);
+                        //    }
+                        //    if (pwebhook.type == "canceled")
+                        //    {
+                        //        var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                        //        pago.state = pwebhook.type;
+                        //        db.Entry(pago).State = EntityState.Modified;
+                        //        db.SaveChanges();
+                        //    }
+                        //    cambioEstado = true;
+                        //    break;
+                        //case "card_debit_request":
+                        //    if (pwebhook.type == "rejected")
+                        //    {
+                        //        var entity_name = pwebhook.entity_name;
+                        //        var entity_id = pwebhook.entity_id;
+                        //        var created_at = pwebhook.created_at;
 
-        //                    InformarRechazoDebito(entity_id, entity_name, created_at);
-        //                }
-        //                if (pwebhook.type == "paid")
-        //                {
-        //                    var pago = db.DebitosCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-        //                    pago.state = pwebhook.type;
-        //                    db.Entry(pago).State = EntityState.Modified;
-        //                    db.SaveChanges();
-        //                }
-        //                if (pwebhook.type == "canceled")
-        //                {
-        //                    var pago = db.DebitosCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-        //                    pago.state = pwebhook.type;
-        //                    db.Entry(pago).State = EntityState.Modified;
-        //                    db.SaveChanges();
-        //                }
-        //                cambioEstado = true;
-        //                break;
-        //        }
-        //        return cambioEstado;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        cambioEstado = false;
-        //        return cambioEstado;
-        //    }
-        //}
+                        //        var rechazo = db.DebitosCard.Where(x => x.id == entity_id).FirstOrDefault();
+                        //        rechazo.state = pwebhook.type;
+                        //        db.Entry(rechazo).State = EntityState.Modified;
+                        //        db.SaveChanges();
+
+                        //        InformarRechazoDebito(entity_id, entity_name, created_at);
+                        //    }
+                        //    if (pwebhook.type == "paid")
+                        //    {
+                        //        var pago = db.DebitosCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                        //        pago.state = pwebhook.type;
+                        //        db.Entry(pago).State = EntityState.Modified;
+                        //        db.SaveChanges();
+                        //    }
+                        //    if (pwebhook.type == "canceled")
+                        //    {
+                        //        var pago = db.DebitosCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                        //        pago.state = pwebhook.type;
+                        //        db.Entry(pago).State = EntityState.Modified;
+                        //        db.SaveChanges();
+                        //    }
+                        //    cambioEstado = true;
+                        //    break;
+                }
+                return cambioEstado;
+            }
+            catch (Exception e)
+            {
+                cambioEstado = false;
+                return cambioEstado;
+            }
+        }
+
+        public void EnviarEmailPagoContado(int asociadoId, string nroSolicitud)
+        {
+            var asociado = db.Asociados.Where(x => x.ID == asociadoId).FirstOrDefault();
+            string to = asociado.Email;
+            string subject = "Pago Solicitud: " + nroSolicitud;
+            var emailBody = asociado.NombreCompleto + "Se ha realizado el pago de la Solicitud " + nroSolicitud +"<br/><br/> LGP";
+
+            Email email = new Email();
+            email.SendEmail(emailBody, to, subject);
+        }
+
+        public void EnviarEmailPagoContadoVencido(int asociadoId, string nroSolicitud)
+        {
+            var asociado = db.Asociados.Where(x => x.ID == asociadoId).FirstOrDefault();
+            string to = asociado.Email;
+            string subject = "Pago vencido LGP";
+            var emailBody = asociado.NombreCompleto + "Se ha vencido el tiempo para el pago de la compra de la solictud" 
+                 + nroSolicitud +". Por favor, vuelva a ingresar al sistema y compre otra solicitud. Muchas gracias.<br/><br/> LGP";
+
+            Email email = new Email();
+            email.SendEmail(emailBody, to, subject);
+        }
     }
 }
