@@ -18,14 +18,16 @@
         <div class="col-md-6" style="padding-top: 15px">
             <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion. @ViewBag.DatosAdhesion
         </div>
-        <div class="col-md-6">
-            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion"  href="#"  style="display: @ViewBag.BotonVisible" class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
+        <div class="col-md-6" id="btnCancelarAdhesion" style="display: @ViewBag.BotonVisible">
+            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion"  href="#"  class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
         </div>
     </div>
     <br>
     <b>Cant. Cuotas:</b> @Model.CantCuotas
     <br>
-    <b>Estado del Pago:</b> @ViewBag.EstadoPago
+    <div class="col-md-6 row" style="padding-top: 15px">
+        <b>Estado del Pago: </b> <div id="EstadoPago"> @ViewBag.EstadoPago</div>
+    </div>            
     <br><br>
     <b>Nombre y Apellido:</b> @ViewBag.Nombre @ViewBag.Apellido
     <br>
@@ -49,11 +51,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @*<div class="modal-body">
+            <div class="modal-body">
                 <label class="col-form-label">Motivo Cancelación:</label>
-                <input type="text" required class="form-control" id="">
+                <input type="text" required class="form-control" id="MotivoCancelacion">
                 <br />
-            </div>*@
+            </div>
             <div class="text-center">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="CancelarAdhesionSi">Sí</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>

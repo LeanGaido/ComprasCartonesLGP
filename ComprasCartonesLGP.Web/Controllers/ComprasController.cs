@@ -303,10 +303,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                     PagoUnaCuota.MesCuota = hoy.Month.ToString();
                     PagoUnaCuota.AnioCuota = hoy.Year.ToString();
 
-                    PagoUnaCuota.PrimerVencimiento = DateTime.Parse(ObtenerDiaHabil(hoy.ToString("dd-MM-yyyy"),3));
+                    //PagoUnaCuota.PrimerVencimiento = DateTime.Parse(ObtenerDiaHabil(hoy.ToString("dd-MM-yyyy"), 3));
+                    PagoUnaCuota.PrimerVencimiento = hoy.AddDays(5);
                     PagoUnaCuota.PrimerPrecioCuota = cartonVendido.TotalAPagar;
 
-                    PagoUnaCuota.SeguntoVencimiento = DateTime.Parse(ObtenerDiaHabil(PagoUnaCuota.PrimerVencimiento.ToString("dd-MM-yyyy"), 3));
+                    //PagoUnaCuota.SeguntoVencimiento = DateTime.Parse(ObtenerDiaHabil(PagoUnaCuota.PrimerVencimiento.ToString("dd-MM-yyyy"), 3));
+                    PagoUnaCuota.SeguntoVencimiento = hoy.AddDays(7);
                     PagoUnaCuota.SeguntoPrecioCuota = cartonVendido.TotalAPagar;
 
                     PagoUnaCuota.TipoPagoID = 1;
@@ -716,10 +718,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string pago360Js = JsonConvert.SerializeObject(pago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -778,10 +780,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -833,10 +835,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionCardPago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -877,7 +879,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult CancelarAdhesionCbu360(int id)
+        public JsonResult CancelarAdhesionCbu360(int id, string motivoCancelacion)
         {
             try
             {
@@ -888,10 +890,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                 string respuesta = "";
 
                 //Local
-                Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCbu?id=" + id);
+                //Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCbu?id=" + id);
 
                 //Server
-                //Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCbu?id=" + id);
+                Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCbu?id=" + id);
 
                 HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -915,7 +917,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         cancelacion = JsonConvert.DeserializeObject<AdhesionCbuPago360Response>(respuesta);
 
                         adhesionCbu.state = cancelacion.state;
-                        adhesionCbu.state_comment = cancelacion.state_comment;
+                        adhesionCbu.state_comment = motivoCancelacion;
                         adhesionCbu.canceled_at = cancelacion.canceled_at;
 
                         db.Entry(adhesionCbu).State = EntityState.Modified;
@@ -931,7 +933,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult CancelarAdhesionCard360(int id)
+        public JsonResult CancelarAdhesionCard360(int id, string motivoCancelacion)
         {
             try
             {
@@ -942,10 +944,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                 string respuesta = "";
 
                 //Local
-                Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCard?id=" + id);
+                //Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCard?id=" + id);
 
                 //Server
-                //Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCard?id=" + id);
+                Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCard?id=" + id);
 
                 HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -967,7 +969,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         cancelacion = JsonConvert.DeserializeObject<AdhesionCardPago360Response>(respuesta);
 
                         adhesionCard.state = cancelacion.state;
-                        adhesionCard.state_comment = cancelacion.state_comment;
+                        adhesionCard.state_comment = motivoCancelacion;
                         adhesionCard.canceled_at = cancelacion.canceled_at;
 
                         db.Entry(adhesionCard).State = EntityState.Modified;
@@ -1192,48 +1194,48 @@ namespace ComprasCartonesLGP.Web.Controllers
             return body;
         }
 
-        public string ObtenerDiaHabil(string date, int days)
-        {
-            string fecha = null;
-            NextBusinessDayRequest nextBusinessDay = new NextBusinessDayRequest();
-            //Respuesta de la Api
-            string respuesta = "";
+        //public string ObtenerDiaHabil(string date, int days)
+        //{
+        //    string fecha = null;
+        //    NextBusinessDayRequest nextBusinessDay = new NextBusinessDayRequest();
+        //    //Respuesta de la Api
+        //    string respuesta = "";
 
-            nextBusinessDay.date = date;
-            nextBusinessDay.days = days;
+        //    nextBusinessDay.date = date;
+        //    nextBusinessDay.days = days;
 
-            //
-            string nextBusinessDay360Js = JsonConvert.SerializeObject(nextBusinessDay);
+        //    //
+        //    string nextBusinessDay360Js = JsonConvert.SerializeObject(nextBusinessDay);
 
-            //Local
-            Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+        //    //Local
+        //    Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
 
-            //Server
-            //Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+        //    //Server
+        //    //Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
 
-            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+        //    HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
-            requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+        //    requestFile.ContentType = "application/html";
+        //    requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
-            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+        //    HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
-            if (requestFile.HaveResponse)
-            {
-                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
-                {
-                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+        //    if (requestFile.HaveResponse)
+        //    {
+        //        if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+        //        {
+        //            StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
 
-                    respuesta = respReader.ReadToEnd();
-                    var dia = respuesta.Substring(11, 2);
-                    var mes = respuesta.Substring(8, 2);
-                    var anio = respuesta.Substring(3, 4);
+        //            respuesta = respReader.ReadToEnd();
+        //            var dia = respuesta.Substring(11, 2);
+        //            var mes = respuesta.Substring(8, 2);
+        //            var anio = respuesta.Substring(3, 4);
 
-                    fecha = dia + "-" + mes + "-" + anio;
-                }
-            }
-            return fecha;
-        }
+        //            fecha = dia + "-" + mes + "-" + anio;
+        //        }
+        //    }
+        //    return fecha;
+        //}
 
         public ActionResult ListadoSolicitudes(int anio = 0)
         {
@@ -1268,30 +1270,45 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 return null;
             }
-            if(detalle.PagoRealizdo == true)
+            if(detalle.PagoCancelado == true)
             {
-                ViewBag.EstadoPago = "Completo";
+                ViewBag.EstadoPago = "Cancelado";
             }
             else
             {
-                ViewBag.EstadoPago = "Pendiente";
-            }
+                if (detalle.PagoRealizdo == true)
+                {
+                    ViewBag.EstadoPago = "Completo";
+                }
+                else
+                {
+                    ViewBag.EstadoPago = "Pendiente";
+                }
+            }           
+
             if (detalle.TipoDePago.ID == 2)
             {
                 var adhesionCbu = db.AdhesionCbu.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
                 var UltimoNrosCbu = adhesionCbu.cbu_number.Substring(18, 4);
                 ViewBag.DatosAdhesion = "(CBU: XXXXXXXXXXXXXXXXXX" + UltimoNrosCbu + ")";
-                ViewBag.IdAdhesion = adhesionCbu.id;
-                ViewBag.BotonVisible = "";
-                ViewBag.TipoPagoId = detalle.TipoDePago.ID;
+                ViewBag.IdAdhesion = adhesionCbu.id;               
+                ViewBag.TipoPagoId = detalle.TipoDePago.ID;               
+                if (detalle.PagoCancelado == false)
+                {
+                    ViewBag.BotonVisible = "";
+                }
             }
             if (detalle.TipoDePago.ID == 3)
             {
                 var adhesionCard = db.AdhesionCard.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
                 ViewBag.DatosAdhesion = "(Tarjeta "+ adhesionCard.card + " terminada en " + adhesionCard.last_four_digits + ")";
-                ViewBag.IdAdhesion = adhesionCard.id;
-                ViewBag.BotonVisible = "";
+                ViewBag.IdAdhesion = adhesionCard.id;               
                 ViewBag.TipoPagoId = detalle.TipoDePago.ID;
+                ViewBag.BotonVisible = "";
+                if (detalle.PagoCancelado == false)
+                {
+                    ViewBag.BotonVisible = "";
+                }
             }
             ViewBag.Nombre = asociado.Nombre;
             ViewBag.Apellido = asociado.Apellido;
@@ -1391,7 +1408,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 db.Entry(pago).State = EntityState.Modified;
                                 db.Entry(solicitudComprada).State = EntityState.Modified;
                                 db.SaveChanges();
-                                //EnviarEmail();
+                                var asociadoId = solicitudComprada.AsociadoID;
+                                var nroSolicitud = solicitudComprada.NroSolicitud;
+                                EnviarEmailPagoContadoVencido(asociadoId, nroSolicitud);
                             }
                         }
                         cambioEstado = true;
@@ -1406,34 +1425,40 @@ namespace ComprasCartonesLGP.Web.Controllers
                         //}
                         if (pwebhook.type == "canceled")
                         {
-
-                            //var adherido = db.AdhesionesCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-                            //adherido.state = pwebhook.type;
-                            //adherido.canceled_at = DateTime.Now;
-                            //db.Entry(adherido).State = EntityState.Modified;
-                            //db.SaveChanges();
-                            //info @lagranpromocion.com.ar
+                            var adherido = db.AdhesionCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference).FirstOrDefault();
+                            solicitudComprada.PagoCancelado = true;
+                            solicitudComprada.FechaCancelado = DateTime.Now;
+                            db.Entry(solicitudComprada).State = EntityState.Modified;
+                            db.SaveChanges();
+                            var nroSolicitud = solicitudComprada.NroSolicitud;
+                            var motivo = adherido.state_comment;
+                            EnviarEmailCancelacionAdhesionDebitoAutomatico(nroSolicitud, motivo);                            
                         }
                         cambioEstado = true;
                         break;
-                    //case "card_adhesion":
-                    //    if (pwebhook.type == "signed")
-                    //    {
-                    //        var id = pwebhook.entity_id;
-                    //        var respuestaAdhesion = ObtenerAdhesionCard(id);
-                    //        db.AdhesionesCard.Add(respuestaAdhesion);
-                    //        db.SaveChanges();
-                    //    }
-                    //    if (pwebhook.type == "canceled")
-                    //    {
-                    //        var adherido = db.AdhesionesCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-                    //        adherido.state = pwebhook.type;
-                    //        adherido.canceled_at = DateTime.Now;
-                    //        db.Entry(adherido).State = EntityState.Modified;
-                    //        db.SaveChanges();
-                    //    }
-                    //    cambioEstado = true;
-                    //    break;
+                    case "card_adhesion":
+                        //if (pwebhook.type == "signed")
+                        //{
+                        //    var id = pwebhook.entity_id;
+                        //    var respuestaAdhesion = ObtenerAdhesionCard(id);
+                        //    db.AdhesionesCard.Add(respuestaAdhesion);
+                        //    db.SaveChanges();
+                        //}
+                        if (pwebhook.type == "canceled")
+                        {
+                            var adherido = db.AdhesionCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference).FirstOrDefault();
+                            solicitudComprada.PagoCancelado = true;
+                            solicitudComprada.FechaCancelado = DateTime.Now;
+                            db.Entry(solicitudComprada).State = EntityState.Modified;
+                            db.SaveChanges();
+                            var nroSolicitud = solicitudComprada.NroSolicitud;
+                            var motivo = adherido.state_comment;
+                            EnviarEmailCancelacionAdhesionDebitoAutomatico(nroSolicitud, motivo);
+                        }
+                        cambioEstado = true;
+                        break;
                         //case "debit_request":
                         //    if (pwebhook.type == "rejected")
                         //    {
@@ -1526,6 +1551,19 @@ namespace ComprasCartonesLGP.Web.Controllers
             string subject = "Pago vencido LGP";
             var emailBody = asociado.NombreCompleto + "Se ha vencido el tiempo para el pago de la compra de la solictud" 
                  + nroSolicitud +". Por favor, vuelva a ingresar al sistema y compre otra solicitud. Muchas gracias.<br/><br/> LGP";
+
+            Email email = new Email();
+            email.SendEmail(emailBody, to, subject);
+        }
+
+        public void EnviarEmailCancelacionAdhesionDebitoAutomatico(string nroSolicitud, string motivo)
+        {
+            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == nroSolicitud).FirstOrDefault();
+            var asociado = db.Asociados.Where(x => x.ID == solicitudComprada.AsociadoID).FirstOrDefault();
+            string to = "info@lagranpromocion.com.ar";
+            string subject = "Baja débito automático";
+            var emailBody = "El asociado " + asociado.NombreCompleto + "Se ha dado de baja al débito automático de la solicitud "
+                + solicitudComprada + ". Motivo: " + motivo;
 
             Email email = new Email();
             email.SendEmail(emailBody, to, subject);

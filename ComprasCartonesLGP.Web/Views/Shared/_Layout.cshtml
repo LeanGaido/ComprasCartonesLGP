@@ -109,7 +109,7 @@
                         traditional: true,
                         async: false,
                         cache: false,
-                        url: '/Clientes/getLocalidades',
+                        url: '@Url.Action("getLocalidades", "Clientes")',
                         data: {
                             ProvinciaId: $('#ProvinciaID').val()
                         },
@@ -161,22 +161,22 @@
                 var valores = button.data('idadhesion') + " " + button.data('tipopagoid');
                 let array = valores.split(' ');
                 $("#IdAdhesion").val(array);
-                console.log("llego");
             })
 
             $('#CancelarAdhesionSi').click(function () {
                 var array = $("#IdAdhesion").val();
+                var motivoCancelacion = $("#MotivoCancelacion").val();
                 var id = array.split(",")[0];
                 var tipoPagoId = array.split(",")[1];
                 if (tipoPagoId == 3) {
-                    CancelarAdhesionCard(id);
+                    CancelarAdhesionCard(id, motivoCancelacion);
                 }
                 if (tipoPagoId == 2) {
-                    CancelarAdhesionCBU(id);
+                    CancelarAdhesionCBU(id, motivoCancelacion);
                 }
             });
 
-            function CancelarAdhesionCard(id) {
+            function CancelarAdhesionCard(id, motivoCancelacion) {
                 $.ajax({
                     type: "POST",
                     traditional: true,
@@ -186,6 +186,7 @@
                     context: document.body,
                     data: {
                         id: id,
+                        motivoCancelacion: motivoCancelacion
                     },
                     success: function (result) {
                         if (result) {
@@ -195,6 +196,8 @@
                                     $(this).remove();
                                 });
                             }, 4000);
+                            $("#EstadoPago").text('Cancelado');
+                            $("#btnCancelarAdhesion").hide();
                         }
                         else {
                             $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
@@ -217,7 +220,7 @@
                 });
             }
 
-            function CancelarAdhesionCBU(id) {
+            function CancelarAdhesionCBU(id, motivoCancelacion) {
                 $.ajax({
                     type: "POST",
                     traditional: true,
@@ -227,6 +230,7 @@
                     context: document.body,
                     data: {
                         id: id,
+                        motivoCancelacion: motivoCancelacion
                     },
                     success: function (result) {
                         if (result) {
@@ -236,6 +240,8 @@
                                     $(this).remove();
                                 });
                             }, 4000);
+                            $("#EstadoPago").text('Cancelado');
+                            $("#btnCancelarAdhesion").hide();
                         }
                         else {
                             $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')

@@ -54,17 +54,26 @@
                                 <td class="">
                                     @solicitud.FechaVenta.ToString("dd-MM-yyyy")
                                 </td>
-                                @if (solicitud.PagoRealizdo == true)
+                                @if(solicitud.PagoCancelado == true)
                                 {
                                     <td class="">
-                                        Pagado
+                                        Cancelado
                                     </td>
                                 }
-                                else
-                                {
-                                    <td class="">
-                                        Pendiente
-                                    </td>
+                                else 
+                                { 
+                                    if (solicitud.PagoRealizdo == true)
+                                    {
+                                        <td class="">
+                                            Pagado
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="">
+                                            Pendiente
+                                        </td>
+                                    }
                                 }
                                 <td width="6%">
                                     <div align="center">
