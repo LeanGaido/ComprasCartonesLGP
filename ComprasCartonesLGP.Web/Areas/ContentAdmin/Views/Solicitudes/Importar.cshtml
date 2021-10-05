@@ -27,7 +27,7 @@
         <div class="form-group row">
             @Html.LabelFor(model => model.Precio, "Precio", htmlAttributes: new { @class = "col-sm-2 col-form-label col-form-label-sm", @for = "colFormLabelSm" })
             <div class="col-sm-6">
-                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control form-control-sm", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
             </div>
         </div>
