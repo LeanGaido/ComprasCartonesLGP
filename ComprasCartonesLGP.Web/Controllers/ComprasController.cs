@@ -998,22 +998,14 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             string dni = Session["ClienteDni"].ToString();           
             string sexo = Session["ClienteSexo"].ToString();
-            var nroSexo = "";
-            if (sexo == "Masculino")
-            {
-                nroSexo = "2";
-            }
-            if (sexo == "Femenino")
-            {
-                nroSexo = "1";
-            }
+
 
             if (string.IsNullOrEmpty(dni) || string.IsNullOrEmpty(sexo))
             {
                 return null;
             }
 
-            return db.Asociados.Where(x => x.Dni == dni && x.Sexo == nroSexo).FirstOrDefault();
+            return db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
         }
 
         public List<Solicitud> ObtenerCartonesDisponibles(int? SearchType, string SearchString)

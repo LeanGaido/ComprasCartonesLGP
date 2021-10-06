@@ -50,7 +50,17 @@
             <div class="form-group row mt-3 focused">
                 <div class="col-md-12">
                     <label for="Sexo" class="col-form-label text-md-right">Sexo</label>
-                    <input id="Sexo" type="text" class="form-control " name="Sexo" value="@ViewBag.Sexo" readonly>
+                    <select name="Sexo" id="Sexo" class="form-control">
+                        @if (ViewBag.Sexo == "1")
+                        {
+                            <option value="1" selected>Femenino</option>
+                        }
+                        else
+                        {
+                            <option value="2" selected>Masculino</option>
+                        }
+
+                    </select>
                 </div>
             </div>
 

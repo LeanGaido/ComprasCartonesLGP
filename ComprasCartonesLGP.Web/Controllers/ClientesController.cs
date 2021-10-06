@@ -259,14 +259,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             ViewBag.Dni = dni;
             ViewBag.Email = email;
-            if (sexo == "1")
-            {
-                ViewBag.Sexo = "Femenino";
-            }
-            if(sexo == "2")
-            {
-                ViewBag.Sexo = "Masculino";
-            }
+            ViewBag.Sexo = sexo;
 
             var provincias = db.Provincias.ToList();
 
