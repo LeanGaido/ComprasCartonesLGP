@@ -53,9 +53,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                 else
                 {
                     return RedirectToAction("ElegirCarton");
+
                 }
             }
-            
+
             return RedirectToAction("ErrorCompra", new { MensajeError = "Ya hay una Compra registrada con este numero de dni." });
         }
 
@@ -995,16 +996,24 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return null;
             }
 
-            string dni = Session["ClienteDni"].ToString();
-
+            string dni = Session["ClienteDni"].ToString();           
             string sexo = Session["ClienteSexo"].ToString();
+            var nroSexo = "";
+            if (sexo == "Masculino")
+            {
+                nroSexo = "2";
+            }
+            if (sexo == "Femenino")
+            {
+                nroSexo = "1";
+            }
 
             if (string.IsNullOrEmpty(dni) || string.IsNullOrEmpty(sexo))
             {
                 return null;
             }
 
-            return db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
+            return db.Asociados.Where(x => x.Dni == dni && x.Sexo == nroSexo).FirstOrDefault();
         }
 
         public List<Solicitud> ObtenerCartonesDisponibles(int? SearchType, string SearchString)
@@ -1560,7 +1569,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         {
             var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == nroSolicitud).FirstOrDefault();
             var asociado = db.Asociados.Where(x => x.ID == solicitudComprada.AsociadoID).FirstOrDefault();
-            string to = "";
+            string to = "promocionilusion@gmail.com";
             string subject = "Baja débito automático";
             var emailBody = "El asociado " + asociado.NombreCompleto + "Se ha dado de baja al débito automático de la solicitud "
                 + nroSolicitud + ". Motivo: " + motivo;

@@ -259,6 +259,14 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             ViewBag.Dni = dni;
             ViewBag.Email = email;
+            if (sexo == "1")
+            {
+                ViewBag.Sexo = "Femenino";
+            }
+            if(sexo == "2")
+            {
+                ViewBag.Sexo = "Masculino";
+            }
 
             var provincias = db.Provincias.ToList();
 
@@ -309,7 +317,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     Nombre = asociado.Nombre,
                     Apellido = asociado.Apellido,
                     FechaNacimiento = asociado.FechaNacimiento,
-                    Sexo = asociado.Sexo,
+                    Sexo = sexo,
                     Dni = asociado.Dni,
                     Direccion = asociado.Direccion,
                     Altura = asociado.Altura,

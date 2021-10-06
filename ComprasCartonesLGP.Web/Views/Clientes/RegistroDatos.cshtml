@@ -26,7 +26,7 @@
             <div class="form-group row">
                 <div class="col-md-12">
                     <label for="Dni" class="col-form-label text-md-right">Dni (sin puntos)</label>
-                    <input id="Dni" type="number" class="form-control " name="Dni" value="" required="" autofocus="">
+                    <input id="Dni" type="number" class="form-control " name="Dni" value="@ViewBag.Dni" readonly>
 
                 </div>
             </div>
@@ -50,10 +50,7 @@
             <div class="form-group row mt-3 focused">
                 <div class="col-md-12">
                     <label for="Sexo" class="col-form-label text-md-right">Sexo</label>
-                    <select name="Sexo" id="Sexo" class="form-control">
-                        <option value="1">Femenino</option>
-                        <option value="2">Masculino</option>
-                    </select>
+                    <input id="Sexo" type="text" class="form-control " name="Sexo" value="@ViewBag.Sexo" readonly>
                 </div>
             </div>
 
@@ -115,12 +112,12 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="AreaTelefonoFijo" class="col-form-label text-md-right">Caracteristica del Teléfono Fijo</label>
+                    <label for="AreaTelefonoFijo" class="col-form-label text-md-right">Característica</label>
                     <input id="AreaTelefonoFijo" type="text" class="form-control " name="AreaTelefonoFijo" value="">
                 </div>
 
                 <div class="col-md-6">
-                    <label for="NumeroTelefonoFijo" class="col-form-label text-md-right">Numero del Teléfono Fijo</label>
+                    <label for="NumeroTelefonoFijo" class="col-form-label text-md-right">Número</label>
                     <input id="NumeroTelefonoFijo" type="text" class="form-control " name="NumeroTelefonoFijo" value="">
                 </div>
             </div>
@@ -131,12 +128,12 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="AreaTelefonoFijo" class="col-form-label text-md-right">Caracteristica del Teléfono Fijo</label>
+                    <label for="AreaTelefonoFijo" class="col-form-label text-md-right">Característica</label>
                     <input id="AreaTelefonoFijo" type="text" class="form-control " name="AreaCelular" value="" required="">
                 </div>
 
                 <div class="col-md-6">
-                    <label for="NumeroTelefonoFijo" class="col-form-label text-md-right">Numero del Teléfono Fijo</label>
+                    <label for="NumeroTelefonoFijo" class="col-form-label text-md-right">Número</label>
                     <input id="NumeroTelefonoFijo" type="text" class="form-control " name="NumeroCelular" value="" required="">
                 </div>
             </div>
