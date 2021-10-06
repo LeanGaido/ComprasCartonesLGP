@@ -9,6 +9,7 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -169,6 +170,30 @@ namespace ComprasCartonesLGP.Web.Controllers
         public ActionResult Autenticación()
         {
             string dni = Session["ClienteDni"].ToString();
+            string sexo = Session["ClienteSexo"].ToString();
+            string contacto = Session["ClienteContacto"].ToString();
+
+            //string path = Server.MapPath("~/App_Data/Data.txt");
+            //StreamWriter sw = new StreamWriter(path, true, Encoding.ASCII);
+            //sw.Write("Sesiones en Autentificacion GET");
+            //if (Session["ClienteDni"] != null)
+            //{
+            //    sw.Write("ClienteDni " + Session["ClienteDni"].ToString());
+            //}
+            //if (Session["ClienteSexo"] != null)
+            //{
+            //    sw.Write("ClienteSexo" + Session["ClienteSexo"].ToString());
+            //}
+            //if (Session["ClienteContacto"] != null)
+            //{
+            //    sw.Write("ClienteContacto" + Session["ClienteContacto"].ToString());
+            //}
+            ////close the file
+            //sw.Close();
+
+            Session["ClienteDni"] = dni;
+            Session["ClienteSexo"] = sexo;
+            Session["ClienteContacto"] = contacto;
 
             ViewBag.Dni = dni;
 
@@ -182,6 +207,24 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (!valida)
             {
+                //string path = Server.MapPath("~/App_Data/log.txt");
+                //StreamWriter sw = new StreamWriter(path, true, Encoding.ASCII);
+                //sw.Write("Variables de sesion perdida");
+                //if (Session["ClienteDni"] == null)
+                //{
+                //    sw.Write("ClienteDni perdida");
+                //}
+                //if (Session["ClienteSexo"] == null)
+                //{
+                //    sw.Write("ClienteSexo perdida");
+                //}
+                //if (Session["ClienteContacto"] == null)
+                //{
+                //    sw.Write("ClienteContacto perdida");
+                //}
+                ////close the file
+                //sw.Close();
+
                 return RedirectToAction("Identificarse", "Clientes", new { returnUrl = "/Compras/ElegirCarton" });
             }
 
