@@ -124,7 +124,7 @@
                 traditional: true,
                 async: false,
                 cache: false,
-                url: '/Compras/ObtenerNumeros',
+                url: '@Url.Action("ObtenerNumeros", "Compras")',
                 data: {
                     SearchType: SearchType,
                     SearchString: SearchString
@@ -152,7 +152,7 @@
                                 traditional: true,
                                 async: false,
                                 cache: false,
-                                url: '/Compras/GetReserva',
+                                url: '@Url.Action("GetReserva", "Compras")',
                                 data: {
                                     id: id
                                 },
@@ -201,7 +201,7 @@
                 traditional: true,
                 async: false,
                 cache: false,
-                url: '/Compras/SortearNumero',
+                url: '@Url.Action("SortearNumero", "Compras")',
                 data: {
                     SearchType: SearchType,
                     SearchString: SearchString

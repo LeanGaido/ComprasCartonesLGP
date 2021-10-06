@@ -1560,10 +1560,10 @@ namespace ComprasCartonesLGP.Web.Controllers
         {
             var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == nroSolicitud).FirstOrDefault();
             var asociado = db.Asociados.Where(x => x.ID == solicitudComprada.AsociadoID).FirstOrDefault();
-            string to = "info@lagranpromocion.com.ar";
+            string to = "";
             string subject = "Baja débito automático";
             var emailBody = "El asociado " + asociado.NombreCompleto + "Se ha dado de baja al débito automático de la solicitud "
-                + solicitudComprada + ". Motivo: " + motivo;
+                + nroSolicitud + ". Motivo: " + motivo;
 
             Email email = new Email();
             email.SendEmail(emailBody, to, subject);
