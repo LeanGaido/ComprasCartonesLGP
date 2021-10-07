@@ -60,7 +60,14 @@
     </p>
     <h2 class="mt-4"><b>PAGOS REALIZADOS</b></h2>
     @{ Html.RenderAction("TablaCuotas", "Compras", new { id = Model.ID });}
-    <br /><br />
+    <br />
+    <div class="row">
+        <div class="col-md-5"></div>
+        <div class="col-md-4">
+            <a href="@Url.Action("ListadoSolicitudes","Compras")" class='btn btn-primary btn-block col-md-6'>VOLVER</a>
+        </div>
+    </div>
+    <br />
 </div>
 <!-- Modal Baja adhesión automatica-->
 <div class="modal fade" id="ModalCancelarAdhesion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
