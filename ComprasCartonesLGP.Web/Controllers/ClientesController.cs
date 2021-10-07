@@ -369,7 +369,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                     AreaCelularAux = asociado.AreaCelularAux,
                     NumeroCelularAux = asociado.NumeroCelularAux,
                     TipoDeAsociado = 1,
-                    FechaAlta = DateTime.Now
+                    FechaAlta = DateTime.Now,
+                    Cuit = asociado.Cuit
                 };
 
                 db.Asociados.Add(cliente);

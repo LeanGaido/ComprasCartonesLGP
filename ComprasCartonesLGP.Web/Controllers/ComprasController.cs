@@ -719,10 +719,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string pago360Js = JsonConvert.SerializeObject(pago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -781,10 +781,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -836,10 +836,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionCardPago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
