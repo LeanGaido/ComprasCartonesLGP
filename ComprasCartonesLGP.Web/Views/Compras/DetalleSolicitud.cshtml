@@ -19,16 +19,37 @@
             <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion. @ViewBag.DatosAdhesion
         </div>
         <div class="col-md-6" id="btnCancelarAdhesion" style="display: @ViewBag.BotonVisible">
-            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion"  href="#"  class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
+            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion" href="#" class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
         </div>
     </div>
-    <br>
+    <div class="alert alert-danger" style="display: @ViewBag.AlertConfirmacionAdhesion">
+        <br />
+        <h6>
+            Para finalizar la adhesión automática, se ha enviado un correo electrónico de confirmación a su email registrado. Tiene tiempo
+            hasta el día @ViewBag.FechaCancelacion para confirmar dicha adhesión. Una vez pasada esta fecha, la compra de la solicitud se cancelará.
+        </h6>
+        <br>
+    </div>
+    <div class="alert alert-danger" style="display: @ViewBag.AlertPagoContado">
+        <br />
+        <div class="col-md-12 text-center row">
+            <h6>
+                Para finalizar la compra, debe abonar antes de la fecha @ViewBag.FechaVencimiento el total de la cuota. Pasada esta fecha,
+                la compra de la solicitud se cancelara.
+            </h6>
+            <div class="col-md-5"></div>
+            <div class="col-md-6 col-sm-6">
+                <a class="btn btn-primary btn-block col-md-3" href="@ViewBag.Checkout" target="_blank">PAGAR</a>
+            </div>
+            <br>
+        </div>
+    </div>
     <b>Cant. Cuotas:</b> @Model.CantCuotas
     <br>
     <div class="col-md-6 row" style="padding-top: 15px">
         <b>Estado del Pago: </b> <div id="EstadoPago"> @ViewBag.EstadoPago</div>
-    </div>            
-    <br><br>
+    </div>
+    <br>
     <b>Nombre y Apellido:</b> @ViewBag.Nombre @ViewBag.Apellido
     <br>
     <b>Dni:</b> @ViewBag.Dni

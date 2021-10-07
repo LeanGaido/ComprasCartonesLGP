@@ -239,7 +239,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             Pago pago = new Pago();
 
             DateTime hoy = DateTime.Now;
-            string url = "https://www.sueñocelestepago.com.ar";
+            //string url = "https://www.sueñocelestepago.com.ar";
 
             var Cliente = ObtenerCliente();
 
@@ -332,9 +332,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                     //pago360.external_reference = PagoCartonId.ToString();
                     pago360.external_reference = numeroCarton.NroSolicitud;
                     pago360.payer_email = Cliente.Email;
-                    pago360.back_url_success = url + "/Compras/PagoRealizado";
-                    pago360.back_url_pending = url + "/Compras/PagoPendiente";
-                    pago360.back_url_rejected = url + "/Compras/PagoCancelado";
+                    //pago360.back_url_success = url + "/Compras/PagoRealizado";
+                    //pago360.back_url_pending = url + "/Compras/PagoPendiente";
+                    //pago360.back_url_rejected = url + "/Compras/PagoCancelado";
                     try
                     {
                         pago = Pagar(pago360);
@@ -719,10 +719,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string pago360Js = JsonConvert.SerializeObject(pago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -781,10 +781,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -836,10 +836,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionCardPago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -1073,7 +1073,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             var Carton = db.Solicitudes.Where(x => x.ID == CartonId)
                                        .Include(t => t.Promocion).FirstOrDefault();
 
-            int Meses = 12, mesInicio = hoy.Month;
+            int Meses = 13, mesInicio = hoy.Month;
 
             if(hoy.Day > 15)
             {
@@ -1261,6 +1261,8 @@ namespace ComprasCartonesLGP.Web.Controllers
         public ActionResult DetalleSolicitud(int? id)
         {
             ViewBag.BotonVisible = "none";
+            ViewBag.AlertConfirmacionAdhesion = "none";
+            ViewBag.AlertPagoContado = "none";
             var detalle = db.ComprasDeSolicitudes.Where(x => x.ID == id).FirstOrDefault();
             if(detalle == null)
             {
@@ -1285,8 +1287,18 @@ namespace ComprasCartonesLGP.Web.Controllers
                 {
                     ViewBag.EstadoPago = "Pendiente";
                 }
-            }           
+            }
 
+            if (detalle.TipoDePago.ID == 1 && detalle.PagoRealizdo == false)
+            {
+                var pago = db.Pagos.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
+                ViewBag.FechaVencimiento = pago.second_due_date.ToString("dd/MM/yyyy");
+                ViewBag.AlertPagoContado = "";
+                if(pago.state == "pending")
+                {
+                    ViewBag.Checkout = pago.checkout_url;
+                }
+            }
             if (detalle.TipoDePago.ID == 2)
             {
                 var adhesionCbu = db.AdhesionCbu.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
@@ -1294,9 +1306,14 @@ namespace ComprasCartonesLGP.Web.Controllers
                 ViewBag.DatosAdhesion = "(CBU: XXXXXXXXXXXXXXXXXX" + UltimoNrosCbu + ")";
                 ViewBag.IdAdhesion = adhesionCbu.id;               
                 ViewBag.TipoPagoId = detalle.TipoDePago.ID;               
-                if (detalle.PagoCancelado == false)
+                if (detalle.PagoCancelado == false && adhesionCbu.state == "signed")
                 {
                     ViewBag.BotonVisible = "";
+                }
+                if (detalle.PagoCancelado == false && adhesionCbu.state == "pending_to_sign")
+                {
+                    ViewBag.AlertConfirmacionAdhesion = "";
+                    ViewBag.FechaCancelacion = adhesionCbu.created_at.AddDays(7).ToString("dd/MM/yyyy");
                 }
             }
             if (detalle.TipoDePago.ID == 3)
@@ -1305,10 +1322,14 @@ namespace ComprasCartonesLGP.Web.Controllers
                 ViewBag.DatosAdhesion = "(Tarjeta "+ adhesionCard.card + " terminada en " + adhesionCard.last_four_digits + ")";
                 ViewBag.IdAdhesion = adhesionCard.id;               
                 ViewBag.TipoPagoId = detalle.TipoDePago.ID;
-                ViewBag.BotonVisible = "";
-                if (detalle.PagoCancelado == false)
+                if (detalle.PagoCancelado == false && adhesionCard.state == "signed")
                 {
                     ViewBag.BotonVisible = "";
+                }
+                if (detalle.PagoCancelado == false && adhesionCard.state == "pending_to_sign")
+                {
+                    ViewBag.AlertConfirmacionAdhesion = "";
+                    ViewBag.FechaCancelacion = adhesionCard.created_at.AddDays(7).ToString("dd/MM/yyyy");
                 }
             }
             ViewBag.Nombre = asociado.Nombre;
@@ -1389,6 +1410,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 solicitudComprada.PagoRealizdo = true;
                                 solicitudComprada.FechaPago = DateTime.Now;
                                 solicitudComprada.TotalAPagar = (float)solicitudComprada.PagoRealizado;
+
+                                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitudComprada.ID).FirstOrDefault();
+                                cuota.CuotaPagada = true;
+                                cuota.FechaPago = DateTime.Now;
+
+                                db.Entry(cuota).State = EntityState.Modified;
                                 db.Entry(pago).State = EntityState.Modified;
                                 db.Entry(solicitudComprada).State = EntityState.Modified;
                                 db.SaveChanges();
@@ -1406,6 +1433,13 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference).FirstOrDefault();
                                 solicitudComprada.PagoRealizdo = false;
                                 solicitudComprada.PagoCancelado = true;
+
+                                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitudComprada.ID).FirstOrDefault();
+                                cuota.TipoPagoID = solicitudComprada.TipoDePagoID;
+                                cuota.PagoID = pwebhook.entity_id;
+                                cuota.CuotaPagada = false;
+
+                                db.Entry(cuota).State = EntityState.Modified;
                                 db.Entry(pago).State = EntityState.Modified;
                                 db.Entry(solicitudComprada).State = EntityState.Modified;
                                 db.SaveChanges();

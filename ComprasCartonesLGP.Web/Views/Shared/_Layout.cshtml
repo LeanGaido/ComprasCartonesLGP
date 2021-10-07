@@ -136,6 +136,12 @@
                     $('#adhesionTarjeta').hide();
                     $(this).prop('checked', true);
                     $('#squaredTwo').prop('checked', false);
+
+                    $('#card_number').prop('required', false);
+                    $('#card_holder_name').prop('required', false);
+                    $('#cbu_number').prop('required', false);
+                    $('#adhesion_holder_name').prop('required', false);
+                    $('#cbu_holder_id_number').prop('required', false);
                 });
                 $('#squaredTwo').change(function () {
                     $(this).prop('checked', true);
@@ -145,10 +151,22 @@
                 $('#DebitoConTarjeta').change(function () {
                     $('#adhesionCBU').hide();
                     $('#adhesionTarjeta').show();
+
+                    $('#card_number').prop('required', true);
+                    $('#card_holder_name').prop('required', true);
+                    $('#cbu_number').prop('required', false);
+                    $('#adhesion_holder_name').prop('required', false);
+                    $('#cbu_holder_id_number').prop('required', false);
                 });
                 $('#DebitoConCbu').change(function () {
                     $('#adhesionTarjeta').hide();
                     $('#adhesionCBU').show();
+
+                    $('#card_number').prop('required', false);
+                    $('#card_holder_name').prop('required', false);
+                    $('#cbu_number').prop('required', true);
+                    $('#adhesion_holder_name').prop('required', true);
+                    $('#cbu_holder_id_number').prop('required', true);
                 });
             }
 
