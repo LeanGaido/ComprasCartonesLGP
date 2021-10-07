@@ -1451,20 +1451,22 @@ namespace ComprasCartonesLGP.Web.Controllers
                         cambioEstado = true;
                         break;
                     case "adhesion":
-                        //if (pwebhook.type == "signed")
-                        //{
-                        //    var id = pwebhook.entity_id;
-                        //    var respuestaAdhesion = ObtenerAdhesionCBU(id);
-                        //    db.AdhesionesCBU.Add(respuestaAdhesion);
-                        //    db.SaveChanges();
-                        //}
+                        if (pwebhook.type == "signed")
+                        {
+                            var adhesion = db.AdhesionCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                            adhesion.state = pwebhook.type;
+                            db.Entry(adhesion).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
                         if (pwebhook.type == "canceled")
                         {
                             var adherido = db.AdhesionCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
                             var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference).FirstOrDefault();
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
+                            adherido.state = pwebhook.type;
                             db.Entry(solicitudComprada).State = EntityState.Modified;
+                            db.Entry(adherido).State = EntityState.Modified;
                             db.SaveChanges();
                             var nroSolicitud = solicitudComprada.NroSolicitud;
                             var motivo = adherido.state_comment;
@@ -1473,20 +1475,22 @@ namespace ComprasCartonesLGP.Web.Controllers
                         cambioEstado = true;
                         break;
                     case "card_adhesion":
-                        //if (pwebhook.type == "signed")
-                        //{
-                        //    var id = pwebhook.entity_id;
-                        //    var respuestaAdhesion = ObtenerAdhesionCard(id);
-                        //    db.AdhesionesCard.Add(respuestaAdhesion);
-                        //    db.SaveChanges();
-                        //}
+                        if (pwebhook.type == "signed")
+                        {
+                            var adhesion = db.AdhesionCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                            adhesion.state = pwebhook.type;
+                            db.Entry(adhesion).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
                         if (pwebhook.type == "canceled")
                         {
                             var adherido = db.AdhesionCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
                             var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference).FirstOrDefault();
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
+                            adherido.state = pwebhook.type;                            
                             db.Entry(solicitudComprada).State = EntityState.Modified;
+                            db.Entry(adherido).State = EntityState.Modified;
                             db.SaveChanges();
                             var nroSolicitud = solicitudComprada.NroSolicitud;
                             var motivo = adherido.state_comment;
