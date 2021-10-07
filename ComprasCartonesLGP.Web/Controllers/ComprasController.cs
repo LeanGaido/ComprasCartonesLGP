@@ -1089,12 +1089,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                 if(c != 1)
                 {
                     cuota.key = c;
-                    cuota.value = c + " Cuotas sin interés de $" + (Carton.Precio/c);
+                    cuota.value = c + " Cuotas sin interés de $" + Math.Round((Carton.Precio/c),2);
                 }
                 else
                 {
                     cuota.key = c;
-                    cuota.value = c + " Cuota sin interés de $" + Carton.Precio;
+                    cuota.value = c + " Cuota sin interés de $" + Math.Round(Carton.Precio,2);
                 }
 
                 cuotas.Add(cuota);

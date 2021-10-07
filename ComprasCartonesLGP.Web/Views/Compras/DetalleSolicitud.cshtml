@@ -6,7 +6,7 @@
 
 
 <div class="col-md-12">
-    <h2 class="mt-4"><b>Consulta de Solicitud Adquirida</b></h2>
+    <h2 class="mt-4"><b>CONSULTA DE SOLICITUD ADQUIRIDA</b></h2>
     <br>
     <b>Fecha de Compra:</b> @Model.FechaVenta.ToString("dd-MM-yyyy")
     <br>
@@ -19,7 +19,7 @@
             <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion. @ViewBag.DatosAdhesion
         </div>
         <div class="col-md-6" id="btnCancelarAdhesion" style="display: @ViewBag.BotonVisible">
-            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion" href="#" class='btn btn-primary btn-block col-md-6'>Cancelar Adhesión</a>
+            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion" href="#" class='btn btn-primary btn-block col-md-6'>CANCELAR ADHESIÓN</a>
         </div>
     </div>
     <div class="alert alert-danger" style="display: @ViewBag.AlertConfirmacionAdhesion">
@@ -58,7 +58,7 @@
     <br>
     <b>Provincia:</b> @ViewBag.Provincia
     </p>
-    <h2 class="mt-4"><b>Pagos Realizados</b></h2>
+    <h2 class="mt-4"><b>PAGOS REALIZADOS</b></h2>
     @{ Html.RenderAction("TablaCuotas", "Compras", new { id = Model.ID });}
     <br /><br />
 </div>
