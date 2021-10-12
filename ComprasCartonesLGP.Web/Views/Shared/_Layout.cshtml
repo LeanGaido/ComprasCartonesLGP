@@ -198,11 +198,22 @@
                 var motivoCancelacion = $("#MotivoCancelacion").val();
                 var id = array.split(",")[0];
                 var tipoPagoId = array.split(",")[1];
-                if (tipoPagoId == 3) {
-                    CancelarAdhesionCard(id, motivoCancelacion);
+                if (motivoCancelacion != '') {
+                    if (tipoPagoId == 3) {
+                        CancelarAdhesionCard(id, motivoCancelacion);
+                    }
+                    if (tipoPagoId == 2) {
+                        CancelarAdhesionCBU(id, motivoCancelacion);
+                    }
                 }
-                if (tipoPagoId == 2) {
-                    CancelarAdhesionCBU(id, motivoCancelacion);
+                else {
+                    $('body').append('<span class = "alert alert-danger" style="position: fixed;top: 10px;right: 0;z-index:90">Debe ingresar el motivo por el cual desea darse de baja del débito automático</span>')
+
+                    window.setTimeout(function () {
+                        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                            $(this).remove();
+                        });
+                    }, 4000);
                 }
             });
 
@@ -220,7 +231,7 @@
                     },
                     success: function (result) {
                         if (result) {
-                            $('body').append('<span class = "alert alert-success" style="position: fixed;bottom: 0;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
+                            $('body').append('<span class = "alert alert-success" style="position: fixed;top: 10px;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
                             window.setTimeout(function () {
                                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
                                     $(this).remove();
@@ -230,7 +241,7 @@
                             $("#btnCancelarAdhesion").hide();
                         }
                         else {
-                            $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+                            $('body').append('<span class = "alert alert-danger" style="position: fixed;top: 10px;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
                             window.setTimeout(function () {
                                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
                                     $(this).remove();
@@ -239,7 +250,7 @@
                         }
                     },
                     error: function (xhr) {
-                        $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+                        $('body').append('<span class = "alert alert-danger" style="position: fixed;top: 10px;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
 
                         window.setTimeout(function () {
                             $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -264,7 +275,7 @@
                     },
                     success: function (result) {
                         if (result) {
-                            $('body').append('<span class = "alert alert-success" style="position: fixed;bottom: 0;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
+                            $('body').append('<span class = "alert alert-success" style="position: fixed;top: 10px;right: 0;z-index:90">Adhesión cancelada exitosamente</span>')
                             window.setTimeout(function () {
                                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
                                     $(this).remove();
@@ -274,7 +285,7 @@
                             $("#btnCancelarAdhesion").hide();
                         }
                         else {
-                            $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+                            $('body').append('<span class = "alert alert-danger" style="position: fixed;top: 10px;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
                             window.setTimeout(function () {
                                 $(".alert").fadeTo(500, 0).slideUp(500, function () {
                                     $(this).remove();
@@ -283,7 +294,7 @@
                         }
                     },
                     error: function (xhr) {
-                        $('body').append('<span class = "alert alert-danger" style="position: fixed;bottom: 0;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
+                        $('body').append('<span class = "alert alert-danger" style="position: fixed;top: 10px;right: 0;z-index:90">Ocurrio un Error, por Favor intente nuevamente</span>')
 
                         window.setTimeout(function () {
                             $(".alert").fadeTo(500, 0).slideUp(500, function () {

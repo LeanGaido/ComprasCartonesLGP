@@ -1027,7 +1027,8 @@ namespace ComprasCartonesLGP.Web.Controllers
                            join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                            join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
                            where !oCompras.PagoCancelado &&
-                                 oPromocion.Anio == hoy.Year
+                                 oPromocion.Anio == hoy.Year 
+                                 //|| oCompras.PagoRealizado != 0
                            select oCompras).ToList();
 
             var Cartones = db.Solicitudes.Where(x => x.Promocion.Anio == hoy.Year).ToList();

@@ -27,19 +27,13 @@
                     <tr>
                         <td class="text-center">
                             <br>
-
                             <h1><b>Trébol de la Suerte</b></h1>
-
                             <b>
                                 PRESIONA EL BOTÓN Y OBTENÉ TU NÚMERO <BR>DE SOLICITUD DE LA SUERTE<b />
-
-
                                 <a href="#" id="sortearNumero" class="btn btn-primary">OBTENER NÚMERO DE LA SUERTE</a>
                                 <span id="numeroSorteado" style="position:absolute;top:57.5%;left:38%;font-size:40px;color:#fff;padding:5px 10px;"></span>
                                 <br><br>
-
                                 <img style="background-color:#000" src="~/assets/img/trebol.png">
-
                                 <br><br>
                         </td>
                     </tr>
@@ -50,14 +44,9 @@
                     <tbody>
                         <tr>
                             <td class="text-center">
-
                                 <br>
-
                                 <h1><b>Buscá tu Número de la Suerte</b></h1>
-
-
                                 <div class="form-group row">
-
                                     <label for="name" class="col-md-12 col-form-label text-md-center"><b>INGRESÁ UN NÚMERO, SI ESTÁ DISPONIBLE,<br> YA ES TUYO!!</b></label>
                                     <br><br>
                                     <div class="row">
@@ -102,7 +91,7 @@
         <div class="mt-4">
             <div class="form-group row">
                 <div class="col-md-12 text-center">
-                    <input type="submit" class="btn btn-primary" value="SIGUIENTE" />
+                    <input type="submit" @*id="btnSubmit"*@ class="btn btn-primary" value="SIGUIENTE" />
                 </div>
             </div>
         </div>
@@ -118,47 +107,47 @@
 
             var SearchType = $('#SearchType').val();
             var SearchString = $('#SearchString').val();
+            if (SearchString != '') {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: false,
+                    cache: false,
+                    url: '@Url.Action("ObtenerNumeros", "Compras")',
+                    data: {
+                        SearchType: SearchType,
+                        SearchString: SearchString
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#ResultadosBuscarCartones').empty();
+                        if (!$.trim(data)) {
+                            $('#ResultadosBuscarCartones').append('<h3>No hay resultados para la busqueda</h3>');
+                        }
+                        else {
+                            $.each(data, function (index, value) {
+                                $('#ResultadosBuscarCartones').append('<a class="btn btn btn-primary BtnSeleccionarCarton" style="color:white" data-id="' + value.ID + '" data-numero="' + value.NroSolicitud + '">' + value.NroSolicitud + '</a>');
+                            });
 
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                async: false,
-                cache: false,
-                url: '@Url.Action("ObtenerNumeros", "Compras")',
-                data: {
-                    SearchType: SearchType,
-                    SearchString: SearchString
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $('#ResultadosBuscarCartones').empty();
-                    if (!$.trim(data)) {
-                        $('#ResultadosBuscarCartones').append('<h3>No hay resultados para la busqueda</h3>');
-                    }
-                    else {
-                        $.each(data, function (index, value) {
-                            $('#ResultadosBuscarCartones').append('<a class="btn btn btn-primary BtnSeleccionarCarton" style="color:white" data-id="' + value.ID + '" data-numero="' + value.NroSolicitud + '">' + value.NroSolicitud + '</a>');
-                        });
 
+                            $('.BtnSeleccionarCarton').click(function (e) {
+                                e.preventDefault();
 
-                        $('.BtnSeleccionarCarton').click(function (e) {
-                            e.preventDefault();
+                                var id = $(this).data("id");
+                                var numero = $(this).data("numero");
 
-                            var id = $(this).data("id");
-                            var numero = $(this).data("numero");
-
-                            $.ajax({
-                                type: "POST",
-                                traditional: true,
-                                async: false,
-                                cache: false,
-                                url: '@Url.Action("GetReserva", "Compras")',
-                                data: {
-                                    id: id
-                                },
-                                dataType: 'json',
-                                success: function (data) {
-                                    //if (data == false) {
+                                $.ajax({
+                                    type: "POST",
+                                    traditional: true,
+                                    async: false,
+                                    cache: false,
+                                    url: '@Url.Action("GetReserva", "Compras")',
+                                    data: {
+                                        id: id
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        //if (data == false) {
                                         /***********************/
                                         $('#SolicitudId').val(id);
                                         $('#numeroSorteado').text(numero);
@@ -168,26 +157,37 @@
                                         //roulette.start(pad(numero,5));
 
                                         /***********************/
-                                    //} else if (data == true) {
+                                        //} else if (data == true) {
                                         /***********************/
                                         //$('#NumeroCarton').val("");
                                         //$('a[data-id="' + id + '"]').remove();
                                         //roulette.reset();
                                         /***********************/
-                                    //}
-                                },
-                                error: function (ex) {
-                                    alert('Error, por favor intente mas tarde.');
-                                }
+                                        //}
+                                    },
+                                    error: function (ex) {
+                                        alert('Error, por favor intente mas tarde.');
+                                    }
+                                });
                             });
-                        });
-                    }
+                        }
 
-                },
-                error: function (ex) {
-                    alert('Error, por favor intente mas tarde.');
-                }
-            });
+                    },
+                    error: function (ex) {
+                        alert('Error, por favor intente mas tarde.');
+                    }
+                });
+            }
+            else {
+                $('body').append('<span class = "alert alert-danger" style="position: fixed;top: 10px;right: 0;z-index:90">Ingrese un número para poder realizar la busqueda</span>')
+
+                window.setTimeout(function () {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                        $(this).remove();
+                    });
+                }, 4000);
+            }
+
         }
 
         $('#BtnBuscarCarton').click(function (e) {
@@ -216,6 +216,45 @@
                 }
             })
         }
+
+        @*$('#btnSubmit').click(function (e) {
+            e.preventDefault();
+            var CodigoVendedor = $("#CodigoVendedor").val();
+            var SolicitudId = $("#SolicitudId").val();
+            if (SolicitudId != '') {
+                Reservar(CodigoVendedor, SolicitudId);
+            }
+            else {
+                $('body').append('<span class = "alert alert-danger" style="position: fixed;top: 10px;right: 0;z-index:90">Debe elegir un Nro. de solicitud para poder continuar</span>')
+
+                window.setTimeout(function () {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                        $(this).remove();
+                    });
+                }, 4000);
+            }
+        });
+
+        function Reservar(CodigoVendedor, SolicitudId) {
+            $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: false,
+                    cache: false,
+                    url: '@Url.Action("ReservarCarton", "Compras")',
+                    data: {
+                        CodigoVendedor: CodigoVendedor,
+                        SolicitudId: SolicitudId
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log("lleog al success");
+                    },
+                    error: function (ex) {
+                        alert('Error, por favor intente mas tarde.');
+                    }
+                })
+        }*@
 
         $('#sortearNumero').click(function (e) {
             e.preventDefault();
