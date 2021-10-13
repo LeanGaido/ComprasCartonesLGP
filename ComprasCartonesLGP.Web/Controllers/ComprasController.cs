@@ -1416,7 +1416,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference).FirstOrDefault();
                                 solicitudComprada.PagoRealizdo = true;
                                 solicitudComprada.FechaPago = DateTime.Now;
-                                solicitudComprada.TotalAPagar = (float)solicitudComprada.PagoRealizado;
+                                solicitudComprada.PagoRealizado = (decimal)solicitudComprada.TotalAPagar;
 
                                 var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitudComprada.ID).FirstOrDefault();
                                 cuota.CuotaPagada = true;
