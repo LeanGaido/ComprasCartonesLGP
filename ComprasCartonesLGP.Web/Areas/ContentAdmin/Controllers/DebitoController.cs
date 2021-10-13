@@ -111,8 +111,9 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
         //    foreach (var adherido in adheridosCbu)
         //    {
-        //        var ctaCte = db.Cuentas_Corrientes.Where(x => x.codigoAfiliado.ToString() == adherido.external_reference && x.fechaPago == "").OrderByDescending(x => x.id).FirstOrDefault();
-        //        var solicitudDebito = db.DebitosCbu.Where(x => x.cupon == ctaCte.numCupo).FirstOrDefault();
+        //        var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+        //        var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false).FirstOrDefault();
+        //        var solicitudDebito = 
 
         //        if (solicitudDebito == null)
         //        {
