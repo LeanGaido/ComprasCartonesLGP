@@ -719,10 +719,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string pago360Js = JsonConvert.SerializeObject(pago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -1027,9 +1027,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                            join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                            join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
                            where !oCompras.PagoCancelado &&
-                                 oPromocion.Anio == hoy.Year 
-                                 //|| oCompras.PagoRealizado != 0
-                           select oCompras).ToList();
+                                 oPromocion.Anio == hoy.Year
+                                 || oCompras.PagoRealizado != 0
+                          select oCompras).ToList();
+
+            //compra = compra.Where(x => x.PagoRealizado != 0).ToList();
 
             var Cartones = db.Solicitudes.Where(x => x.Promocion.Anio == hoy.Year).ToList();
 
