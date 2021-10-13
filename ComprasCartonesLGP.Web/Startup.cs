@@ -34,8 +34,8 @@ namespace ComprasCartonesLGP.Web
                 //Here we create a Admin super user who will maintain the website                  
 
                 var user = new ApplicationUser();
-                user.UserName = "CartonDigital@lagranpromocion.com";
-                user.Email = "CartonDigital@lagranpromocion.com";
+                user.UserName = "compraonline@lagranpromocion.ar";
+                user.Email = "compraonline@lagranpromocion.ar";
 
                 string userPWD = "_LgCDig21";
 
