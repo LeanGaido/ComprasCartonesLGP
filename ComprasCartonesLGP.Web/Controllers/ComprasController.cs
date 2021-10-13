@@ -108,8 +108,12 @@ namespace ComprasCartonesLGP.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ReservarCarton(string CodigoVendedor, int SolicitudId)
+        public ActionResult ReservarCarton(string CodigoVendedor, int? SolicitudId)
         {
+            if(SolicitudId == null)
+            {
+                return RedirectToAction("ErrorCompra", new { MensajeError = "Debe elegir un Nro. de Solicitud para continuar"});
+            }
             DateTime hoy = DateTime.Now;
 
             if (Session["ClienteDni"] == null)
@@ -142,7 +146,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 cartonReservado.CodigoVendedor = Convert.ToInt32(CodigoVendedor);
             }
-            cartonReservado.SolicitudID = SolicitudId;
+            cartonReservado.SolicitudID = Convert.ToInt32(SolicitudId);
             cartonReservado.Dni = dni;
             cartonReservado.Sexo = sexo;
             cartonReservado.FechaReserva = DateTime.Now;
@@ -719,10 +723,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string pago360Js = JsonConvert.SerializeObject(pago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
