@@ -20,7 +20,7 @@
                     <div align="center">Fecha Compra</div>
                 </th>
                 <th scope="col">
-                    <div align="center">Pago</div>
+                    <div align="center">Estado Pago</div>
                 </th>
                 <th></th>
             </tr>
@@ -35,17 +35,26 @@
                     <td class="">
                         @item.FechaVenta.ToString("dd-MM-yyyy")
                     </td>
-                    @if(item.PagoRealizdo == true)
+                    @if (item.PagoCancelado == true)
                     {
                         <td class="">
-                            Completo
-                        </td>                        
+                            Cancelado
+                        </td>
                     }
                     else
                     {
-                        <td class="">
-                            Pendiente
-                        </td> 
+                        if (item.PagoRealizdo == true)
+                        {
+                            <td class="">
+                                Completo
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="">
+                                Pendiente
+                            </td>
+                        }
                     }
                     <td width="5%"><a href="@Url.Action("Details", new { id = item.ID, page = ViewBag.page, currentFilter = ViewBag.CurrentFilter })"><div align="center"><i class="fa fa-info" aria-hidden="true"></i></div></a></td>
                 </tr>

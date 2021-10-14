@@ -13,6 +13,10 @@
     <table class="table table-hover" id="job-table">
         <tbody class="text-center tableBody">
             <tr class="active">
+                <th width="20%" scope="col">Fecha Compra</th>
+                <td>@Model.FechaVenta.ToString("dd-MM-yyyy")</td>
+            </tr>
+            <tr class="active">
                 <th width="20%" scope="col">Nº Solicitud</th>
                 <td>@Model.NroSolicitud</td>
             </tr>
@@ -21,24 +25,98 @@
                 <td>@ViewBag.NombreAsociado</td>
             </tr>
             <tr class="active">
-                <th width="20%" scope="col">Fecha Compra</th>
-                <td>@Model.NroSolicitud</td>
+                <th width="20%" scope="col">DNI</th>
+                <td>@ViewBag.Dni</td>
             </tr>
             <tr class="active">
-                <th width="20%" scope="col">Pago</th>
+                <th width="20%" scope="col">CUIL</th>
+                <td>@ViewBag.Cuil</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Fecha Nacimiento</th>
+                <td>@ViewBag.FechaNacimiento</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Sexo</th>
+                <td>@ViewBag.Sexo</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Calle</th>
+                <td>@ViewBag.Calle</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Altura</th>
+                <td>@ViewBag.Altura</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Torre</th>
+                <td>@ViewBag.Torre</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Piso</th>
+                <td>@ViewBag.Piso</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Departamento</th>
+                <td>@ViewBag.Departamento</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Provincia</th>
+                <td>@ViewBag.Provincia</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Localidad</th>
+                <td>@ViewBag.Localidad</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Area Telefono Fijo</th>
+                <td>@ViewBag.CaracTelFijo</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">N° Telefono Fijo</th>
+                <td>@ViewBag.NroTelFijo</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Area Telefono Celular</th>
+                <td>@ViewBag.CaracCelu</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">N° Telefono Celular</th>
+                <td>@ViewBag.NroCelu</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Email</th>
+                <td>@ViewBag.Email</td>
+            </tr>
+            @if (Model.TipoDePagoID == 1)
+            {
+                <tr class="active">
+                    <th width="20%" scope="col">Tipo de pago</th>
+                    <td>En un pago</td>
+                </tr>
+            }
+            else
+            {
+                <tr class="active">
+                    <th width="20%" scope="col">Tipo de pago</th>
+                    <td>Plan de cuotas</td>
+                </tr>
+            }
+            <tr class="active">
+                <th width="20%" scope="col">Forma de pago</th>
+                <td>@Model.TipoDePago.Descripcion</td>
+            </tr>
+            <tr class="active">
+                <th width="20%" scope="col">Estado Pago</th>
                 <td>@ViewBag.EstadoPago</td>
             </tr>
             <tr class="active">
-                <th width="20%" scope="col">Tipo de pago</th>
-                <td>@Model.TipoDePago.Descripcion</td>
+                <th width="20%" scope="col">Cantidad de Cuotas</th>
+                <td>@Model.CantCuotas</td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Total a pagar</th>
                 <td>$@Model.TotalAPagar</td>
-            </tr>
-            <tr class="active">
-                <th width="20%" scope="col">Cuotas</th>
-                <td>@Model.CantCuotas</td>
             </tr>
         </tbody>
     </table>

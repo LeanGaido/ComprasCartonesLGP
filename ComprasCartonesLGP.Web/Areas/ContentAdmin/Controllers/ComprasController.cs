@@ -32,16 +32,48 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 return HttpNotFound();
             }
             var asociado = db.Asociados.Where(x => x.ID == compra.AsociadoID).FirstOrDefault();
-            if(compra.PagoRealizdo == true)
+            if(compra.PagoCancelado == true)
             {
-                ViewBag.EstadoPago = "Completo"; 
+                ViewBag.EstadoPago = "Cancelado";
             }
             else
             {
-                ViewBag.EstadoPago = "Pendiente";
+                if (compra.PagoRealizdo == true)
+                {
+                    ViewBag.EstadoPago = "Completo";
+                }
+                else
+                {
+                    ViewBag.EstadoPago = "Pendiente";
+                }
             }
+            var localidad = db.Localidades.Where(x => x.ID == asociado.LocalidadID).FirstOrDefault();
 
             ViewBag.NombreAsociado = asociado.NombreCompleto;
+            ViewBag.Dni = asociado.Dni;
+            ViewBag.Cuil = asociado.Cuit;
+            ViewBag.FechaNacimiento = asociado.FechaNacimiento.ToString("dd-MM-yyyy");
+            if(asociado.Sexo == "1")
+            {
+                ViewBag.Sexo = "Femenino";
+            }
+            if (asociado.Sexo == "2")
+            {
+                ViewBag.Sexo = "Masculino";
+            }
+            ViewBag.Calle = asociado.Direccion;
+            ViewBag.Altura = asociado.Altura;
+            ViewBag.Torre = asociado.Torre;
+            ViewBag.Piso = asociado.Piso;
+            ViewBag.Departamento = asociado.Dpto;
+            ViewBag.Provincia = localidad.Provincia.Descripcion;
+            ViewBag.Localidad = localidad.Descripcion;
+            ViewBag.CaracTelFijo = asociado.AreaTelefonoFijo;
+            ViewBag.NroTelFijo = asociado.NumeroTelefonoFijo;
+            ViewBag.CaracCelu = asociado.AreaCelular;
+            ViewBag.NroCelu = asociado.NumeroCelular;
+            ViewBag.Email = asociado.Email;
+
             return View(compra);
         }
     }
