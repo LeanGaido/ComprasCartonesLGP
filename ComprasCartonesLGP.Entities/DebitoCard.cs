@@ -22,6 +22,7 @@ namespace ComprasCartonesLGP.Entities
         //metadata	Object	Objeto JSON que se puede utilizar para guardar atributos adicionales en la Solicitud de Débito y poder sincronizar con tus sistemas de backend. Pagos360.com no utiliza este objeto.
         [ForeignKey("adhesion")]
         public int adhesionId { get; set; }
+        public int CuotaId { get; set; }
         public virtual AdhesionCbu adhesion { get; set; }//card_adhesion	Object	Objeto con el detalle de la Adhesión en Tarjeta.
     }
 }

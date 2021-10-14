@@ -96,225 +96,250 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View();
         }
 
-        //public ActionResult DebitarCbu()
-        //{
-        //    List<Alert> alerts = new List<Alert>();
-        //    string errorMessage;
+        public ActionResult DebitarCbu()
+        {
+            List<Alert> alerts = new List<Alert>();
+            string errorMessage;
 
-        //    DateTime dateTime = DateTime.Now;
-        //    string date = dateTime.ToString("dd-MM-yyyy");
-        //    int days = 3;
-        //    string primerVencimiento = ObtenerDiaHabil(date, days);
-        //    days = 3;
-        //    string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
-        //    var adheridosCbu = db.AdhesionCbu.Where(x => x.state == "signed").ToList();
+            DateTime dateTime = DateTime.Now;
+            string date = dateTime.ToString("dd-MM-yyyy");
+            int days = 3;
+            //string primerVencimiento = ObtenerDiaHabil(date, days);
+            string primerVencimiento = 3.ToString();
+            days = 3;
+            //string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
+            string segundoVencimiento = 6.ToString();
+            var adheridosCbu = db.AdhesionCbu.Where(x => x.state == "signed").ToList();
 
-        //    foreach (var adherido in adheridosCbu)
-        //    {
-        //        var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
-        //        var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false).FirstOrDefault();
-        //        var solicitudDebito = 
+            foreach (var adherido in adheridosCbu)
+            {
+                var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+                if(solicitud != null)
+                {
+                    var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false).FirstOrDefault();
+                    var solicitudDebito = db.DebitosCBU.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
 
-        //        if (solicitudDebito == null)
-        //        {
-        //            DebitCbuPago360Request debito = new DebitCbuPago360Request();
-        //            Metadata metadata = new Metadata();
+                    if (solicitudDebito == null)
+                    {
+                        CbuDebitRequest debito = new CbuDebitRequest();
+                        Metadata metadata = new Metadata();
 
-        //            debito.adhesion_id = adherido.id;
-        //            debito.first_due_date = primerVencimiento;
-        //            debito.first_total = Convert.ToDecimal(ctaCte.importe);
-        //            debito.second_due_date = segundoVencimiento;
-        //            debito.second_total = Convert.ToDecimal(ctaCte.importe);
-        //            debito.description = "LO MAR. Pago periodo:  " + ctaCte.periodo + " a través del débito automático. Cupon: " + ctaCte.numCupo;
-        //            metadata.external_reference = ctaCte.numCupo.ToString();
-        //            debito.metadata = metadata;
+                        debito.adhesion_id = adherido.id;
+                        debito.first_due_date = primerVencimiento;
+                        //debito.first_total = Convert.ToDecimal(ctaCte.importe);
+                        debito.first_total = (decimal)cuotaSolicitud.PrimerPrecioCuota;
+                        debito.second_due_date = segundoVencimiento;
+                        //debito.second_total = Convert.ToDecimal(ctaCte.importe);
+                        debito.second_total = (decimal)cuotaSolicitud.SeguntoPrecioCuota;
+                        debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                        metadata.CuotaId = cuotaSolicitud.ID;
+                        debito.metadata = metadata;
 
-        //            DebitoCBU debitoCbu = new DebitoCBU();
-        //            //Respuesta de la Api
-        //            string respuesta = "";
+                        DebitoCBU debitoCbu = new DebitoCBU();
+                        //Respuesta de la Api
+                        string respuesta = "";
 
-        //            //
-        //            string debit360Js = JsonConvert.SerializeObject(debito);
+                        //
+                        string debit360Js = JsonConvert.SerializeObject(debito);
 
-        //            //Local
-        //            //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        //Local
+                        Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
-        //            //Server
-        //            Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        //Server
+                        // uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
-        //            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+                        HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
-        //            requestFile.ContentType = "application/html";
-        //            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+                        requestFile.ContentType = "application/html";
+                        requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
-        //            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+                        HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
-        //            if (requestFile.HaveResponse)
-        //            {
-        //                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
-        //                {
-        //                    try
-        //                    {
-        //                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+                        if (requestFile.HaveResponse)
+                        {
+                            if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                            {
+                                try
+                                {
+                                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
 
-        //                        respuesta = respReader.ReadToEnd();
+                                    respuesta = respReader.ReadToEnd();
 
-        //                        //DebitCbuPago360Response debitResponse = new DebitCbuPago360Response();
-        //                        CbuDebitResponse debitResponse = new CbuDebitResponse();
-        //                        //var jsonObject = JObject.Parse(response.Content);
+                                    //DebitCbuPago360Response debitResponse = new DebitCbuPago360Response();
+                                    CbuDebitResponse debitResponse = new CbuDebitResponse();
+                                    //var jsonObject = JObject.Parse(response.Content);
 
-        //                        debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
+                                    debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
 
-        //                        if (debitResponse.id != 0)
-        //                        {
-        //                            debitoCbu.id = debitResponse.id;
-        //                            debitoCbu.type = debitResponse.type;
-        //                            debitoCbu.state = debitResponse.state;
-        //                            debitoCbu.created_at = debitResponse.created_at;
-        //                            debitoCbu.first_due_date = debitResponse.first_due_date;
-        //                            debitoCbu.first_total = debitResponse.first_total;
-        //                            debitoCbu.second_due_date = debito.second_due_date;
-        //                            debitoCbu.second_total = debitResponse.first_total;
-        //                            debitoCbu.description = debitResponse.description;
-        //                            debitoCbu.cupon = int.Parse(debitResponse.metadata.external_reference);
-        //                            debitoCbu.AdhesionId = debitResponse.Adhesion.id;
+                                    if (debitResponse.id != 0)
+                                    {
+                                        debitoCbu.id = debitResponse.id;
+                                        debitoCbu.type = debitResponse.type;
+                                        debitoCbu.state = debitResponse.state;
+                                        debitoCbu.created_at = debitResponse.created_at;
+                                        debitoCbu.first_due_date = debitResponse.first_due_date;
+                                        debitoCbu.first_total = debitResponse.first_total;
+                                        debitoCbu.second_due_date = debito.second_due_date;
+                                        debitoCbu.second_total = debitResponse.first_total;
+                                        debitoCbu.description = debitResponse.description;
+                                        debitoCbu.CuotaId = debitResponse.metadata.CuotaId;
+                                        debitoCbu.adhesionId = debitResponse.AdhesionId;
 
-        //                            db.DebitosCbu.Add(debitoCbu);
-        //                            db.SaveChanges();
-        //                        }
-        //                        else
-        //                        {
-        //                            errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                            alerts.Add(new Alert("danger", errorMessage, true));
-        //                        }
+                                        db.DebitosCBU.Add(debitoCbu);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                        errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                                        alerts.Add(new Alert("danger", errorMessage, true));
+                                    }
 
-        //                    }
-        //                    catch (Exception ex)
-        //                    {
-        //                        errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                        alerts.Add(new Alert("danger", errorMessage, true));
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                    alerts.Add(new Alert("danger", errorMessage, true));
-        //                }
-        //            }
-        //            else
-        //            {
-        //                errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                alerts.Add(new Alert("danger", errorMessage, true));
-        //            }
-        //        }
-        //    }
-        //    return View("EnvioSolicitudDebitoExitoso", alerts);
-        //}
+                                }
+                                catch (Exception ex)
+                                {
+                                    var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                    errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                                    alerts.Add(new Alert("danger", errorMessage, true));
+                                }
+                            }
+                            else
+                            {
+                                var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                                alerts.Add(new Alert("danger", errorMessage, true));
+                            }
+                        }
+                        else
+                        {
+                            var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                            errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                            alerts.Add(new Alert("danger", errorMessage, true));
+                        }
+                    }
+                    else
+                    {
+                        var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                        errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                        alerts.Add(new Alert("danger", errorMessage, true));
+                    }
+                }
+            }
+            return View("EnvioSolicitudDebitoExitoso", alerts);
+        }
 
-        //public ActionResult DebitarCard()
-        //{
-        //    List<Alert> alerts = new List<Alert>();
-        //    string errorMessage;
+        public ActionResult DebitarCard()
+        {
+            List<Alert> alerts = new List<Alert>();
+            string errorMessage;
 
-        //    var adheridosCard = db.AdhesionesCard.Where(x => x.state == "signed").ToList();
+            var adheridosCard = db.AdhesionCard.Where(x => x.state == "signed").ToList();
 
-        //    foreach (var adherido in adheridosCard)
-        //    {
-        //        var ctaCte = db.Cuentas_Corrientes.Where(x => x.codigoAfiliado.ToString() == adherido.external_reference && x.fechaPago == "").OrderByDescending(x => x.id).FirstOrDefault();
-        //        var solicitudDebito = db.DebitosCard.Where(x => x.cupon == ctaCte.numCupo).FirstOrDefault();
-        //        if (solicitudDebito == null)
-        //        {
-        //            DebitCardPago360Request debito = new DebitCardPago360Request();
-        //            Metadata metadata = new Metadata();
+            foreach (var adherido in adheridosCard)
+            {
+                var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+                if(solicitud != null)
+                {
+                    var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false).FirstOrDefault();
+                    var solicitudDebito = db.DebitosCard.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
 
-        //            debito.card_adhesion_id = adherido.id;
-        //            debito.month = int.Parse(ctaCte.periodo.Substring(4, 2));
-        //            debito.year = int.Parse(ctaCte.periodo.Substring(0, 4));
-        //            debito.amount = Convert.ToDecimal(ctaCte.importe);
-        //            debito.description = "LO MAR. Pago periodo:  " + ctaCte.periodo + " a través del débito automático. Cupon: " + ctaCte.numCupo;
-        //            metadata.external_reference = ctaCte.numCupo.ToString();
-        //            debito.metadata = metadata;
+                    if (solicitudDebito == null)
+                    {
+                        CardDebitRequest debito = new CardDebitRequest();
+                        Metadata metadata = new Metadata();
 
-        //            DebitoCard debitoCard = new DebitoCard();
-        //            //Respuesta de la Api
-        //            string respuesta = "";
+                        debito.card_adhesion_id = adherido.id;
+                        debito.month = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                        debito.year = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                        debito.amount = cuotaSolicitud.PrimerPrecioCuota;
+                        debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                        metadata.CuotaId = cuotaSolicitud.ID;
+                        debito.metadata = metadata;
 
-        //            //
-        //            string debit360Js = JsonConvert.SerializeObject(debito);
+                        DebitoCard debitoCard = new DebitoCard();
+                        //Respuesta de la Api
+                        string respuesta = "";
 
-        //            //Local
-        //            //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        //
+                        string debit360Js = JsonConvert.SerializeObject(debito);
 
-        //            //Server
-        //            Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        //Local
+                        //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
-        //            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+                        //Server
+                        Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
-        //            requestFile.ContentType = "application/html";
-        //            requestFile.Headers.Add("authorization", "Bearer ZTY0Zjk0NThlOTZlYzFkMmVmYWNjZWZiYzJiZDk1YjQ5ZjAzMDVhYzZhYTExZTE3NTM1ZGYwYjRiMmI2OTQxYQ");
+                        HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
-        //            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+                        requestFile.ContentType = "application/html";
+                        requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
 
-        //            if (requestFile.HaveResponse)
-        //            {
-        //                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
-        //                {
-        //                    try
-        //                    {
-        //                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+                        HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
 
-        //                        respuesta = respReader.ReadToEnd();
+                        if (requestFile.HaveResponse)
+                        {
+                            if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                            {
+                                try
+                                {
+                                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
 
-        //                        DebitCardPago360Response debitResponse = new DebitCardPago360Response();
+                                    respuesta = respReader.ReadToEnd();
 
-        //                        //var jsonObject = JObject.Parse(response.Content);
+                                    CardDebitResponse debitResponse = new CardDebitResponse();
 
-        //                        debitResponse = JsonConvert.DeserializeObject<DebitCardPago360Response>(respuesta);
-        //                        if (debitResponse.id != 0)
-        //                        {
-        //                            debitoCard.id = debitResponse.id;
-        //                            debitoCard.type = debitResponse.type;
-        //                            debitoCard.state = debitResponse.state;
-        //                            debitoCard.created_at = debitResponse.created_at;
-        //                            debitoCard.amount = debitResponse.amount;
-        //                            debitoCard.month = debitResponse.month;
-        //                            debitoCard.year = debitResponse.year;
-        //                            debitoCard.description = debitResponse.description;
-        //                            debitoCard.cupon = int.Parse(debitResponse.metadata.external_reference);
-        //                            debitoCard.AdhesionId = debitResponse.card_adhesion.id;
+                                    //var jsonObject = JObject.Parse(response.Content);
 
-        //                            db.DebitosCard.Add(debitoCard);
-        //                            db.SaveChanges();
-        //                        }
-        //                        else
-        //                        {
-        //                            errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                            alerts.Add(new Alert("danger", errorMessage, true));
-        //                        }
+                                    debitResponse = JsonConvert.DeserializeObject<CardDebitResponse>(respuesta);
+                                    if (debitResponse.id != 0)
+                                    {
+                                        debitoCard.id = debitResponse.id;
+                                        debitoCard.type = debitResponse.type;
+                                        debitoCard.state = debitResponse.state;
+                                        debitoCard.created_at = debitResponse.created_at;
+                                        debitoCard.amount = debitResponse.amount;
+                                        debitoCard.month = debitResponse.month;
+                                        debitoCard.year = debitResponse.year;
+                                        debitoCard.description = debitResponse.description;
+                                        debitoCard.CuotaId = debitResponse.metadata.CuotaId;
+                                        debitoCard.adhesionId = debitResponse.adhesion.id;
 
-        //                    }
-        //                    catch (Exception ex)
-        //                    {
-        //                        errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                        alerts.Add(new Alert("danger", errorMessage, true));
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                    alerts.Add(new Alert("danger", errorMessage, true));
-        //                }
-        //            }
-        //            else
-        //            {
-        //                errorMessage = "Socio: " + adherido.external_reference + ". Cupón: " + ctaCte.numCupo + ".";
-        //                alerts.Add(new Alert("danger", errorMessage, true));
-        //            }
-        //        }
+                                        db.DebitosCard.Add(debitoCard);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                        errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                                        alerts.Add(new Alert("danger", errorMessage, true));
+                                    }
 
-        //    }
-        //    return View("EnvioSolicitudDebitoExitoso", alerts);
-        //}
+                                }
+                                catch (Exception ex)
+                                {
+                                    var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                    errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                                    alerts.Add(new Alert("danger", errorMessage, true));
+                                }
+                            }
+                            else
+                            {
+                                var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                                alerts.Add(new Alert("danger", errorMessage, true));
+                            }
+                        }
+                        else
+                        {
+                            var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                            errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".";
+                            alerts.Add(new Alert("danger", errorMessage, true));
+                        }
+                    }
+                }
+            }
+            return View("EnvioSolicitudDebitoExitoso", alerts);
+        }
 
         public string ObtenerDiaHabil(string date, int days)
         {
@@ -330,10 +355,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             string nextBusinessDay360Js = JsonConvert.SerializeObject(nextBusinessDay);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+            Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+            //Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 

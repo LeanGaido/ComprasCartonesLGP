@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ComprasCartonesLGP.Entities.Pago360.Request;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,6 @@ namespace ComprasCartonesLGP.Entities.Pago360.Response
         public string description { get; set; } //"description": "Concepto del Pago"
         public int AdhesionId { get; set; }
         public AdhesionCbuPago360Response adhesion { get; set; } //"adhesion"
-
+        public Metadata metadata { get; set; }
     }
 }

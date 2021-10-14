@@ -77,6 +77,14 @@
     <Compile Include="Migrations\202110051329266_Add-Vendedor.Designer.cs">
       <DependentUpon>202110051329266_Add-Vendedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110141206492_AddCuotaId.cs" />
+    <Compile Include="Migrations\202110141206492_AddCuotaId.Designer.cs">
+      <DependentUpon>202110141206492_AddCuotaId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110141252597_changeFloatXDeci.cs" />
+    <Compile Include="Migrations\202110141252597_changeFloatXDeci.Designer.cs">
+      <DependentUpon>202110141252597_changeFloatXDeci.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -111,6 +119,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110051329266_Add-Vendedor.resx">
       <DependentUpon>202110051329266_Add-Vendedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110141206492_AddCuotaId.resx">
+      <DependentUpon>202110141206492_AddCuotaId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110141252597_changeFloatXDeci.resx">
+      <DependentUpon>202110141252597_changeFloatXDeci.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

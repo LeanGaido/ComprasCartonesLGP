@@ -63,6 +63,7 @@
     <Compile Include="Pago360\Request\AdhesionCbuPago360Request.cs" />
     <Compile Include="Pago360\Request\CardDebitRequest.cs" />
     <Compile Include="Pago360\Request\ItemPago360Request.cs" />
+    <Compile Include="Pago360\Request\Metadata.cs" />
     <Compile Include="Pago360\Request\NextBusinessDayRequest.cs" />
     <Compile Include="Pago360\Request\Pago360Request.cs" />
     <Compile Include="Pago360\Request\CbuDebitRequest.cs" />
