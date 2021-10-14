@@ -104,11 +104,8 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             DateTime dateTime = DateTime.Now;
             string date = dateTime.ToString("dd-MM-yyyy");
             int days = 3;
-            //string primerVencimiento = ObtenerDiaHabil(date, days);
-            string primerVencimiento = 3.ToString();
-            days = 3;
-            //string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
-            string segundoVencimiento = 6.ToString();
+            string primerVencimiento = ObtenerDiaHabil(date, days);
+            string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
             var adheridosCbu = db.AdhesionCbu.Where(x => x.state == "signed").ToList();
 
             foreach (var adherido in adheridosCbu)
@@ -125,10 +122,11 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         Metadata metadata = new Metadata();
 
                         debito.adhesion_id = adherido.id;
-                        debito.first_due_date = primerVencimiento;
-                        //debito.first_total = Convert.ToDecimal(ctaCte.importe);
+                        //debito.first_due_date = Convert.ToDateTime(primerVencimiento);
+                        debito.first_due_date = DateTime.ParseExact(primerVencimiento, "dd-MM-yyyy", null);
+                        //debito.first_total = Convert.ToDecimal(ctaCte.importe); 
                         debito.first_total = (decimal)cuotaSolicitud.PrimerPrecioCuota;
-                        debito.second_due_date = segundoVencimiento;
+                        debito.second_due_date = DateTime.ParseExact(segundoVencimiento, "dd-MM-yyyy",null);
                         //debito.second_total = Convert.ToDecimal(ctaCte.importe);
                         debito.second_total = (decimal)cuotaSolicitud.SeguntoPrecioCuota;
                         debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
@@ -179,7 +177,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                         debitoCbu.created_at = debitResponse.created_at;
                                         debitoCbu.first_due_date = debitResponse.first_due_date;
                                         debitoCbu.first_total = debitResponse.first_total;
-                                        debitoCbu.second_due_date = debito.second_due_date;
+                                        //debitoCbu.second_due_date = debito.second_due_date;
                                         debitoCbu.second_total = debitResponse.first_total;
                                         debitoCbu.description = debitResponse.description;
                                         debitoCbu.CuotaId = debitResponse.metadata.CuotaId;
@@ -382,6 +380,11 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 }
             }
             return fecha;
+        }
+
+        public ActionResult EnvioSolicitudDebitoExitoso(List<Alert> alerts)
+        {
+            return View(alerts);
         }
     }
 }
