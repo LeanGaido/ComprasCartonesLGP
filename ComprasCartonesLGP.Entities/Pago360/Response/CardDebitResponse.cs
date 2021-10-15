@@ -18,6 +18,6 @@ namespace ComprasCartonesLGP.Entities.Pago360.Response
         public int year { get; set; } //year	Integer	Año en el que se ejecuta el Debito Automático. Formato: aaaa.
         public string description { get; set; }//description	String	Descripción o concepto de la Solicitud de Débito.
         public Metadata metadata { get; set; }//metadata	Object	Objeto JSON que se puede utilizar para guardar atributos adicionales en la Solicitud de Débito y poder sincronizar con tus sistemas de backend. Pagos360.com no utiliza este objeto.
-        public AdhesionCard adhesion { get; set; }//card_adhesion	Object	Objeto con el detalle de la Adhesión en Tarjeta.
+        public AdhesionCardPago360Response card_adhesion { get; set; }//card_adhesion	Object	Objeto con el detalle de la Adhesión en Tarjeta.
     }
 }
