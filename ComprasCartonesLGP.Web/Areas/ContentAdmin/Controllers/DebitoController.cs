@@ -163,7 +163,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
                                     respuesta = respReader.ReadToEnd();
 
-                                    //DebitCbuPago360Response debitResponse = new DebitCbuPago360Response();
                                     CbuDebitResponse debitResponse = new CbuDebitResponse();
                                     //var jsonObject = JObject.Parse(response.Content);
 

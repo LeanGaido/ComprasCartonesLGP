@@ -1421,6 +1421,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitudComprada.ID).FirstOrDefault();
                                 cuota.CuotaPagada = true;
                                 cuota.FechaPago = DateTime.Now;
+                                cuota.TipoPagoID = 1;
 
                                 db.Entry(cuota).State = EntityState.Modified;
                                 db.Entry(pago).State = EntityState.Modified;
@@ -1505,40 +1506,69 @@ namespace ComprasCartonesLGP.Web.Controllers
                         }
                         cambioEstado = true;
                         break;
-                        //case "debit_request":
-                        //    if (pwebhook.type == "rejected")
-                        //    {
-                        //        var entity_name = pwebhook.entity_name;
-                        //        var entity_id = pwebhook.entity_id;
-                        //        var created_at = pwebhook.created_at;
+                    case "debit_request":
+                        if (pwebhook.type == "rejected")
+                        {
+                            var entity_name = pwebhook.entity_name;
+                            var entity_id = pwebhook.entity_id;
+                            var created_at = pwebhook.created_at;
 
-                        //        var rechazo = db.DebitosCbu.Where(x => x.id == entity_id).FirstOrDefault();
-                        //        rechazo.state = pwebhook.type;
-                        //        db.Entry(rechazo).State = EntityState.Modified;
-                        //        db.SaveChanges();
+                            var rechazo = db.DebitosCBU.Where(x => x.id == entity_id).FirstOrDefault();
+                            rechazo.state = pwebhook.type;
+                            db.Entry(rechazo).State = EntityState.Modified;
+                            db.SaveChanges();
 
-                        //        InformarRechazoDebito(entity_id, entity_name, created_at);
-                        //    }
-                        //    if (pwebhook.type == "paid")
-                        //    {
-                        //        var entity_id = pwebhook.entity_id;
+                            InformarRechazoDebito(entity_id, entity_name, created_at);
+                        }
+                        if (pwebhook.type == "paid")
+                        {
+                            var entity_id = pwebhook.entity_id;
 
-                        //        var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-                        //        pago.state = pwebhook.type;
-                        //        db.Entry(pago).State = EntityState.Modified;
-                        //        db.SaveChanges();
+                            var pago = db.DebitosCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                            pago.state = pwebhook.type;
+                            db.Entry(pago).State = EntityState.Modified;
+                            db.SaveChanges();
 
-                        //        InformarPagoDebito(entity_id);
-                        //    }
-                        //    if (pwebhook.type == "canceled")
-                        //    {
-                        //        var pago = db.DebitosCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-                        //        pago.state = pwebhook.type;
-                        //        db.Entry(pago).State = EntityState.Modified;
-                        //        db.SaveChanges();
-                        //    }
-                        //    cambioEstado = true;
-                        //    break;
+                            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == pago.CuotaId).FirstOrDefault();
+                            cuota.CuotaPagada = true;
+                            cuota.FechaPago = Convert.ToDateTime(pwebhook.created_at);
+                            cuota.TipoPagoID = 2;
+                            db.Entry(cuota).State = EntityState.Modified;
+                            db.SaveChanges();
+
+                            var solicitud = db.ComprasDeSolicitudes.Where(x => x.ID == cuota.CompraDeSolicitudID).FirstOrDefault();
+                            solicitud.PagoRealizado = solicitud.PagoRealizado + (decimal)cuota.PrimerPrecioCuota;
+                            db.Entry(solicitud).State = EntityState.Modified;
+                            db.SaveChanges();
+
+                            int cuotasPagadas = 0;
+                            var cuotas = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID).ToList();
+                            foreach(var cuot in cuotas)
+                            {
+                                if(cuot.CuotaPagada == true)
+                                {
+                                    cuotasPagadas = cuotasPagadas + 1;
+                                }                              
+                            }
+
+                            if(cuotas.Count == cuotasPagadas)
+                            {
+                                solicitud.PagoRealizdo = true;
+                                solicitud.FechaPago = Convert.ToDateTime(pwebhook.created_at);
+                                solicitud.PagoRealizado = (decimal)solicitud.TotalAPagar;
+                                db.Entry(solicitud).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                        if (pwebhook.type == "canceled")
+                        {
+                            var pago = db.DebitosCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
+                            pago.state = pwebhook.type;
+                            db.Entry(pago).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        cambioEstado = true;
+                        break;
                         //case "card_debit_request":
                         //    if (pwebhook.type == "rejected")
                         //    {
@@ -1613,6 +1643,53 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             Email email = new Email();
             email.SendEmail(emailBody, to, subject);
+        }
+
+        public void InformarRechazoDebito(int? entity_id, string entity_name, string created_at)
+        {
+            if (entity_name == "debit_request")
+            {
+                var rechazo = db.DebitosCBU.Where(x => x.id == entity_id).FirstOrDefault();
+                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
+
+                string to = rechazo.adhesion.email;
+                string subject = "Rechazo débito automático LGP";
+                var emailBody = "Le informamos que se rechazó el pago de la cuota de mes " + cuota.MesCuota + "a traves del débito " +
+                    " automático. Por favor comunicarse con administración para regularizar la cuenta. <br/><br/> La Gran Promoción";
+                Email email = new Email();
+                email.SendEmail(to,subject, emailBody);
+
+                string to2 = "promocionilusion@gmail.com";
+                string subject2 = "Rechazo débito automático. Asociado: " + rechazo.adhesion.adhesion_holder_name;
+                var emailBody2 = "Le informamos que el día " + created_at + " se rechazó el pago de la cuota " + cuota.MesCuota +
+                    " del socio: " + rechazo.adhesion.adhesion_holder_name + " a través del debito automatico.Nº Solicitud: " + rechazo.adhesion.external_reference;
+
+
+                email.SendEmail(to2, subject2, emailBody2);
+            }
+            //if (entity_name == "card_debit_request")
+            //{
+            //    var rechazo = db.DebitosCard.Where(x => x.id == entity_id).FirstOrDefault();
+            //    var socio = db.Socios.Where(x => x.codigo.ToString() == rechazo.adhesion.external_reference && x.titular == 1).FirstOrDefault();
+
+            //    string to = rechazo.adhesion.email;
+            //    string from = "avisos@gemcia.com.ar";
+            //    string user = "avisos@gemcia.com.ar";
+            //    string password = "eaYfkpOR7M";
+            //    string subject = "Rechazo débito automático LO-MAR";
+            //    var emailBody = "Le informamos que se rechazó el pago del cupon " + rechazo.cupon + "a traves del débito " +
+            //        " automático. Por favor comunicarse con administración para regularizar la cuenta. <br/><br/> LO MAR";
+
+            //    Email email = new Email();
+            //    email.sendEmail(to, from, user, password, subject, emailBody);
+
+            //    string to2 = "adm_lomar@riotel.com.ar";
+            //    string subject2 = "Rechazo débito automático. socio: " + socio.nombreApellido;
+            //    var emailBody2 = "Le informamos que el día " + created_at + " se rechazó el pago del cupon " + rechazo.cupon +
+            //        " del socio: " + socio.nombreApellido + " a través del debito automatico. Codigo Socio: " + socio.codigo;
+
+            //    email.sendEmail(to2, from, user, password, subject2, emailBody2);
+            //}
         }
     }
 }
