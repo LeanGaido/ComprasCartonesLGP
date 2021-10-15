@@ -8,6 +8,6 @@ namespace ComprasCartonesLGP.Entities.Pago360.Request
 {
     public class Metadata
     {
-        public int CuotaId { get; set; }
+        public int external_reference { get; set; }
     }
 }

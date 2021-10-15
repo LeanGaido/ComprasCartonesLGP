@@ -785,10 +785,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -895,10 +895,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                 string respuesta = "";
 
                 //Local
-                //Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCbu?id=" + id);
+                Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCbu?id=" + id);
 
                 //Server
-                Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCbu?id=" + id);
+                //Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCbu?id=" + id);
 
                 HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
