@@ -9,36 +9,43 @@
         <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
     </ol>
 </nav>
-<div class="table-responsive" id="tableCtaCte">
+<div class="table-responsive" id="">
     <table class="table table-hover" id="job-table">
         <tbody class="text-center tableBody">
             <tr class="active">
                 <th width="20%" scope="col">Fecha Compra</th>
                 <td>@Model.FechaVenta.ToString("dd-MM-yyyy")</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Nº Solicitud</th>
                 <td>@Model.NroSolicitud</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Nombre Asociado</th>
                 <td>@ViewBag.NombreAsociado</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">DNI</th>
                 <td>@ViewBag.Dni</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">CUIL</th>
                 <td>@ViewBag.Cuil</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Fecha Nacimiento</th>
                 <td>@ViewBag.FechaNacimiento</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Sexo</th>
                 <td>@ViewBag.Sexo</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Calle</th>
@@ -47,52 +54,64 @@
             <tr class="active">
                 <th width="20%" scope="col">Altura</th>
                 <td>@ViewBag.Altura</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Torre</th>
                 <td>@ViewBag.Torre</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Piso</th>
                 <td>@ViewBag.Piso</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Departamento</th>
                 <td>@ViewBag.Departamento</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Provincia</th>
                 <td>@ViewBag.Provincia</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Localidad</th>
                 <td>@ViewBag.Localidad</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Area Telefono Fijo</th>
                 <td>@ViewBag.CaracTelFijo</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">N° Telefono Fijo</th>
                 <td>@ViewBag.NroTelFijo</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Area Telefono Celular</th>
                 <td>@ViewBag.CaracCelu</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">N° Telefono Celular</th>
                 <td>@ViewBag.NroCelu</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Email</th>
                 <td>@ViewBag.Email</td>
+                <td></td>
             </tr>
             @if (Model.TipoDePagoID == 1)
             {
                 <tr class="active">
                     <th width="20%" scope="col">Tipo de pago</th>
                     <td>En un pago</td>
+                    <td></td>
                 </tr>
             }
             else
@@ -100,27 +119,33 @@
                 <tr class="active">
                     <th width="20%" scope="col">Tipo de pago</th>
                     <td>Plan de cuotas</td>
+                    <td></td>
                 </tr>
             }
             <tr class="active">
                 <th width="20%" scope="col">Forma de pago</th>
                 <td>@Model.TipoDePago.Descripcion</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Estado Pago</th>
                 <td>@ViewBag.EstadoPago</td>
+                <td width="5%"><a href="@Url.Action("TablaEstadoPago", new { id = Model.ID })"><div align="center"><i class="fa fa-info" aria-hidden="true"></i></div></a></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Cantidad de Cuotas</th>
                 <td>@Model.CantCuotas</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Total a pagar</th>
                 <td>$@Model.TotalAPagar</td>
+                <td></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Codigo Vendedor</th>
                 <td>@Model.CodigoVendedor</td>
+                <td></td>
             </tr>
         </tbody>
     </table>

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<ComprasCartonesLGP.Entities.CuotaCompraDeSolicitud>
+@{
+    ViewBag.Title = "Compras > Estado Pago";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+<div class="table-responsive" id="">
+    <table class="table table-hover" id="job-table">
+        <thead class="">
+            <tr class="text-center">
+                <th width="20%" scope="col">
+                    <div align="center">Mes Cuota</div>
+                </th>
+                <th width="20%" scope="col">
+                    <div align="center">Importe</div>
+                </th>
+                <th width="20%" scope="col">
+                    <div align="center">Estado</div>
+                </th>
+                <th width="20%" scope="col">
+                    <div align="center">Fecha Pago</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cuota in Model)
+            {
+                <tr class="text-center">
+                    <td width="20%" class="">
+                        @cuota.MesCuota
+                    </td>
+                    <td width="20%" class="">
+                        $@cuota.PrimerPrecioCuota
+                    </td>
+                    @if (cuota.CuotaPagada == true)
+                    {
+                        <td width="20%" class="">
+                            Pagado
+                        </td>
+
+                    }
+                    else
+                    {
+                        <td width="20%" class="">
+                            Pendiente
+                        </td>
+
+                    }
+                    <td width="20%" class="">
+                        @if (cuota.FechaPago != null)
+                        {
+                            @cuota.FechaPago.Value.ToString("dd-MM-yyyy")
+
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br /><br />
+    <div class="form-group row botones-formularios">
+        <div class="margin-botones-formularios">
+            @Html.ActionLink("Volver", "Details", new { id = @ViewBag.IdSolicitud }, new { @class = "btn botonPrincipal" })
+        </div>
+    </div>
+</div>
