@@ -81,10 +81,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         {
             var cuotas = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == id).ToList();
             ViewBag.IdSolicitud = id;
-            //if(cuotas == null)
-            //{
-            //    return HttpNotFound();
-            //}
+            if (cuotas == null)
+            {
+                return HttpNotFound();
+            }
             return View(cuotas);
         }
     }

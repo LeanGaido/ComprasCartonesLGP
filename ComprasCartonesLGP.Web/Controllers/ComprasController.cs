@@ -401,12 +401,12 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                     try
                     {
-                        adhesion = GenerarAdhesionCbu(adhesionPago360);
-                        db.AdhesionCbu.Add(adhesion);
+                        //adhesion = GenerarAdhesionCbu(adhesionPago360);
+                        //db.AdhesionCbu.Add(adhesion);
 
-                        db.SaveChanges();
+                        //db.SaveChanges();
 
-                        adhesionId = adhesion.id;
+                        //adhesionId = adhesion.id;
 
                         int mesInicio = hoy.Month;
                         var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
@@ -783,10 +783,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 

@@ -37,7 +37,10 @@
                                 <div align="center">Fecha Compra</div>
                             </th>
                             <th scope="col">
-                                <div align="center">Estado</div>
+                                <div align="center">Tipo de Pago</div>
+                            </th>
+                            <th scope="col">
+                                <div align="center">Estado del Pago</div>
                             </th>
                             <th scope="col">
                                 <div align="center">Detalle</div>
@@ -53,6 +56,9 @@
                                 </td>
                                 <td class="">
                                     @solicitud.FechaVenta.ToString("dd-MM-yyyy")
+                                </td>
+                                <td class="">
+                                    @solicitud.TipoDePago.Descripcion
                                 </td>
                                 @if(solicitud.PagoCancelado == true)
                                 {
