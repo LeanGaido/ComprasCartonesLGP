@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ComprasCartonesLGP.Entities.Solicitud>
+﻿@model PagedList.IPagedList<ComprasCartonesLGP.Entities.Solicitud>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Solicitudes";
 }
@@ -12,7 +13,22 @@
 <div class="container col-md-12 row">
     <div class="col-md-4">
         <p>
-            @*<h4>@Html.ActionLink("Cargar Solicitudes", "Importar", null, new { @class = "btn botonPrincipal" })</h4>*@
+            <h4>@Html.ActionLink("Cargar Solicitudes", "Importar", null, new { @class = "btn botonPrincipal" })</h4>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <p></p>
+        @using (Html.BeginForm())
+        {
+            <p>
+                <strong class="">Buscar Cliente: </strong> @Html.TextBox("searchString", ViewBag.currentFilter as string)
+                <input type="submit" value="Buscar" class="btn botonPrincipal" />
+            </p>
+        }
+    </div>
+    <div class="col-md-2">
+        <p>
+            <h4>@Html.ActionLink("Limpiar filtro", "Index", null, new { @class = "btn botonPrincipal" })</h4>
         </p>
     </div>
 </div>
@@ -47,6 +63,18 @@
                 </tr>
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="12">
+                    <p></p>
+                    <div align="center">
+                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                    </div>
+                    <p></p>
+                </td>
+            </tr>
+        </tfoot>
     </table>
     <br /><br />
 </div>

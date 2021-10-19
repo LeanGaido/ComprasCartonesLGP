@@ -41,8 +41,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(compras.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? page, string currentFilter)
         {
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = currentFilter;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

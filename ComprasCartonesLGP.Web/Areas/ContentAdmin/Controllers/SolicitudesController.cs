@@ -11,6 +11,7 @@ using ComprasCartonesLGP.Dal;
 using ComprasCartonesLGP.Entities;
 using ComprasCartonesLGP.Utilities;
 using ExcelDataReader;
+using PagedList;
 
 namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 {
@@ -20,10 +21,30 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         private LGPContext db = new LGPContext();
 
         // GET: ContentAdmin/Solicitudes
-        public ActionResult Index()
+        public ActionResult Index(string searchString, string currentFilter, int? page)
         {
-            var solicitudes = db.Solicitudes.Include(s => s.Promocion);
-            return View(solicitudes.ToList());
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = searchString;
+
+            int pageSize = 30;
+            int pageNumber = (page ?? 1);
+
+            //var solicitudes = db.Solicitudes.Include(s => s.Promocion);
+            var solicitudes = db.Solicitudes.OrderByDescending(x => x.Promocion.Anio).ToList();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                solicitudes = solicitudes.Where(x => x.NroSolicitud.ToUpper().Contains(searchString.ToUpper())).ToList();
+            }
+
+            return View(solicitudes.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: ContentAdmin/Solicitudes/Details/5
