@@ -211,12 +211,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                             alerts.Add(new Alert("danger", errorMessage, true));
                         }
                     }
-                    else
-                    {
-                        var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
-                        errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ".Solicitud: " + solicitud.NroSolicitud;
-                        alerts.Add(new Alert("danger", errorMessage, true));
-                    }
                 }
             }
             return View("EnvioSolicitudDebitoExitoso", alerts);
