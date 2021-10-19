@@ -1,5 +1,6 @@
 ﻿using ComprasCartonesLGP.Dal;
 using ComprasCartonesLGP.Entities;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,30 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
     {
         private LGPContext db = new LGPContext();
         // GET: ContentAdmin/Compras
-        public ActionResult Index()
+        public ActionResult Index(string searchString, string currentFilter, int? page)
         {
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = searchString;
+
+            int pageSize = 20;
+            int pageNumber = (page ?? 1);
+
             var compras = db.ComprasDeSolicitudes.OrderByDescending(x => x.ID).ToList();
-            return View(compras);
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                compras = compras.Where(x => x.NroSolicitud.ToUpper().Contains(searchString.ToUpper())).ToList();
+            }
+
+            
+            return View(compras.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Details(int? id)
