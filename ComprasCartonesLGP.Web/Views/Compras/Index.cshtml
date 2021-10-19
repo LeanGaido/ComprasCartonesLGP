@@ -19,7 +19,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>
-                                    <input type="radio" value="1" id="squaredOne" name="TipoDePago" checked />
+                                    <input type="radio" value="1" id="squaredOne" name="TipoDePago" checked  style="height: 20px; width: 5%;"/>
                                     <b>EN 1 PAGO DE $@ViewBag.Carton.Precio</b> (Tarjeta de Crédito / Débito / Rapipago / Pago Fácil)
                                 </h5>
                             </div>
@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>
-                                    <input type="radio" value="None" id="squaredTwo" name="check"/>
+                                    <input type="radio" value="None" id="squaredTwo" name="check" style="height: 20px; width: 5%;"/>
                                     <b>PLAN DE CUOTAS CON DÉBITO AUTOMÁTICO</b>
                                 </h5>
                             </div>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-11">
                                 <div id="PagoDebitoAutomatico" style="display:none;">
-                                    <h5 style="display:inline-block;margin-right:20px">Elegí el Número de Cuotas:</h5>
+                                    <h4 style="display:inline-block;margin-right:20px">Elegí el Número de Cuotas:</h4>
                                     <select name="CantCuotas" id="CantCuotas" style="display:inline-block">
                                         @foreach (var item in ViewBag.Cuotas)
                                         {
@@ -52,15 +52,15 @@
                                     <br>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <h5>
+                                            <h4>
                                                 Elegí si lo haces con tarjeta de credito o con CBU.
-                                            </h5>
+                                            </h4>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-11">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input type="radio" value="3" name="TipoDePago" id="DebitoConTarjeta"> <B>CON TARJETA DE CRÉDITO</B>
+                                                    <input type="radio" value="3" name="TipoDePago" id="DebitoConTarjeta" style="height: 20px; width: 5%;"> <B>CON TARJETA DE CRÉDITO</B>
                                                 </div>
                                                 <div class="col-md-12" id="adhesionTarjeta" style="display:none">
                                                     <div class="col-md-2"></div>
@@ -79,7 +79,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input type="radio" value="2" name="TipoDePago" id="DebitoConCbu"> <B>CON CBU</B>
+                                                    <input type="radio" value="2" name="TipoDePago" id="DebitoConCbu" style="height: 20px; width: 5%;"> <B>CON CBU</B>
                                                 </div>
                                                 <div class="col-md-12" id="adhesionCBU" style="display:none">
                                                     <div class="col-md-2"></div>

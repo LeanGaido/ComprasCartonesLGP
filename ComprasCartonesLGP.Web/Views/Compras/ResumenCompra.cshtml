@@ -4,7 +4,7 @@
 }
 
 
-<div class="col-md-12">
+<b class="col-md-12">
     <h2 class="mt-4"><b>Resumen de Compra</b></h2>
     <br>
     <h4>Su compra ha finalizado con éxito</h4>
@@ -16,20 +16,28 @@
     <br>
     <b>Nro de Solicitud:</b> @Model.NroSolicitud
     <br>
-    <b>Forma de Pago:</b> @Model.TipoDePago.Descripcion
+    @if (Model.TipoDePagoID == 2)
+    {
+        <b>Forma de Pago:</b> <b>Plan de cuotas con débito automático</b>
+    }
+    @if (Model.TipoDePagoID == 3)
+    {
+        <b>Forma de Pago:</b> <b>Plan de cuotas con Tarjeta de Credito</b>
+    }
+    <br>
+    <b>N° de cuotas:</b> @Model.CantCuotas 
     <br>
     <b>Estado del Pago:</b> @ViewBag.EstadoPago
     <br><br>
     <div class="alert alert-danger">
-        <h5>Para finalizar la adhesión automática se le ha enviado un correo electronico de confirmación a su correo</h5>
+        <h5>Para finalizar la adhesión automática se le ha enviado un email de confirmación a su cuenta de  correo electrónico</h5>
     </div>
-    @*<h5>Se ha enviado un mail automático a su correo electrónico con el resumen de los datos de su compra.</h5>*@
     <br>
     Desde ya muchas gracias
     <br><br>
     <B>LA GRAN PROMOCIÓN</B>
     <br /><br />
-    <a href="@Url.Action("ListadoSolicitudes","Compras")" class="btn btn-primary btn-block col-md-3">Listado de solicitudes</a>
+    <a href="@Url.Action("ListadoSolicitudes","Compras")" class="btn btn-primary btn-block col-md-3">Ver Listado de Solicitudes</a>
     <br />
-</div>
+    </div>
 

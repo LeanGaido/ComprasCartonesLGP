@@ -97,5 +97,16 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
             return View(compra);
         }
+
+        public ActionResult TablaEstadoPago(int? id)
+        {
+            var cuotas = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == id).ToList();
+            ViewBag.IdSolicitud = id;
+            if (cuotas == null)
+            {
+                return HttpNotFound();
+            }
+            return View(cuotas);
+        }
     }
 }
