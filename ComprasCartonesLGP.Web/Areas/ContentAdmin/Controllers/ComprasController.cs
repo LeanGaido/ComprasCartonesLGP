@@ -15,8 +15,9 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
     {
         private LGPContext db = new LGPContext();
         // GET: ContentAdmin/Compras
-        public ActionResult Index(string searchString, string currentFilter, int? page, int Estado = 0)
+        public ActionResult Index(string searchString, string currentFilter, int? page, int Estado = 0, int Anio = 0)
         {
+            ViewBag.Anio = new SelectList(db.Promociones.OrderByDescending(x => x.Anio), "Anio", "Anio");
             if (!string.IsNullOrEmpty(searchString))
             {
                 page = 1;
@@ -31,7 +32,17 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             int pageSize = 20;
             int pageNumber = (page ?? 1);
 
-            var compras = db.ComprasDeSolicitudes.OrderByDescending(x => x.ID).ToList();
+            if (Anio == 0)
+            {
+                Anio = DateTime.Now.Year;
+            }
+
+            var compras = (from oCompras in db.ComprasDeSolicitudes
+                             join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
+                             join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
+                             where oPromocion.Anio == Anio select oCompras).OrderByDescending(x => x.ID).ToList();
+
+            //var compras = db.ComprasDeSolicitudes.OrderByDescending(x => x.ID).ToList();
             if (!string.IsNullOrEmpty(searchString))
             {
                 compras = compras.Where(x => x.NroSolicitud.ToUpper().Contains(searchString.ToUpper())).ToList();
@@ -55,11 +66,12 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(compras.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult Details(int? id, int? page, string currentFilter, int Estado = 0)
+        public ActionResult Details(int? id, int? page, string currentFilter, int Estado = 0, int Anio = 0)
         {
             ViewBag.page = page;
             ViewBag.CurrentFilter = currentFilter;
             ViewBag.Estado = Estado;
+            ViewBag.Anio = Anio;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -115,13 +127,14 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(compra);
         }
 
-        public ActionResult TablaEstadoPago(int? id, int? page, string currentFilter, int Estado = 0)
+        public ActionResult TablaEstadoPago(int? id, int? page, string currentFilter, int Estado = 0, int Anio = 0)
         {
             var cuotas = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == id).ToList();
             ViewBag.IdSolicitud = id;
             ViewBag.page = page;
             ViewBag.CurrentFilter = currentFilter;
             ViewBag.Estado = Estado;
+            ViewBag.Anio = Anio;
             if (cuotas == null)
             {
                 return HttpNotFound();
