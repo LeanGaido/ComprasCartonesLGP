@@ -20,13 +20,12 @@
 
     @*<script src="../code.jquery.com/jquery-1.11.1.min.js"></script>*@
     @*<link href="../maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="../maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>*@
+        <script src="../maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>*@
 
     @*<link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">*@
     <link rel="stylesheet" href="~/assets/css/custom-styles.css">
 </head>
-<body>
-
+<body class="bg-section-secondary">
     <header class="header header-transparent mt-lg-5" id="header-main">
         <!-- Main navbar -->
         <nav class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light bg-white" id="navbar-main">
@@ -38,9 +37,9 @@
                     </a>
                     <!-- Navbar collapse trigger -->
                     @*<button class="navbar-toggler lgp-burguer" type="button" data-toggle="collapse" data-target="#navbar-main-collapse"
-                            aria-controls="navbar-main-collapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>*@
+                                aria-controls="navbar-main-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>*@
                 </div>
                 <!-- Navbar nav -->
             </div>
@@ -150,7 +149,7 @@
                     $(this).prop('checked', true);
                     $('#squaredOne').prop('checked', false);
                     $('#PagoDebitoAutomatico').show();
-                    
+
                     $('#DebitoConTarjeta').prop('required', true);
                     $('#DebitoConCbu').prop('required', true);
                 });
@@ -304,7 +303,6 @@
                     }
                 });
             }
-
             //// Function to clear all dabs from the card
             //function cleanCard() {
             //    $('td').css('background-color', 'rgb(119, 119, 119)');
@@ -349,6 +347,8 @@
             //    $('#' + tab).addClass('active');
             //});
         });
+
+
     </script>
 </body>
 </html>
