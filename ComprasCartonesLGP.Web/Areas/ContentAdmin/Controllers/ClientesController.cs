@@ -37,11 +37,15 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 clientes = clientes.Where(x => x.NombreCompleto.ToUpper().Contains(searchString.ToUpper())).ToList();
             }
 
+            ViewBag.TotalAsociados = clientes.Count();
+
             return View(clientes.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? page, string currentFilter)
         {
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = currentFilter;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

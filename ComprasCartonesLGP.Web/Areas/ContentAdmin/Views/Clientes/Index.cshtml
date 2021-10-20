@@ -11,6 +11,20 @@
     </ol>
 </nav>
 <div class="container col-md-12 row">
+    <div class="col-md-12 form-control alert-success">
+        <p>
+            @if (ViewBag.currentFilter == null)
+            {
+                <strong>@ViewBag.TotalAsociados Clientes Registrados</strong>
+            }
+            else
+            {
+                <strong>@ViewBag.TotalAsociados Resultados de la busqueda</strong>
+            }
+        </p>
+    </div>
+</div>
+<div class="container col-md-12 row">
     <div class="col-md-6">
         <p></p>
         @using (Html.BeginForm())
@@ -31,6 +45,7 @@
     <table class="table table-hover" id="job-table">
         <thead>
             <tr class="text-center">
+                <th scope="col"></th>
                 <th scope="col">
                     <div align="center">Nombre y apellido</div>
                 </th>
@@ -44,9 +59,14 @@
             </tr>
         </thead>
         <tbody class="text-center tableBody">
+            @{var cantidad = 0;}
             @foreach (var item in Model)
             {
+                cantidad = cantidad + 1;
                 <tr class="">
+                    <td>
+                        @cantidad
+                    </td>
                     <td class="">
                         @Html.DisplayFor(modelItem => item.NombreCompleto)
                     </td>

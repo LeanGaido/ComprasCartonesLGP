@@ -51,6 +51,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             }
 
             ViewBag.Estado = Estado;
+            ViewBag.TotalCompras = compras.Count();
             return View(compras.ToPagedList(pageNumber, pageSize));
         }
 
@@ -114,10 +115,13 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(compra);
         }
 
-        public ActionResult TablaEstadoPago(int? id)
+        public ActionResult TablaEstadoPago(int? id, int? page, string currentFilter, int Estado = 0)
         {
             var cuotas = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == id).ToList();
             ViewBag.IdSolicitud = id;
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = currentFilter;
+            ViewBag.Estado = Estado;
             if (cuotas == null)
             {
                 return HttpNotFound();

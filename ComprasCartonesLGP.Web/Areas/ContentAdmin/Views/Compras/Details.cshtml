@@ -130,7 +130,7 @@
             <tr class="active">
                 <th width="20%" scope="col">Estado Pago</th>
                 <td>@ViewBag.EstadoPago</td>
-                <td width="5%"><a href="@Url.Action("TablaEstadoPago", new { id = Model.ID })"><div align="center"><i class="fa fa-info" aria-hidden="true"></i></div></a></td>
+                <td width="5%"><a href="@Url.Action("TablaEstadoPago", new { id = Model.ID, currentFilter = ViewBag.CurrentFilter, page = ViewBag.page, Estado = ViewBag.Estado })"><div align="center"><i class="fa fa-info" aria-hidden="true"></i></div></a></td>
             </tr>
             <tr class="active">
                 <th width="20%" scope="col">Cantidad de Cuotas</th>
@@ -152,7 +152,7 @@
     <br /><br />
     <div class="form-group row botones-formularios">
         <div class="margin-botones-formularios">
-            @Html.ActionLink("Volver", "Index", new { currentFilter = @ViewBag.CurrentFilter, page = @ViewBag.page, Estado = ViewBag.Estado }, new { @class = "btn botonPrincipal" })
+            @Html.ActionLink("Volver", "Index", new { currentFilter = ViewBag.CurrentFilter, page = ViewBag.page, Estado = ViewBag.Estado }, new { @class = "btn botonPrincipal" })
         </div>
     </div>
 </div>
