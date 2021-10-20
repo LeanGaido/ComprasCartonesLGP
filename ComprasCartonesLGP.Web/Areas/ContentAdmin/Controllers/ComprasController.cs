@@ -15,7 +15,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
     {
         private LGPContext db = new LGPContext();
         // GET: ContentAdmin/Compras
-        public ActionResult Index(string searchString, string currentFilter, int? page)
+        public ActionResult Index(string searchString, string currentFilter, int? page, int Estado = 0)
         {
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -37,14 +37,28 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 compras = compras.Where(x => x.NroSolicitud.ToUpper().Contains(searchString.ToUpper())).ToList();
             }
 
-            
+            switch (Estado)
+            {
+                case 1:
+                    compras = compras.Where(x => x.PagoRealizdo == true).ToList();
+                    break;
+                case 2:
+                    compras = compras.Where(x => x.PagoRealizdo == false && x.PagoCancelado == false).ToList();
+                    break;
+                case 3:
+                    compras = compras.Where(x => x.PagoCancelado == true).ToList();
+                    break;
+            }
+
+            ViewBag.Estado = Estado;
             return View(compras.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult Details(int? id, int? page, string currentFilter)
+        public ActionResult Details(int? id, int? page, string currentFilter, int Estado = 0)
         {
             ViewBag.page = page;
             ViewBag.CurrentFilter = currentFilter;
+            ViewBag.Estado = Estado;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

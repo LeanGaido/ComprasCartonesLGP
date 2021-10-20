@@ -10,23 +10,57 @@
         <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
     </ol>
 </nav>
-<div class="container col-md-12 row">
-    <div class="col-md-6">
-        <p></p>
-        @using (Html.BeginForm())
-        {
+@using (Html.BeginForm())
+{
+    <div class="container col-md-12 row">
+            <div class="col-md-3">
+                <p></p>
+                <p>
+                    @Html.TextBox("searchString", ViewBag.currentFilter as string, new { @class = "form-control", @placeholder ="Nº Solicitud" })
+                </p>
+            </div>
+            <div class="col-md-4">
+                <p></p>
+                <select class="form-control" name="Estado" id="Estado">
+                    @switch (ViewBag.Estado)
+                    {
+                        case 0:
+                            <option selected value="0">Todos</option>
+                            <option value="1">Completo</option>
+                            <option value="2">Pendiente</option>
+                            <option value="3">Cancelado</option>
+                            break;
+                        case 1:
+                            <option value="0">Todos</option>
+                            <option selected value="1">Completo</option>
+                            <option value="2">Pendiente</option>
+                            <option value="3">Cancelado</option>
+                            break;
+                        case 2:
+                            <option value="0">Todos</option>
+                            <option value="1">Completo</option>
+                            <option selected value="2">Pendiente</option>
+                            <option value="3">Cancelado</option>
+                            break;
+                        case 3:
+                            <option value="0">Todos</option>
+                            <option value="1">Completo</option>
+                            <option value="2">Pendiente</option>
+                            <option selected value="3">Cancelado</option>
+                            break;
+                    }
+
+                </select>
+            </div>
+        <div class="col-md-2">
             <p>
-                <strong class="">Buscar solicitud: </strong> @Html.TextBox("searchString", ViewBag.currentFilter as string)
+                <p></p>
                 <input type="submit" value="Buscar" class="btn botonPrincipal" />
+                @*<h4>@Html.ActionLink("Limpiar filtro", "Index", null, new { @class = "btn botonPrincipal" })</h4>*@
             </p>
-        }
+        </div>
     </div>
-    <div class="col-md-2">
-        <p>
-            <h4>@Html.ActionLink("Limpiar filtro", "Index", null, new { @class = "btn botonPrincipal" })</h4>
-        </p>
-    </div>
-</div>
+}
 <div class="table-responsive" id="tableCtaCte">
     <table class="table table-hover" id="job-table">
         <thead>
@@ -74,7 +108,7 @@
                             </td>
                         }
                     }
-                    <td width="5%"><a href="@Url.Action("Details", new { id = item.ID, page = ViewBag.page, currentFilter = ViewBag.CurrentFilter })"><div align="center"><i class="fa fa-info" aria-hidden="true"></i></div></a></td>
+                    <td width="5%"><a href="@Url.Action("Details", new { id = item.ID, page = ViewBag.page, currentFilter = ViewBag.CurrentFilter, Estado = ViewBag.Estado })"><div align="center"><i class="fa fa-info" aria-hidden="true"></i></div></a></td>
                 </tr>
             }
         </tbody>
@@ -84,7 +118,7 @@
                     <p></p>
                     <div align="center">
                         @Html.PagedListPager(Model, page => Url.Action("Index",
-                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, Estado = ViewBag.Estado }))
                     </div>
                     <p></p>
                 </td>
