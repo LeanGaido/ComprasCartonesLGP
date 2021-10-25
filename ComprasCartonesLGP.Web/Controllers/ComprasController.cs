@@ -1437,6 +1437,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference).FirstOrDefault();
                                 solicitudComprada.PagoRealizdo = false;
                                 solicitudComprada.PagoCancelado = true;
+                                solicitudComprada.FechaCancelado = DateTime.Now;
 
                                 var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitudComprada.ID).FirstOrDefault();
                                 cuota.TipoPagoID = solicitudComprada.TipoDePagoID;
