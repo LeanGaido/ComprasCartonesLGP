@@ -1267,6 +1267,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             ViewBag.AlertConfirmacionAdhesion = "none";
             ViewBag.AlertPagoContado = "none";
             var detalle = db.ComprasDeSolicitudes.Where(x => x.ID == id).FirstOrDefault();
+
             if(detalle == null)
             {
                 return null;
@@ -1292,15 +1293,13 @@ namespace ComprasCartonesLGP.Web.Controllers
                 }
             }
 
-            if (detalle.TipoDePago.ID == 1 && detalle.PagoRealizdo == false)
+            var pago = db.Pagos.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
+
+            if (detalle.TipoDePago.ID == 1 && detalle.PagoRealizdo == false && pago.state == "pending")
             {
-                var pago = db.Pagos.Where(x => x.external_reference == detalle.NroSolicitud).FirstOrDefault();
                 ViewBag.FechaVencimiento = pago.second_due_date.ToString("dd/MM/yyyy");
-                ViewBag.AlertPagoContado = "";
-                if(pago.state == "pending")
-                {
-                    ViewBag.Checkout = pago.checkout_url;
-                }
+                ViewBag.AlertPagoContado = "";            
+                ViewBag.Checkout = pago.checkout_url;
             }
             if (detalle.TipoDePago.ID == 2)
             {
@@ -1644,7 +1643,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             var asociado = db.Asociados.Where(x => x.ID == asociadoId).FirstOrDefault();
             string to = asociado.Email;
             string subject = "Pago Solicitud: " + nroSolicitud;
-            var emailBody = asociado.NombreCompleto + "Se ha realizado el pago de la Solicitud " + nroSolicitud +"<br/><br/> LGP";
+            var emailBody = "Buenas " + asociado.NombreCompleto + ". Se ha realizado el pago de la Solicitud " + nroSolicitud +"<br/><br/> LGP";
 
             Email email = new Email();
             email.SendEmail(emailBody, to, subject);
@@ -1655,7 +1654,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             var asociado = db.Asociados.Where(x => x.ID == asociadoId).FirstOrDefault();
             string to = asociado.Email;
             string subject = "Pago vencido LGP";
-            var emailBody = asociado.NombreCompleto + "Se ha vencido el tiempo para el pago de la compra de la solictud" 
+            var emailBody = "Buenas " + asociado.NombreCompleto + ". Se ha vencido el tiempo para el pago de la compra de la solictud " 
                  + nroSolicitud +". Por favor, vuelva a ingresar al sistema y compre otra solicitud. Muchas gracias.<br/><br/> LGP";
 
             Email email = new Email();
@@ -1668,7 +1667,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             var asociado = db.Asociados.Where(x => x.ID == solicitudComprada.AsociadoID).FirstOrDefault();
             string to = "promocionilusion@gmail.com";
             string subject = "Baja débito automático";
-            var emailBody = "El asociado " + asociado.NombreCompleto + "Se ha dado de baja al débito automático de la solicitud "
+            var emailBody = "El asociado " + asociado.NombreCompleto + " se ha dado de baja al débito automático de la solicitud "
                 + nroSolicitud + ". Motivo: " + motivo;
 
             Email email = new Email();
