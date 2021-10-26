@@ -243,7 +243,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             Pago pago = new Pago();
 
             DateTime hoy = DateTime.Now;
-            //string url = "https://lagranpromocion.ar/";
+            string url = "https://lagranpromocion.ar/compraonline/";
 
             var Cliente = ObtenerCliente();
 
@@ -331,10 +331,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                     pago360.second_due_date = PagoUnaCuota.SeguntoVencimiento.ToString("dd-MM-yyyy");
                     pago360.second_total = Carton.Precio;
                     pago360.payer_name = Cliente.NombreCompleto;
-                    //pago360.external_reference = PagoCartonId.ToString();
                     pago360.external_reference = numeroCarton.NroSolicitud;
                     pago360.payer_email = Cliente.Email;
-                    //pago360.back_url_success = url + "/Compras/PagoRealizado";
+                    pago360.back_url_success = url + "/Compras/PagoRealizado";
                     //pago360.back_url_pending = url + "/Compras/PagoPendiente";
                     //pago360.back_url_rejected = url + "/Compras/PagoCancelado";
                     try
@@ -1198,52 +1197,14 @@ namespace ComprasCartonesLGP.Web.Controllers
             return body;
         }
 
-        //public string ObtenerDiaHabil(string date, int days)
-        //{
-        //    string fecha = null;
-        //    NextBusinessDayRequest nextBusinessDay = new NextBusinessDayRequest();
-        //    //Respuesta de la Api
-        //    string respuesta = "";
-
-        //    nextBusinessDay.date = date;
-        //    nextBusinessDay.days = days;
-
-        //    //
-        //    string nextBusinessDay360Js = JsonConvert.SerializeObject(nextBusinessDay);
-
-        //    //Local
-        //    Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
-
-        //    //Server
-        //    //Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
-
-        //    HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
-
-        //    requestFile.ContentType = "application/html";
-        //    requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
-
-        //    HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
-
-        //    if (requestFile.HaveResponse)
-        //    {
-        //        if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
-        //        {
-        //            StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
-
-        //            respuesta = respReader.ReadToEnd();
-        //            var dia = respuesta.Substring(11, 2);
-        //            var mes = respuesta.Substring(8, 2);
-        //            var anio = respuesta.Substring(3, 4);
-
-        //            fecha = dia + "-" + mes + "-" + anio;
-        //        }
-        //    }
-        //    return fecha;
-        //}
-
         public ActionResult ListadoSolicitudes(int anio = 0)
         {
             var Cliente = ObtenerCliente();
+            if (Cliente == null)
+            {
+                return RedirectToAction("Identificarse", "Clientes");
+            }
+
             List<CompraDeSolicitud> solicitudes = new List<CompraDeSolicitud>();
             ViewBag.Anio = new SelectList(db.Promociones.OrderByDescending(x => x.Anio), "Anio", "Anio");
             if (Cliente != null)
@@ -1716,6 +1677,18 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                 email.SendEmail(to2, subject2, emailBody2);
             }
+        }
+
+        public ActionResult PagoRealizado()
+        {
+            var Cliente = ObtenerCliente();
+
+            if (Cliente == null)
+            {
+                return RedirectToAction("Identificarse", "Clientes");
+            }
+
+            return View();
         }
     }
 }
