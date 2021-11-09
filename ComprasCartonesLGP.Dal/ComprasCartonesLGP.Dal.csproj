@@ -85,6 +85,10 @@
     <Compile Include="Migrations\202110141252597_changeFloatXDeci.Designer.cs">
       <DependentUpon>202110141252597_changeFloatXDeci.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111091749367_parametros.cs" />
+    <Compile Include="Migrations\202111091749367_parametros.Designer.cs">
+      <DependentUpon>202111091749367_parametros.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -125,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110141252597_changeFloatXDeci.resx">
       <DependentUpon>202110141252597_changeFloatXDeci.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111091749367_parametros.resx">
+      <DependentUpon>202111091749367_parametros.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

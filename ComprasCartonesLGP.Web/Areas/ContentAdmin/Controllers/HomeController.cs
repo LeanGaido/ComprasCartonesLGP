@@ -14,5 +14,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         {
             return View();
         }
+
+        public ActionResult HabilitarCompra()
+        {
+            return View();
+        }
     }
 }

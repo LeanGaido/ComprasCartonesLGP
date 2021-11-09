@@ -41,7 +41,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
             int pageSize = 20;
             int pageNumber = (page ?? 1);
-            var adheridos = db.AdhesionCard.Where(x => x.state == "signed").ToList();
+            var adheridos = db.AdhesionCard.Where(x => x.state == "signed").OrderByDescending(x => x.id).ToList();
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -66,7 +66,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
             int pageSize = 20;
             int pageNumber = (page ?? 1);
-            var adheridos = db.AdhesionCbu.Where(x => x.state == "signed").ToList();
+            var adheridos = db.AdhesionCbu.Where(x => x.state == "signed").OrderByDescending(x => x.id).ToList();
 
             if (!string.IsNullOrEmpty(searchString))
             {
