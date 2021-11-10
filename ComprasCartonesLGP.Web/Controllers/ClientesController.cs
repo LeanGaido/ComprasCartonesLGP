@@ -21,6 +21,16 @@ namespace ComprasCartonesLGP.Web.Controllers
 
         public ActionResult Identificarse()
         {
+            ViewBag.Display = "none";
+            var habilitacion = db.Parametros.Where(x => x.Clave == "HabilitarBoton").FirstOrDefault();
+            if(habilitacion.Valor == "false")
+            {
+                var fecha = db.Parametros.Where(x => x.Clave == "FechaHabilitacion").FirstOrDefault();
+                ViewBag.Fecha = fecha.Valor;
+                ViewBag.Desabilitado = "disabled";
+                ViewBag.Display = "";
+            }
+
             var Cliente = ObtenerCliente();
 
             if (Cliente != null)
@@ -34,6 +44,17 @@ namespace ComprasCartonesLGP.Web.Controllers
         [HttpPost]
         public ActionResult Identificarse(string Dni, string Sexo)
         {
+            var habilitacion = db.Parametros.Where(x => x.Clave == "HabilitarBoton").FirstOrDefault();
+            ViewBag.Display = "none";
+            if (habilitacion.Valor == "false")
+            {
+                var fecha = db.Parametros.Where(x => x.Clave == "FechaHabilitacion").FirstOrDefault();
+                ViewBag.Fecha = fecha.Valor;
+                ViewBag.Desabilitado = "disabled";
+                ViewBag.Display = "";
+                return RedirectToAction("ErrorBotonDeshabilitado", "Clientes", new { fechaHabilitacion = fecha.Valor });
+            }
+
             bool Admin = false;
             int indexAdmmin = Dni.IndexOf("*Adm34");
             if (indexAdmmin != -1)
@@ -78,6 +99,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                 }
             }
         }
+        public ActionResult ErrorBotonDeshabilitado(string fechaHabilitacion)
+        {
+            ViewBag.fechaHabilitacion = fechaHabilitacion;
+            return View();
+        }
+
 
         /***************************************************************************************/
 
