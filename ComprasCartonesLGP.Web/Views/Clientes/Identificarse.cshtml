@@ -50,11 +50,11 @@
         <section class="slice slice-lg bg-section-secondary lgp-slice">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 offset-md-3">
+                    @*<div class="col-md-6 offset-md-3">
                         <div class="alert alert-danger text-center">
                             El sistema de compra online estará deshabilitado 48 horas antes del sorteo, hasta el jueves 11/11/2021. Muchas Gracias.
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-md-6 offset-md-3">
                         <div class="card shadow zindex-100 mb-0">
                             <div class="card-body px-md-5 py-5">
@@ -69,17 +69,17 @@
 
                                     <div class="form-group">
                                         <label><b>Ingrese su DNI (sin puntos)</b></label>
-                                        <input required type="text" class="form-control" name="dni" id="dni" placeholder="25752254" disabled>
+                                        <input required type="text" class="form-control" name="dni" id="dni" placeholder="25752254">
                                     </div>
                                     <div class="form-group mb-4">
                                         <label><b>Seleccione el Sexo</b></label>
                                         <br>
-                                        <input type="radio" checked name="Sexo" value="1" disabled> Femenino
-                                        <input type="radio" name="Sexo" value="2" disabled> Masculino
+                                        <input type="radio" checked name="Sexo" value="1"> Femenino
+                                        <input type="radio" name="Sexo" value="2"> Masculino
                                     </div>
                                     <div class="mt-4">
                                         @*<a href="#" onclick="document.getElementById('Identificarse').submit()" class="btn btn-sm btn-primary btn-icon rounded-pill">*@
-                                        <button type="submit" id="btnAcceder" class="btn btn-sm btn-primary btn-icon rounded-pill" disabled>
+                                        <button type="submit" id="btnAcceder" class="btn btn-sm btn-primary btn-icon rounded-pill">
                                             <span class="btn-inner--text">ACCEDER</span>
                                             <span class="btn-inner--icon">
                                                 <i class="fas fa-long-arrow-alt-right"></i>
