@@ -74,6 +74,7 @@
     <Compile Include="Pago360\Response\Pago360Response.cs" />
     <Compile Include="Pago360\Response\CbuDebitResponse.cs" />
     <Compile Include="Pago360\Webhook.cs" />
+    <Compile Include="Parametro.cs" />
     <Compile Include="Promocion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provincias.cs" />

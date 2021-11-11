@@ -359,6 +359,8 @@
     <Content Include="Content\font\9bf8d97dc76c21ccf6da3143e3d3ea5f.woff2" />
     <Content Include="Areas\ContentAdmin\Views\Debito\EnvioSolicitudDebitoExitoso.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Compras\TablaEstadoPago.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Home\HabilitarCompra.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Home\CompraHabilitadaExitosamente.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -420,6 +422,7 @@
     <Content Include="Views\Compras\ResumenCompra.cshtml" />
     <Content Include="Views\Compras\ErrorCompra.cshtml" />
     <Content Include="Views\Compras\PagoRealizado.cshtml" />
+    <Content Include="Views\Clientes\ErrorBotonDeshabilitado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

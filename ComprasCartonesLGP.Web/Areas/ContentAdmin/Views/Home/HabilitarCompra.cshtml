@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "Habilitar Compra";
+}
+
+<br />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb background-turquesa3">
+        <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
+    </ol>
+</nav>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container col-md-12 row">
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="col-md-8 offset-md-2 text-center">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    @ViewBag.Error
+                </div>
+            </div>
+        }
+        <div class="col-md-8 offset-md-2 text-center">
+            <div class="form-group col-auto p-2 text-center">
+                <h3>Compra de solicitudes</h3>
+                <div class="offset-md-1  col-md-10">
+                    @switch (ViewBag.Estado)
+                    {
+                        case "true":
+                            <input type="radio" checked name="habilitado" value="true"><b>Habilitado</b>
+                            <input type="radio" name="habilitado" value="false"><b>Deshabilitado</b>
+                            break;
+                        case "false":
+                            <input type="radio" name="habilitado" value="true"><b>Habilitado</b>
+                            <input type="radio" checked name="habilitado" value="false"><b>Deshabilitado</b>
+                            break;
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 offset-md-2 text-center">
+            <div class="form-group col-auto p-2 text-center">
+                <h3>Fecha Habilitación</h3>
+                <h6>En caso de deshabilitar el boton indicar hasta que fecha estará deshabilitado</h6>
+                <div class="offset-md-3 col-md-6">
+                    <input type="date" name="fechaHabilitacion" class="form-control text-center" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 text-center">
+            <div class="row offset-md-7 col-auto p-1 text-center">
+                <div class="margin-botones-formularios">
+                    <input type="submit" value="Guardar" class="btn botonPrincipal" />
+                </div>
+                <div class="margin-botones-formularios">
+                    @Html.ActionLink("Volver", "Index", null, new { @class = "btn botonPrincipal" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
