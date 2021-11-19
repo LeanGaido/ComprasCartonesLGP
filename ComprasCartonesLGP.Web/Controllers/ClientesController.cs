@@ -143,6 +143,9 @@ namespace ComprasCartonesLGP.Web.Controllers
             Session["ClienteContacto"] = Area + "" + Numero;
             var numeroCompleto = Session["ClienteContacto"].ToString();
 
+            Session["ClienteArea"] = Area; 
+            Session["ClienteNumero"] = Numero;
+
             var cliente = db.Asociados.Where(x => x.AreaCelular == Area && x.NumeroCelular == Numero && x.Dni != dni).FirstOrDefault();
 
             if (cliente != null)
@@ -223,10 +226,15 @@ namespace ComprasCartonesLGP.Web.Controllers
             string dni = Session["ClienteDni"].ToString();
             string sexo = Session["ClienteSexo"].ToString();
             string contacto = Session["ClienteContacto"].ToString();
+            string area = Session["ClienteArea"].ToString();
+            string numero = Session["ClienteNumero"].ToString();
 
             Session["ClienteDni"] = dni;
             Session["ClienteSexo"] = sexo;
             Session["ClienteContacto"] = contacto;
+            Session["ClienteArea"] = area;
+            Session["ClienteNumero"] = numero;
+
 
             ViewBag.Dni = dni;
 
@@ -288,12 +296,14 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             string dni = Session["ClienteDni"].ToString();
             string sexo = Session["ClienteSexo"].ToString();
-            var asociado = db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
+            string area = Session["ClienteArea"].ToString();
+            string numero = Session["ClienteNumero"].ToString();
+
             //string email = Session["ClienteContacto"].ToString();
 
             int SolicitudReservadaId = 0;
 
-            if(Session["ReservaSolicitud"] != null)
+            if (Session["ReservaSolicitud"] != null)
             {
                 if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
                 {
@@ -313,12 +323,12 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                 ViewBag.Expira = tiempoRestante.Minutes.ToString().PadLeft(2, '0') + ":" + tiempoRestante.Seconds.ToString().PadLeft(2, '0');
             }
-            
+
 
             ViewBag.Dni = dni;
             //ViewBag.Email = email;
-            ViewBag.AreaCelular = asociado.AreaCelular;
-            ViewBag.NumeroCelular = asociado.NumeroCelular;
+            ViewBag.AreaCelular = area;
+            ViewBag.NumeroCelular = numero;
             ViewBag.Sexo = sexo;
 
             var provincias = db.Provincias.ToList();
@@ -341,8 +351,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                 }
 
                 string dni = Session["ClienteDni"].ToString();
-                string email = Session["ClienteContacto"].ToString();
                 string sexo = Session["ClienteSexo"].ToString();
+                string area = Session["ClienteArea"].ToString();
+                string numero = Session["ClienteNumero"].ToString();
 
                 var cliente = db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
                 if (cliente != null)
@@ -350,7 +361,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Dni" });
                 }
 
-                cliente = db.Asociados.Where(x => x.Email == email).FirstOrDefault();
+                cliente = db.Asociados.Where(x => x.AreaCelular == area && x.NumeroCelular == numero).FirstOrDefault();
                 if (cliente != null)
                 {
                     return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Nº de Celular" });
@@ -408,7 +419,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 //}
 
                 Session["ClienteDni"] = asociado.Dni;
-                Session["ClienteContacto"] = asociado.Email;
+                Session["ClienteContacto"] = asociado.AreaCelular +"" +asociado.NumeroCelular;
                 Session["ClienteSexo"] = asociado.Sexo;
 
                 return RedirectToAction("ComprobarCompra", "Compras");
