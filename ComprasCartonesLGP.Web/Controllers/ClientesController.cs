@@ -141,7 +141,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             string dni = Session["ClienteDni"].ToString();
             Session["ClienteContacto"] = Area + "" + Numero;
-            var numero = Session["ClienteContacto"].ToString();
+            var numeroCompleto = Session["ClienteContacto"].ToString();
 
             var cliente = db.Asociados.Where(x => x.AreaCelular == Area && x.NumeroCelular == Numero && x.Dni != dni).FirstOrDefault();
 
@@ -150,16 +150,21 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente Distinto registrado con ese Nº de celular" });
             }
 
-            CodigoAcceso codigo = ObtenerCodigo(numero);
+            CodigoAcceso codigo = ObtenerCodigo(numeroCompleto);
 
             //string emailBody = "Por Favor ingrese este codigo: " + codigo.Codigo + " para poder ingresar";
             //Email nuevoEmail = new Email();
 
             //string respuesta = nuevoEmail.SendEmail(emailBody, Email, "Verificacion de Ingreso - La Gran Promocion");
 
+
+
+            ///////////////////
+
+
             string texto = "Hola, su codigo Temporal para ingresar a la compra de LGP es: " + codigo.Codigo;
 
-            Mensajes sms = new Mensajes(numero, texto);
+            Mensajes sms = new Mensajes(numeroCompleto, texto);
             string respuesta = sms.EnviarSms();
 
             if (respuesta == "Enviado Correctamente" || respuesta.Contains("probando sin enviar"))
@@ -219,24 +224,6 @@ namespace ComprasCartonesLGP.Web.Controllers
             string sexo = Session["ClienteSexo"].ToString();
             string contacto = Session["ClienteContacto"].ToString();
 
-            //string path = Server.MapPath("~/App_Data/Data.txt");
-            //StreamWriter sw = new StreamWriter(path, true, Encoding.ASCII);
-            //sw.Write("Sesiones en Autentificacion GET");
-            //if (Session["ClienteDni"] != null)
-            //{
-            //    sw.Write("ClienteDni " + Session["ClienteDni"].ToString());
-            //}
-            //if (Session["ClienteSexo"] != null)
-            //{
-            //    sw.Write("ClienteSexo" + Session["ClienteSexo"].ToString());
-            //}
-            //if (Session["ClienteContacto"] != null)
-            //{
-            //    sw.Write("ClienteContacto" + Session["ClienteContacto"].ToString());
-            //}
-            ////close the file
-            //sw.Close();
-
             Session["ClienteDni"] = dni;
             Session["ClienteSexo"] = sexo;
             Session["ClienteContacto"] = contacto;
@@ -253,24 +240,6 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (!valida)
             {
-                //string path = Server.MapPath("~/App_Data/log.txt");
-                //StreamWriter sw = new StreamWriter(path, true, Encoding.ASCII);
-                //sw.Write("Variables de sesion perdida");
-                //if (Session["ClienteDni"] == null)
-                //{
-                //    sw.Write("ClienteDni perdida");
-                //}
-                //if (Session["ClienteSexo"] == null)
-                //{
-                //    sw.Write("ClienteSexo perdida");
-                //}
-                //if (Session["ClienteContacto"] == null)
-                //{
-                //    sw.Write("ClienteContacto perdida");
-                //}
-                ////close the file
-                //sw.Close();
-
                 return RedirectToAction("Identificarse", "Clientes", new { returnUrl = "/Compras/ElegirCarton" });
             }
 
