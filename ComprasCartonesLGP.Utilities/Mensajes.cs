@@ -11,8 +11,6 @@ namespace ComprasCartonesLGP.Utilities
 {
     public class Mensajes
     {
-        //private SueñoCelestePagosContext db = new SueñoCelestePagosContext();
-
         public string usuario { get; set; }
         public string clave { get; set; }
         public string numero { get; set; }
@@ -21,8 +19,8 @@ namespace ComprasCartonesLGP.Utilities
 
         public Mensajes(string _numero, string _texto)
         {
-            usuario = "ccordoba";//"SMSDEMO766042";//"MIUSUARIO";
-            clave = "ceYbdARkLA";//"SMSDEMO766042108";// "MICLAVE";
+            usuario = "COSMOPOLITA";//"SMSDEMO766042";//"MIUSUARIO";
+            clave = "COSMOPOLITA633";//"SMSDEMO766042108";// "MICLAVE";
             numero = _numero;
             texto = _texto;//"Su codigo Temporal es: " + codigo.Codigo + "\r\nMcBrill";
         }
@@ -48,6 +46,10 @@ namespace ComprasCartonesLGP.Utilities
                     StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8"/*"iso-8859-1"*/));
 
                     respuesta = respReader.ReadToEnd();
+                    if(respuesta == "OK\r\n")
+                    {
+                        respuesta = "Enviado Correctamente";
+                    }
                 }
             }
 

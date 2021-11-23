@@ -11,12 +11,29 @@
                 @using (Html.BeginForm())
                 {
                     <div class="form-group">
-                        <label for="Dni">DNI<small>(Solo numeros, sin puntos o guiones)</small></label>
+                        <div class="text-center">
+                            <label for="Dni">DNI<small>(Solo numeros, sin puntos o guiones)</small></label>
+                        </div>
                         <input type="number" class="form-control" name="Dni" id="Dni" value="@ViewBag.Dni" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="Area">Email</label>
-                        <input type="email" class="form-control" name="Email" id="Email" placeholder="Email">
+                        <div class="text-center">
+                            <label>CELULAR</label>
+                        </div>
+                        <div class="container row col-md-12">
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <label for="Area">Caracteristica<small>(sin el 0)</small></label>
+                                </div>
+                                <input type="number" class="form-control" name="Area" id="Area" placeholder="3564">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <label for="Area">Número<small>(sin el 15)</small></label>
+                                </div>
+                                <input type="number" class="form-control" name="Numero" id="Numero" placeholder="698745">
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">SIGUIENTE</button>
                 }
