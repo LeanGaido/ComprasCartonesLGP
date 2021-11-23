@@ -600,10 +600,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -1240,6 +1240,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                             adhesion.state = pwebhook.type;
                             db.Entry(adhesion).State = EntityState.Modified;
                             db.SaveChanges();
+
+                            int id = pwebhook.entity_id;
+                            DebitarCbuAutomaticamente(id);
                         }
                         if (pwebhook.type == "canceled")
                         {
@@ -1264,6 +1267,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                             adhesion.state = pwebhook.type;
                             db.Entry(adhesion).State = EntityState.Modified;
                             db.SaveChanges();
+
+                            int id = pwebhook.entity_id;
+                            DebitarCardAutomaticamente(id);
                         }
                         if (pwebhook.type == "canceled")
                         {
@@ -1497,6 +1503,32 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
         }
 
+        public void EnviarEmailErrorAlDebitarAutomaticamenteCbu(int? id)
+        {
+            var asociado = db.AdhesionCbu.Where(x => x.id == id).FirstOrDefault();
+            string to = "javisicardi94@gmail.com";
+            string subject = "Error al enviar solicitud de debito automáticamente";
+            var emailBody = "El asociado "+ asociado.adhesion_holder_name + " compro la solicitud " + asociado.external_reference + " " +
+                " y hubo un error al intentar enviar la solicitud de debito automaticamente. Por favor ingrese al " +
+                "sistema administrador y envie la solicitud nuevamente. Gracias.";
+
+            Email email = new Email();
+            email.SendEmail(emailBody, to, subject);
+        }
+
+        public void EnviarEmailErrorAlDebitarAutomaticamenteCard(int? id)
+        {
+            var asociado = db.AdhesionCard.Where(x => x.id == id).FirstOrDefault();
+            string to = "javisicardi94@gmail.com";
+            string subject = "Error al enviar solicitud de debito automáticamente";
+            var emailBody = "El asociado " + asociado.adhesion_holder_name + " compro la solicitud " + asociado.external_reference + " " +
+                " y hubo un error al intentar enviar la solicitud de debito automaticamente. Por favor ingrese al " +
+                "sistema administrador y envie la solicitud nuevamente. Gracias.";
+
+            Email email = new Email();
+            email.SendEmail(emailBody, to, subject);
+        }
+
         public ActionResult PagoRealizado()
         {
             var Cliente = ObtenerCliente();
@@ -1507,6 +1539,274 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
 
             return View();
+        }
+
+        public void DebitarCbuAutomaticamente(int? id)
+        {
+            DateTime dateTime = DateTime.Now;
+            string date = dateTime.ToString("dd-MM-yyyy");
+            int days = 3;
+            string primerVencimiento = ObtenerDiaHabil(date, days);
+            string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
+            var adheridoCbu = db.AdhesionCbu.Where(x => x.state == "signed" && x.id == id).FirstOrDefault();
+            var mesActual = dateTime.ToString("MM");
+            var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCbu.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+            if (solicitud != null)
+            {
+                var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
+                if (cuotaSolicitud != null)
+                {
+                    var solicitudDebito = db.DebitosCBU.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
+                    if (solicitudDebito == null)
+                    {
+                        CbuDebitRequest debito = new CbuDebitRequest();
+                        Metadata metadata = new Metadata();
+
+                        debito.adhesion_id = adheridoCbu.id;
+                        debito.first_due_date = primerVencimiento;
+                        debito.first_total = (decimal)cuotaSolicitud.PrimerPrecioCuota;
+                        debito.second_due_date = segundoVencimiento;
+                        debito.second_total = (decimal)cuotaSolicitud.SeguntoPrecioCuota;
+                        debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                        metadata.external_reference = cuotaSolicitud.ID;
+                        debito.metadata = metadata;
+
+                        DebitoCBU debitoCbu = new DebitoCBU();
+                        //Respuesta de la Api
+                        string respuesta = "";
+
+                        //
+                        string debit360Js = JsonConvert.SerializeObject(debito);
+
+                        //Local
+                        Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                        //Server
+                        //Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                        HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+                        requestFile.ContentType = "application/html";
+                        requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+                        HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+                        if (requestFile.HaveResponse)
+                        {
+                            if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                            {
+                                try
+                                {
+                                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                                    respuesta = respReader.ReadToEnd();
+
+                                    CbuDebitResponse debitResponse = new CbuDebitResponse();
+                                    //var jsonObject = JObject.Parse(response.Content);
+
+                                    debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
+
+                                    if (debitResponse.id != 0)
+                                    {
+                                        debitoCbu.id = debitResponse.id;
+                                        debitoCbu.type = debitResponse.type;
+                                        debitoCbu.state = debitResponse.state;
+                                        debitoCbu.created_at = debitResponse.created_at;
+                                        debitoCbu.first_due_date = debitResponse.first_due_date;
+                                        debitoCbu.first_total = debitResponse.first_total;
+                                        debitoCbu.second_due_date = debito.second_due_date;
+                                        debitoCbu.second_total = debitResponse.first_total;
+                                        debitoCbu.description = debitResponse.description;
+                                        debitoCbu.CuotaId = debitResponse.metadata.external_reference;
+                                        debitoCbu.adhesionId = debitResponse.adhesion.id;
+
+                                        db.DebitosCBU.Add(debitoCbu);
+                                        db.SaveChanges();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    EnviarEmailErrorAlDebitarAutomaticamenteCbu(adheridoCbu.id);
+                                }
+                            }
+                            else
+                            {
+                                EnviarEmailErrorAlDebitarAutomaticamenteCbu(adheridoCbu.id);
+                            }
+                        }
+                        else
+                        {
+                            EnviarEmailErrorAlDebitarAutomaticamenteCbu(adheridoCbu.id);
+                        }
+                    }
+                    else
+                    {
+                        EnviarEmailErrorAlDebitarAutomaticamenteCbu(adheridoCbu.id);
+                    }
+                }
+                else
+                {
+                    EnviarEmailErrorAlDebitarAutomaticamenteCbu(adheridoCbu.id);
+                }
+            }
+            else
+            {
+                EnviarEmailErrorAlDebitarAutomaticamenteCbu(adheridoCbu.id);
+            }
+        }
+
+        public void DebitarCardAutomaticamente(int? id)
+        {
+            var adheridoCard = db.AdhesionCard.Where(x => x.id == id).FirstOrDefault();
+            var mesActual = DateTime.Now.ToString("MM");
+            var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCard.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+            if (solicitud != null)
+            {
+                var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
+                if (cuotaSolicitud != null)
+                {
+                    var solicitudDebito = db.DebitosCard.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
+                    if (solicitudDebito == null)
+                    {
+                        CardDebitRequest debito = new CardDebitRequest();
+                        Metadata metadata = new Metadata();
+
+                        debito.card_adhesion_id = adheridoCard.id;
+                        debito.month = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                        debito.year = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                        debito.amount = cuotaSolicitud.PrimerPrecioCuota;
+                        debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                        metadata.external_reference = cuotaSolicitud.ID;
+                        debito.metadata = metadata;
+
+                        DebitoCard debitoCard = new DebitoCard();
+                        //Respuesta de la Api
+                        string respuesta = "";
+
+                        string debit360Js = JsonConvert.SerializeObject(debito);
+
+                        //Local
+                        //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                        //Server
+                        Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                        HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+                        requestFile.ContentType = "application/html";
+                        requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+                        HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+                        if (requestFile.HaveResponse)
+                        {
+                            if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                            {
+                                try
+                                {
+                                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                                    respuesta = respReader.ReadToEnd();
+
+                                    CardDebitResponse debitResponse = new CardDebitResponse();
+
+                                    //var jsonObject = JObject.Parse(response.Content);
+
+                                    debitResponse = JsonConvert.DeserializeObject<CardDebitResponse>(respuesta);
+                                    if (debitResponse.id != 0)
+                                    {
+                                        debitoCard.id = debitResponse.id;
+                                        debitoCard.type = debitResponse.type;
+                                        debitoCard.state = debitResponse.state;
+                                        debitoCard.created_at = debitResponse.created_at;
+                                        debitoCard.amount = debitResponse.amount;
+                                        debitoCard.month = debitResponse.month;
+                                        debitoCard.year = debitResponse.year;
+                                        debitoCard.description = debitResponse.description;
+                                        debitoCard.CuotaId = debitResponse.metadata.external_reference;
+                                        debitoCard.adhesionId = debitResponse.card_adhesion.id;
+
+                                        db.DebitosCard.Add(debitoCard);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        EnviarEmailErrorAlDebitarAutomaticamenteCard(adheridoCard.id);
+                                    }
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    EnviarEmailErrorAlDebitarAutomaticamenteCard(adheridoCard.id);
+                                }
+                            }
+                            else
+                            {
+                                EnviarEmailErrorAlDebitarAutomaticamenteCard(adheridoCard.id);
+                            }
+                        }
+                        else
+                        {
+                            EnviarEmailErrorAlDebitarAutomaticamenteCard(adheridoCard.id);
+                        }
+                    }
+                    else
+                    {
+                        EnviarEmailErrorAlDebitarAutomaticamenteCard(adheridoCard.id);
+                    }
+                }
+                else
+                {
+                    EnviarEmailErrorAlDebitarAutomaticamenteCard(adheridoCard.id);
+                }
+            }
+            else
+            {
+                EnviarEmailErrorAlDebitarAutomaticamenteCard(adheridoCard.id);
+            }
+        }
+
+        public string ObtenerDiaHabil(string date, int days)
+        {
+            string fecha = null;
+            NextBusinessDayRequest nextBusinessDay = new NextBusinessDayRequest();
+            //Respuesta de la Api
+            string respuesta = "";
+
+            nextBusinessDay.date = date;
+            nextBusinessDay.days = days;
+
+            //
+            string nextBusinessDay360Js = JsonConvert.SerializeObject(nextBusinessDay);
+
+            //Local
+            Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+
+            //Server
+            //Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+
+            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+            requestFile.ContentType = "application/html";
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+            if (requestFile.HaveResponse)
+            {
+                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                {
+                    StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                    respuesta = respReader.ReadToEnd();
+                    var dia = respuesta.Substring(11, 2);
+                    var mes = respuesta.Substring(8, 2);
+                    var anio = respuesta.Substring(3, 4);
+
+                    fecha = dia + "-" + mes + "-" + anio;
+                }
+            }
+            return fecha;
         }
     }
 }
