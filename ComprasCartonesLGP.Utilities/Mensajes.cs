@@ -11,8 +11,6 @@ namespace ComprasCartonesLGP.Utilities
 {
     public class Mensajes
     {
-        //private SueñoCelestePagosContext db = new SueñoCelestePagosContext();
-
         public string usuario { get; set; }
         public string clave { get; set; }
         public string numero { get; set; }
@@ -48,7 +46,7 @@ namespace ComprasCartonesLGP.Utilities
                     StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8"/*"iso-8859-1"*/));
 
                     respuesta = respReader.ReadToEnd();
-                    if(respuesta == "OK")
+                    if(respuesta == "OK\r\n")
                     {
                         respuesta = "Enviado Correctamente";
                     }

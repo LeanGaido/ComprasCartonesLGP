@@ -94,6 +94,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                     string numero = Session["ClienteContacto"].ToString();
                     CodigoAcceso codigo = ObtenerCodigo(numero);
 
+                    //Si busca por este camino ya tiene un codigo creado y no se le envia un msj al usuario
+                    if (codigo.Codigo == 00000)
+                    {
+                        return RedirectToAction("Autenticación", new { Mensaje = "Su código de verificación generado todavía está vigente. Ingrese el último código que se envio a su Celular" });
+                    }
+
                     string texto = "Hola, su codigo Temporal para ingresar a la compra de LGP es: " + codigo.Codigo;
 
                     Mensajes sms = new Mensajes(numero, texto);
@@ -139,6 +145,19 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return RedirectToAction("Identificarse", "Clientes");
             }
 
+            //En caso que el usuario ingrese el 0 o el 15 se borra
+            var validaArea = Area.Substring(0, 1);
+            var validaNumero = Numero.Substring(0, 2);
+
+            if(Convert.ToInt32(validaArea) == 0)
+            {
+                Area = Area.Substring(1, Area.Length -1);
+            }
+            if (Convert.ToInt32(validaNumero) == 15)
+            {
+                Numero = Numero.Substring(2, Numero.Length - 2);
+            }
+
             string dni = Session["ClienteDni"].ToString();
             Session["ClienteContacto"] = Area + "" + Numero;
             var numeroCompleto = Session["ClienteContacto"].ToString();
@@ -153,14 +172,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente Distinto registrado con ese Nº de celular" });
             }
 
-            CodigoAcceso codigo = ObtenerCodigo(numeroCompleto);
+            CodigoAcceso codigo = ObtenerCodigo(numeroCompleto);            
 
             //string emailBody = "Por Favor ingrese este codigo: " + codigo.Codigo + " para poder ingresar";
             //Email nuevoEmail = new Email();
 
             //string respuesta = nuevoEmail.SendEmail(emailBody, Email, "Verificacion de Ingreso - La Gran Promocion");
-
-
 
             ///////////////////
 
@@ -221,19 +238,19 @@ namespace ComprasCartonesLGP.Web.Controllers
 
         /***************************************************************************************/
 
-        public ActionResult Autenticación()
+        public ActionResult Autenticación(string Mensaje)
         {
+            if(!string.IsNullOrEmpty(Mensaje))
+            {
+                ViewBag.Mensaje = Mensaje;
+            }
             string dni = Session["ClienteDni"].ToString();
             string sexo = Session["ClienteSexo"].ToString();
             string contacto = Session["ClienteContacto"].ToString();
-            string area = Session["ClienteArea"].ToString();
-            string numero = Session["ClienteNumero"].ToString();
 
             Session["ClienteDni"] = dni;
             Session["ClienteSexo"] = sexo;
             Session["ClienteContacto"] = contacto;
-            Session["ClienteArea"] = area;
-            Session["ClienteNumero"] = numero;
 
 
             ViewBag.Dni = dni;
@@ -326,7 +343,6 @@ namespace ComprasCartonesLGP.Web.Controllers
 
 
             ViewBag.Dni = dni;
-            //ViewBag.Email = email;
             ViewBag.AreaCelular = area;
             ViewBag.NumeroCelular = numero;
             ViewBag.Sexo = sexo;
@@ -367,14 +383,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                     return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Nº de Celular" });
                 }
 
-                /*
-                cliente = db.Clientes.Where(x => x.Email == Email).FirstOrDefault();
-                if (cliente != null)
-                {
-                    return RedirectToAction("ErrorRegistro", new { MensajeError = "Ya existe un cliente registrado con ese Email" });
-                }
-                */
-
                 cliente = new Asociado()
                 {
                     NumeroDeAsociado = "00000",
@@ -403,20 +411,6 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                 db.Asociados.Add(cliente);
                 db.SaveChanges();
-
-                //int SolicitudReservadaId = 0;
-
-                //if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
-                //{
-                //    return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
-                //}
-
-                //var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
-
-                //if (cartonReservado.FechaExpiracionReserva <= DateTime.Now)
-                //{
-                //    return RedirectToAction("ErrorCompra", new { MensajeError = "La Reserva del Carton Expiro" });
-                //}
 
                 Session["ClienteDni"] = asociado.Dni;
                 Session["ClienteContacto"] = asociado.AreaCelular +"" +asociado.NumeroCelular;
@@ -531,6 +525,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                     codigo.Expira = DateTime.Now.AddMinutes(30);
 
                     db.SaveChanges();
+                }
+                else
+                {
+                    //Si el usuario ya tiene creado un codigo y no expiro se manda el codigo 00000 para que no vuelva a enviar otro mensaje 
+                    //con el mismo codigo ya que no lo permite el servicio de mensajeria
+                    codigo.Codigo = 00000;
                 }
             }
 
