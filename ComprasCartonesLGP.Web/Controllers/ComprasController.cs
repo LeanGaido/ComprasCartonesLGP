@@ -655,10 +655,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionCardPago360);
 
             //Local
-            //Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -1506,7 +1506,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         public void EnviarEmailErrorAlDebitarAutomaticamenteCbu(int? id)
         {
             var asociado = db.AdhesionCbu.Where(x => x.id == id).FirstOrDefault();
-            string to = "javisicardi94@gmail.com";
+            string to = "promocionilusion@gmail.com";
             string subject = "Error al enviar solicitud de debito automáticamente";
             var emailBody = "El asociado "+ asociado.adhesion_holder_name + " compro la solicitud " + asociado.external_reference + " " +
                 " y hubo un error al intentar enviar la solicitud de debito automaticamente. Por favor ingrese al " +
@@ -1519,7 +1519,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         public void EnviarEmailErrorAlDebitarAutomaticamenteCard(int? id)
         {
             var asociado = db.AdhesionCard.Where(x => x.id == id).FirstOrDefault();
-            string to = "javisicardi94@gmail.com";
+            string to = "promocionilusion@gmail.com";
             string subject = "Error al enviar solicitud de debito automáticamente";
             var emailBody = "El asociado " + asociado.adhesion_holder_name + " compro la solicitud " + asociado.external_reference + " " +
                 " y hubo un error al intentar enviar la solicitud de debito automaticamente. Por favor ingrese al " +
@@ -1659,6 +1659,11 @@ namespace ComprasCartonesLGP.Web.Controllers
         {
             var adheridoCard = db.AdhesionCard.Where(x => x.id == id).FirstOrDefault();
             var mesActual = DateTime.Now.ToString("MM");
+            //int diaDelMes = DateTime.Now.Day;
+            //if(diaDelMes > 20)
+            //{
+            //    int periodo = Convert.ToInt32(mesActual) + 1;
+            //}
             var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCard.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
             if (solicitud != null)
             {
@@ -1686,10 +1691,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                         string debit360Js = JsonConvert.SerializeObject(debito);
 
                         //Local
-                        //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                         //Server
-                        Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        //Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                         HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 

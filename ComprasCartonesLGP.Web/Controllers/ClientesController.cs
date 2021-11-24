@@ -97,7 +97,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     //Si busca por este camino ya tiene un codigo creado y no se le envia un msj al usuario
                     if (codigo.Codigo == 00000)
                     {
-                        return RedirectToAction("Autenticación", new { Mensaje = "Su código de verificación generado todavía está vigente. Ingrese el último código que se envio a su Celular" });
+                        return RedirectToAction("Autenticación", new { Mensaje = "Su código de verificación generado todavía está vigente. Ingrese el último código que se envío a su celular." });
                     }
 
                     string texto = "Hola, su codigo Temporal para ingresar a la compra de LGP es: " + codigo.Codigo;

@@ -254,10 +254,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                             string debit360Js = JsonConvert.SerializeObject(debito);
 
                             //Local
-                            //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                            Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                             //Server
-                            Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                            //Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
