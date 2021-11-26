@@ -162,7 +162,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         }
 
         [HttpPost]
-        public void Importar(HttpPostedFileBase file, int? PromocionId, float Precio)
+        public ActionResult Importar(HttpPostedFileBase file, int? PromocionId, float Precio)
         {
 
             List<Solicitud> solicitudes = new List<Solicitud>();
@@ -213,7 +213,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         Solicitud solicitudNueva = new Solicitud();
                         if (!int.TryParse(solicitudAuxiliar[0].Trim(), out int nroSolicitud))
                         {
-                            string errorMessage = "Error en Linea: " + data.IndexOf(row) + ", El numero de solicitud no es valido";
+                            string errorMessage = "Error en Linea: " + (data.IndexOf(row) + 2 ) + ", El numero de solicitud no es valido";
                             alerts.Add(new Alert("danger", errorMessage, true));
                             continue;
                         }
@@ -221,11 +221,11 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         solicitudNueva.Precio = Precio;
                         solicitudNueva.PromocionId = Convert.ToInt32(PromocionId);
 
-                        if (solicitudes.Where(x => x.PromocionId == solicitudNueva.PromocionId).FirstOrDefault() == null)
+                        if (db.Solicitudes.Where(x => x.PromocionId == solicitudNueva.PromocionId && x.NroSolicitud == solicitudNueva.NroSolicitud).FirstOrDefault() == null)
                         {
-                            //solicitudes.Add(solicitudNueva);
-                            db.Solicitudes.Add(solicitudNueva);
-                            db.SaveChanges();
+                            solicitudes.Add(solicitudNueva);
+                            //db.Solicitudes.Add(solicitudNueva);
+                            //db.SaveChanges();
                         }
                     }
                     else
@@ -235,8 +235,25 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         continue;
                     }
                 }
-            }
 
+                if (alerts.Count == 0)
+                {
+                    db.Solicitudes.AddRange(solicitudes);
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("ImportadoExitoso");
+                }
+
+                ViewBag.Alerts = alerts;
+            }
+            return View();
+
+        }
+
+        public ActionResult ImportadoExitoso()
+        {
+            return View();
         }
     }
 }
