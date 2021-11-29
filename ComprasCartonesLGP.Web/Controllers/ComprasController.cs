@@ -1187,7 +1187,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                             if(pago != null)
                             {
                                 pago.state = pwebhook.type;
-                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference).FirstOrDefault();
+                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
                                 solicitudComprada.PagoRealizdo = true;
                                 solicitudComprada.FechaPago = DateTime.Now;
                                 solicitudComprada.PagoRealizado = (decimal)solicitudComprada.TotalAPagar;
@@ -1212,7 +1212,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                             if (pago != null)
                             {
                                 pago.state = pwebhook.type;
-                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference).FirstOrDefault();
+                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
                                 solicitudComprada.PagoRealizdo = false;
                                 solicitudComprada.PagoCancelado = true;
                                 solicitudComprada.FechaCancelado = DateTime.Now;
@@ -1247,7 +1247,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         if (pwebhook.type == "canceled")
                         {
                             var adherido = db.AdhesionCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference).FirstOrDefault();
+                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false).FirstOrDefault();
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
                             adherido.state = pwebhook.type;
@@ -1274,7 +1274,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         if (pwebhook.type == "canceled")
                         {
                             var adherido = db.AdhesionCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
-                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference).FirstOrDefault();
+                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false).FirstOrDefault();
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
                             adherido.state = pwebhook.type;                            
