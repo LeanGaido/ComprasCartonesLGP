@@ -236,12 +236,37 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         var solicitudDebito = db.DebitosCard.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
                         if (solicitudDebito == null)
                         {
+                            //Si ya cerraron las tarjetas se envian para el proximo periodo
+                            int diaDelMes = DateTime.Now.Day;
+                            int periodo = 0;
+                            int año = 0;
+
+                            if (diaDelMes >= 18)
+                            {
+                                periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                                if (periodo == 12)
+                                {
+                                    periodo = 01;
+                                    año = Convert.ToInt32(cuotaSolicitud.AnioCuota) + 1;
+                                }
+                                else
+                                {
+                                    periodo = Convert.ToInt32(cuotaSolicitud.MesCuota) + 1;
+                                    año = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                                }
+                            }
+                            else
+                            {
+                                periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                                año = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                            }
+
                             CardDebitRequest debito = new CardDebitRequest();
                             Metadata metadata = new Metadata();
 
                             debito.card_adhesion_id = adherido.id;
-                            debito.month = Convert.ToInt32(cuotaSolicitud.MesCuota);
-                            debito.year = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                            debito.month = periodo;
+                            debito.year = año;
                             debito.amount = cuotaSolicitud.PrimerPrecioCuota;
                             debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
                             metadata.external_reference = cuotaSolicitud.ID;
