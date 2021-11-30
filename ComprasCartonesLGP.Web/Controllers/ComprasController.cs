@@ -1656,7 +1656,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             int diaDelMes = DateTime.Now.Day;
             int periodo = 0;
-            if (diaDelMes > 18)
+            if (diaDelMes >= 18)
             {
                 periodo = Convert.ToInt32(mesActual) + 1;
             }
