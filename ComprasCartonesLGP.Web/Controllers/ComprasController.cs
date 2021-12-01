@@ -1162,10 +1162,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 //                         where oPromocion.Anio == anio && oCompras.NroSolicitud == pago.external_reference && oCompras.PagoCancelado == false
                                 //                         select oCompras).FirstOrDefault();
 
-                                //var promocion = db.Promociones.Where(x => x.Anio == anio).FirstOrDefault();
-                                //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
+                                var promocion = db.Promociones.Where(x => x.Anio == anio).FirstOrDefault();
+                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
 
-                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
+                                //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
+
                                 solicitudComprada.PagoRealizdo = true;
                                 solicitudComprada.FechaPago = DateTime.Now;
                                 solicitudComprada.PagoRealizado = (decimal)solicitudComprada.TotalAPagar;
@@ -1190,9 +1191,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                             if (pago != null)
                             {
                                 pago.state = pwebhook.type;
-                                //var promocion = db.Promociones.Where(x => x.Anio == anio).FirstOrDefault();
-                                //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
-                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
+                                var promocion = db.Promociones.Where(x => x.Anio == anio).FirstOrDefault();
+                                var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
+
+                                //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
+
                                 solicitudComprada.PagoRealizdo = false;
                                 solicitudComprada.PagoCancelado = true;
                                 solicitudComprada.FechaCancelado = DateTime.Now;
@@ -1228,9 +1231,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                         {
                             var adherido = db.AdhesionCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
 
-                            //var promocion = db.Promociones.Where(x => x.Anio == anio).FirstOrDefault();
-                            //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
-                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false).FirstOrDefault();
+                            var promocion = db.Promociones.Where(x => x.Anio == anio).FirstOrDefault();
+                            var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
+
+                            //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false).FirstOrDefault();
 
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
@@ -1534,7 +1538,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
             var adheridoCbu = db.AdhesionCbu.Where(x => x.state == "signed" && x.id == id).FirstOrDefault();
             var mesActual = dateTime.ToString("MM");
-            var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCbu.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+
+            var promocion = db.Promociones.Where(x => x.Anio == dateTime.Year).FirstOrDefault();
+            var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCbu.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
+
             if (solicitud != null)
             {
                 var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
@@ -1655,7 +1662,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                 periodo = Convert.ToInt32(mesActual);
             }
 
-            var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCard.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+            var promocion = db.Promociones.Where(x => x.Anio == DateTime.Now.Year).FirstOrDefault();
+            var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCard.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
+
+            //var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCard.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
+
             if (solicitud != null)
             {
                 var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
