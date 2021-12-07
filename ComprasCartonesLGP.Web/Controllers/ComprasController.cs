@@ -1178,8 +1178,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                                                          where oPromocion.Anio == anio && oCompras.NroSolicitud == pago.external_reference && oCompras.PagoCancelado == false
                                                          select oCompras).FirstOrDefault();
 
-                                //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
-
                                 solicitudComprada.PagoRealizdo = true;
                                 solicitudComprada.FechaPago = DateTime.Now;
                                 solicitudComprada.PagoRealizado = (decimal)solicitudComprada.TotalAPagar;
@@ -1209,8 +1207,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                                                          join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
                                                          where oPromocion.Anio == anio && oCompras.NroSolicitud == pago.external_reference && oCompras.PagoCancelado == false
                                                          select oCompras).FirstOrDefault();
-
-                                //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == pago.external_reference && x.PagoCancelado == false).FirstOrDefault();
 
                                 solicitudComprada.PagoRealizdo = false;
                                 solicitudComprada.PagoCancelado = true;
@@ -1247,16 +1243,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                         {
                             var adherido = db.AdhesionCbu.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
 
-                            //var promocion = db.Promociones.Where(x => x.Anio == anio).FirstOrDefault();
-                            //var solicitudComprada = db.ComprasDeSolicitudes.Include(x => x.Solicitud).Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
-
                             var solicitudComprada = (from oCompras in db.ComprasDeSolicitudes
                                                      join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                                                      join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
                                                      where oPromocion.Anio == anio && oCompras.NroSolicitud == adherido.external_reference && oCompras.PagoCancelado == false
                                                      select oCompras).FirstOrDefault();
-
-                            //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false).FirstOrDefault();
 
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
@@ -1290,8 +1281,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                                                      where oPromocion.Anio == anio && oCompras.NroSolicitud == adherido.external_reference && oCompras.PagoCancelado == false
                                                      select oCompras).FirstOrDefault();
 
-                            //var solicitudComprada = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoCancelado == false).FirstOrDefault();
-
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
                             adherido.state = pwebhook.type;                            
@@ -1310,12 +1299,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                             var entity_name = pwebhook.entity_name;
                             var entity_id = pwebhook.entity_id;
                             var created_at = pwebhook.created_at;
-
                             var rechazo = db.DebitosCBU.Where(x => x.id == entity_id).FirstOrDefault();
                             rechazo.state = pwebhook.type;
                             db.Entry(rechazo).State = EntityState.Modified;
                             db.SaveChanges();
-
                             InformarRechazoDebito(entity_id, entity_name, created_at);
                         }
                         if (pwebhook.type == "paid")
@@ -1578,9 +1565,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                                      where oPromocion.Anio == dateTime.Year && oCompras.NroSolicitud == adheridoCbu.external_reference && oCompras.PagoCancelado == false && oCompras.PagoRealizdo == false
                                      select oCompras).FirstOrDefault();
 
-            //var promocion = db.Promociones.Where(x => x.Anio == dateTime.Year).FirstOrDefault();
-            //var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adheridoCbu.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false && x.Solicitud.PromocionId == promocion.ID).FirstOrDefault();
-
             if (solicitud != null)
             {
                 var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
@@ -1757,8 +1741,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                                     respuesta = respReader.ReadToEnd();
 
                                     CardDebitResponse debitResponse = new CardDebitResponse();
-
-                                    //var jsonObject = JObject.Parse(response.Content);
 
                                     debitResponse = JsonConvert.DeserializeObject<CardDebitResponse>(respuesta);
                                     if (debitResponse.id != 0)
