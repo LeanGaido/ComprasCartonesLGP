@@ -33,11 +33,11 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 //var compra = db.ComprasDeSolicitudes.Include(t => t.Solicitud)
                 //                                    .Include(t => t.Solicitud.Promocion)
-                //                                    .Where(x => x.AsociadoID == Cliente.ID && 
-                //                                                x.Solicitud.Promocion.Anio == hoy.Year && 
+                //                                    .Where(x => x.AsociadoID == Cliente.ID &&
+                //                                                x.Solicitud.Promocion.Anio == hoy.Year &&
                 //                                                x.PagoCancelado == false).ToList();
 
-                var compras =  (from oCompras in db.ComprasDeSolicitudes
+                var compras = (from oCompras in db.ComprasDeSolicitudes
                                join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                                join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
                                where oCompras.AsociadoID == Cliente.ID &&

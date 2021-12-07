@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 {
@@ -38,11 +39,11 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             }
 
             var compras = (from oCompras in db.ComprasDeSolicitudes
-                             join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
-                             join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
-                             where oPromocion.Anio == Anio select oCompras).OrderByDescending(x => x.ID).ToList();
+                           join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
+                           join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
+                           where oPromocion.Anio == Anio
+                           select oCompras).OrderByDescending(x => x.ID).ToList();
 
-            //var compras = db.ComprasDeSolicitudes.OrderByDescending(x => x.ID).ToList();
             if (!string.IsNullOrEmpty(searchString))
             {
                 compras = compras.Where(x => x.NroSolicitud.ToUpper().Contains(searchString.ToUpper())).ToList();
