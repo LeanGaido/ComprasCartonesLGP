@@ -1320,8 +1320,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                         }
                         if (pwebhook.type == "paid")
                         {
-                            var entity_id = pwebhook.entity_id;
-
                             var pago = db.DebitosCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
                             pago.state = pwebhook.type;
                             db.Entry(pago).State = EntityState.Modified;
@@ -1356,6 +1354,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 solicitud.PagoRealizado = (decimal)solicitud.TotalAPagar;
                                 db.Entry(solicitud).State = EntityState.Modified;
                                 db.SaveChanges();
+                                var id = pago.adhesionId;
+                                var motivoCancelacion = "Finalización del pago.";
+                                CancelarAdhesionCbu360(id, motivoCancelacion);
                             }
                         }
                         if (pwebhook.type == "canceled")
@@ -1419,6 +1420,9 @@ namespace ComprasCartonesLGP.Web.Controllers
                                 solicitud.PagoRealizado = (decimal)solicitud.TotalAPagar;
                                 db.Entry(solicitud).State = EntityState.Modified;
                                 db.SaveChanges();
+                                var id = pago.adhesionId;
+                                var motivoCancelacion = "Finalización del pago.";
+                                CancelarAdhesionCard360(id, motivoCancelacion);
                             }
                         }
                         if (pwebhook.type == "canceled")
@@ -1716,7 +1720,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                         Metadata metadata = new Metadata();
 
                         debito.card_adhesion_id = adheridoCard.id;
-                        //debito.month = Convert.ToInt32(cuotaSolicitud.MesCuota);
                         debito.month = periodo;
                         debito.year = Convert.ToInt32(cuotaSolicitud.AnioCuota);
                         debito.amount = cuotaSolicitud.PrimerPrecioCuota;
