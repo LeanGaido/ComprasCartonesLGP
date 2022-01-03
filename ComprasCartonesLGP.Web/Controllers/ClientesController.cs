@@ -19,26 +19,33 @@ namespace ComprasCartonesLGP.Web.Controllers
     {
         private LGPContext db = new LGPContext();
 
-        public ActionResult Identificarse()
+        public ActionResult Identificarse(int? codigo)
         {
-            ViewBag.Display = "none";
-            var habilitacion = db.Parametros.Where(x => x.Clave == "HabilitarBoton").FirstOrDefault();
-            if(habilitacion.Valor == "false")
+            if(codigo != null)
             {
-                var fecha = db.Parametros.Where(x => x.Clave == "FechaHabilitacion").FirstOrDefault();
-                ViewBag.Fecha = fecha.Valor;
-                ViewBag.Desabilitado = "disabled";
-                ViewBag.Display = "";
+                ViewBag.Display = "none";
+                var habilitacion = db.Parametros.Where(x => x.Clave == "HabilitarBoton").FirstOrDefault();
+                if (habilitacion.Valor == "false")
+                {
+                    var fecha = db.Parametros.Where(x => x.Clave == "FechaHabilitacion").FirstOrDefault();
+                    ViewBag.Fecha = fecha.Valor;
+                    ViewBag.Desabilitado = "disabled";
+                    ViewBag.Display = "";
+                }
+
+                var Cliente = ObtenerCliente();
+
+                if (Cliente != null)
+                {
+                    return RedirectToAction("ComprobarCompra", "Compras");
+                }
+
+                return View();
             }
-
-            var Cliente = ObtenerCliente();
-
-            if (Cliente != null)
+            else
             {
-                return RedirectToAction("ComprobarCompra", "Compras");
+                return RedirectToAction("ErrorCodigoUnicoIncorrecto", "Clientes");
             }
-
-            return View();
         }
 
         [HttpPost]
@@ -124,6 +131,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             return View();
         }
 
+        public ActionResult ErrorCodigoUnicoIncorrecto()
+        {
+            return View();
+        }
 
         /***************************************************************************************/
 
@@ -589,6 +600,25 @@ namespace ComprasCartonesLGP.Web.Controllers
             var localidades = db.Localidades.Where(x => x.ProvinciaID == ProvinciaId).ToList();
 
             return Json(localidades, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VerificarCodigoUnicoAcceso()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult VerificarCodigoUnicoAcceso(int? codigo)
+        {
+            if (codigo == 1996)
+            {
+                return RedirectToAction("Identificarse", "Clientes", new { codigo = codigo });
+            }
+            else
+            {
+                ViewBag.MensajeError = "Codigo invalido";
+                return View();
+            }
         }
     }
 }
