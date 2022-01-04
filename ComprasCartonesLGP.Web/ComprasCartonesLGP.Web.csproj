@@ -426,6 +426,7 @@
     <Content Include="Views\Clientes\ErrorBotonDeshabilitado.cshtml" />
     <Content Include="Views\Clientes\VerificarCodigoUnicoAcceso.cshtml" />
     <Content Include="Views\Clientes\ErrorCodigoUnicoIncorrecto.cshtml" />
+    <Content Include="Views\Compras\TerminosYCondiciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

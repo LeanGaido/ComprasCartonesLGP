@@ -1838,5 +1838,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
             return fecha;
         }
+
+        public ActionResult TerminosYCondiciones()
+        {
+            return View();
+        }
     }
 }
