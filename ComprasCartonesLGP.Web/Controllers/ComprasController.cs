@@ -363,125 +363,125 @@ namespace ComprasCartonesLGP.Web.Controllers
                         return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
                     }
                 }
-                //else if (cartonVendido.TipoDePagoID == 2)//Plan de Pagos Debito CBU
-                //{
-                //    int adhesionId = 0;
-                //    AdhesionCbu adhesion = new AdhesionCbu();
-                //    AdhesionCbuPago360Request adhesionPago360 = new AdhesionCbuPago360Request();
+                else if (cartonVendido.TipoDePagoID == 2)//Plan de Pagos Debito CBU
+                {
+                    int adhesionId = 0;
+                    AdhesionCbu adhesion = new AdhesionCbu();
+                    AdhesionCbuPago360Request adhesionPago360 = new AdhesionCbuPago360Request();
 
-                //    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == cartonVendido.NroSolicitud && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+                    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == cartonVendido.NroSolicitud && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
-                //    adhesionPago360.adhesion_holder_name = asociado.NombreCompleto;
-                //    adhesionPago360.email = Cliente.Email;
-                //    adhesionPago360.description = "Adhesion para el Débito automático de La Gran Promocion";
-                //    adhesionPago360.short_description = "LGP";
-                //    adhesionPago360.external_reference = CartonComprado.NroSolicitud;
-                //    adhesionPago360.cbu_number = cbu_number;
-                //    adhesionPago360.cbu_holder_id_number = cbu_holder_id_number.Value;
-                //    adhesionPago360.cbu_holder_name = adhesion_holder_name;
+                    adhesionPago360.adhesion_holder_name = asociado.NombreCompleto;
+                    adhesionPago360.email = Cliente.Email;
+                    adhesionPago360.description = "Adhesion para el Débito automático de La Gran Promocion";
+                    adhesionPago360.short_description = "LGP";
+                    adhesionPago360.external_reference = CartonComprado.NroSolicitud;
+                    adhesionPago360.cbu_number = cbu_number;
+                    adhesionPago360.cbu_holder_id_number = cbu_holder_id_number.Value;
+                    adhesionPago360.cbu_holder_name = adhesion_holder_name;
 
-                //    try
-                //    {
-                //        adhesion = GenerarAdhesionCbu(adhesionPago360);
-                //        db.AdhesionCbu.Add(adhesion);
+                    try
+                    {
+                        adhesion = GenerarAdhesionCbu(adhesionPago360);
+                        db.AdhesionCbu.Add(adhesion);
 
-                //        db.SaveChanges();
+                        db.SaveChanges();
 
-                //        adhesionId = adhesion.id;
+                        adhesionId = adhesion.id;
 
-                //        int mesInicio = hoy.Month;
-                //        var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
-                //        float precioCuota = solicitud.Precio / CantCuotas;
+                        int mesInicio = hoy.Month;
+                        var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
+                        float precioCuota = solicitud.Precio / CantCuotas;
 
-                //        for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
-                //        {
-                //            CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
+                        for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
+                        {
+                            CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
 
-                //            cuota.CompraDeSolicitudID = CartonComprado.ID;
-                //            cuota.MesCuota = mes.ToString();
-                //            cuota.AnioCuota = hoy.Year.ToString();
-                //            cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
-                //            cuota.PrimerPrecioCuota = precioCuota;
-                //            cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
-                //            cuota.SeguntoPrecioCuota = precioCuota;
+                            cuota.CompraDeSolicitudID = CartonComprado.ID;
+                            cuota.MesCuota = mes.ToString();
+                            cuota.AnioCuota = hoy.Year.ToString();
+                            cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
+                            cuota.PrimerPrecioCuota = precioCuota;
+                            cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
+                            cuota.SeguntoPrecioCuota = precioCuota;
 
-                //            db.CuotasCompraDeSolicitudes.Add(cuota);
-                //        }
+                            db.CuotasCompraDeSolicitudes.Add(cuota);
+                        }
 
-                //        db.ReservaDeSolicitudes.Remove(ReservaCarton);
+                        db.ReservaDeSolicitudes.Remove(ReservaCarton);
 
-                //        db.SaveChanges();
-                //        return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        if (CartonVendidoId != 0)
-                //        {
-                //            db.ComprasDeSolicitudes.Remove(cartonVendido);
-                //            db.SaveChanges();
-                //        }
-                //        return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
-                //    }
-                //}
-                //else if (cartonVendido.TipoDePagoID == 3)//Plan de Pagos Debito Tarjeta
-                //{
-                //    int adhesionId = 0;
-                //    AdhesionCard adhesion = new AdhesionCard();
-                //    AdhesionCardPago360Request adhesionPago360 = new AdhesionCardPago360Request();
+                        db.SaveChanges();
+                        return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
+                    }
+                    catch (Exception e)
+                    {
+                        if (CartonVendidoId != 0)
+                        {
+                            db.ComprasDeSolicitudes.Remove(cartonVendido);
+                            db.SaveChanges();
+                        }
+                        return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                    }
+                }
+                else if (cartonVendido.TipoDePagoID == 3)//Plan de Pagos Debito Tarjeta
+                {
+                    int adhesionId = 0;
+                    AdhesionCard adhesion = new AdhesionCard();
+                    AdhesionCardPago360Request adhesionPago360 = new AdhesionCardPago360Request();
 
-                //    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == cartonVendido.NroSolicitud && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
+                    var CartonComprado = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == cartonVendido.NroSolicitud && x.FechaVenta.Year == hoy.Year && x.PagoCancelado == false).FirstOrDefault();
 
-                //    adhesionPago360.adhesion_holder_name = asociado.NombreCompleto;
-                //    adhesionPago360.email = Cliente.Email;
-                //    adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
-                //    adhesionPago360.external_reference = CartonComprado.NroSolicitud;
-                //    adhesionPago360.card_number = card_number;
-                //    adhesionPago360.card_holder_name = card_holder_name;
+                    adhesionPago360.adhesion_holder_name = asociado.NombreCompleto;
+                    adhesionPago360.email = Cliente.Email;
+                    adhesionPago360.description = "Adhesion para el Debito automatico de La Gran Promocion";
+                    adhesionPago360.external_reference = CartonComprado.NroSolicitud;
+                    adhesionPago360.card_number = card_number;
+                    adhesionPago360.card_holder_name = card_holder_name;
 
-                //    try
-                //    {
-                //        adhesion = GenerarAdhesionCard(adhesionPago360);
-                //        db.AdhesionCard.Add(adhesion);
+                    try
+                    {
+                        adhesion = GenerarAdhesionCard(adhesionPago360);
+                        db.AdhesionCard.Add(adhesion);
 
-                //        db.SaveChanges();
+                        db.SaveChanges();
 
-                //        adhesionId = adhesion.id;
+                        adhesionId = adhesion.id;
 
-                //        int mesInicio = hoy.Month;
+                        int mesInicio = hoy.Month;
 
-                //        var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
-                //        float precioCuota = solicitud.Precio / CantCuotas;
+                        var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
+                        float precioCuota = solicitud.Precio / CantCuotas;
 
-                //        for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
-                //        {
-                //            CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
+                        for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
+                        {
+                            CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
 
-                //            cuota.CompraDeSolicitudID = CartonComprado.ID;
-                //            cuota.MesCuota = mes.ToString();
-                //            cuota.AnioCuota = hoy.Year.ToString();
-                //            cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
-                //            cuota.PrimerPrecioCuota = precioCuota;
-                //            cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
-                //            cuota.SeguntoPrecioCuota = precioCuota;
+                            cuota.CompraDeSolicitudID = CartonComprado.ID;
+                            cuota.MesCuota = mes.ToString();
+                            cuota.AnioCuota = hoy.Year.ToString();
+                            cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
+                            cuota.PrimerPrecioCuota = precioCuota;
+                            cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
+                            cuota.SeguntoPrecioCuota = precioCuota;
 
-                //            db.CuotasCompraDeSolicitudes.Add(cuota);
-                //        }
+                            db.CuotasCompraDeSolicitudes.Add(cuota);
+                        }
 
-                //        db.ReservaDeSolicitudes.Remove(ReservaCarton);
-                //        db.SaveChanges();
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        if (CartonVendidoId != 0)
-                //        {
-                //            db.ComprasDeSolicitudes.Remove(cartonVendido);
-                //            db.SaveChanges();
-                //        }
-                //        return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
-                //    }
+                        db.ReservaDeSolicitudes.Remove(ReservaCarton);
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        if (CartonVendidoId != 0)
+                        {
+                            db.ComprasDeSolicitudes.Remove(cartonVendido);
+                            db.SaveChanges();
+                        }
+                        return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
+                    }
 
-                //    return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
-                //}
+                    return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
+                }
             }
             catch (Exception e)
             {
@@ -852,7 +852,6 @@ namespace ComprasCartonesLGP.Web.Controllers
             List<Cuotas> cuotas = new List<Cuotas>();
 
             DateTime hoy = DateTime.Today;
-
             int c = 1;
 
             //var FechaLimite = db.FechaLimiteVentaCartones.Where(x => x.Vigente).FirstOrDefault();
@@ -860,14 +859,15 @@ namespace ComprasCartonesLGP.Web.Controllers
             var Carton = db.Solicitudes.Where(x => x.ID == CartonId)
                                        .Include(t => t.Promocion).FirstOrDefault();
 
-            int Meses = 13, mesInicio = hoy.Month;
+            int Meses = 12, mesInicio = hoy.Month;
 
-            if(hoy.Day > 15)
+            if (mesInicio < 4)
             {
-                mesInicio++;
+                Meses = 10;
+                mesInicio = 1;
             }
 
-            int cantCuotas = Meses - mesInicio;
+            //int cantCuotas = Meses - mesInicio;
 
             for (int mes = mesInicio; mes <= Meses; mes++)
             {
