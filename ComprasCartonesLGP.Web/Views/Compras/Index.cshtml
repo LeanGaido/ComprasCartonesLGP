@@ -19,7 +19,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>
-                                    <input type="radio" value="1" id="squaredOne" name="TipoDePago" checked  style="height: 20px; width: 5%;"/>
+                                    <input type="radio" value="1" id="squaredOne" name="TipoDePago" checked style="height: 20px; width: 5%;" />
                                     <b>EN 1 PAGO DE $@ViewBag.Carton.Precio</b> (Tarjeta de Crédito / Débito / Rapipago / Pago Fácil)
                                 </h5>
                             </div>
@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>
-                                    <input type="radio" value="None" id="squaredTwo" name="check" style="height: 20px; width: 5%;"/>
+                                    <input type="radio" value="None" id="squaredTwo" name="check" style="height: 20px; width: 5%;" />
                                     <b>PLAN DE CUOTAS CON DÉBITO AUTOMÁTICO</b>
                                 </h5>
                             </div>
@@ -105,7 +105,15 @@
                 <div class="mt-4">
                     <div class="form-group row">
                         <div class="col-md-12 text-center">
-                            <input type="submit" @*value="CONFIRMAR COMPRA"*@ value="ASOCIARSE" class="btn btn-primary" />
+                            <input type="checkbox" value="true" class="btn btn-primary" required name="CheckTerminosYCondiciones" />
+                            <b>Acepto los <a target="_blank" href="@Url.Action("TerminosYCondiciones","Compras")">Terminos Y Condiciones</a></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="form-group row">
+                        <div class="col-md-12 text-center">
+                            <input type="submit"  value="ASOCIARSE" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
