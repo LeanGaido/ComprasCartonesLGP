@@ -1519,8 +1519,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         public void EnviarEmailErrorAlDebitarAutomaticamenteCbu(int? id)
         {
             var asociado = db.AdhesionCbu.Where(x => x.id == id).FirstOrDefault();
-            //string to = "promocionilusion@gmail.com";
-            string to = "javisicardi94@gmail.com";
+            string to = "promocionilusion@gmail.com";
             string subject = "Error al enviar solicitud de debito automáticamente";
             var emailBody = "El asociado "+ asociado.adhesion_holder_name + " compro la solicitud " + asociado.external_reference + " " +
                 " y hubo un error al intentar enviar la solicitud de debito automaticamente. Por favor ingrese al " +
@@ -1533,8 +1532,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         public void EnviarEmailErrorAlDebitarAutomaticamenteCard(int? id)
         {
             var asociado = db.AdhesionCard.Where(x => x.id == id).FirstOrDefault();
-            //string to = "promocionilusion@gmail.com";
-            string to = "javisicardi94@gmail.com";
+            string to = "promocionilusion@gmail.com";
             string subject = "Error al enviar solicitud de debito automáticamente";
             var emailBody = "El asociado " + asociado.adhesion_holder_name + " compro la solicitud " + asociado.external_reference + " " +
                 " y hubo un error al intentar enviar la solicitud de debito automaticamente. Por favor ingrese al " +
