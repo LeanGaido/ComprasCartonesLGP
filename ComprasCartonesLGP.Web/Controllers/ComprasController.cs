@@ -512,10 +512,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string pago360Js = JsonConvert.SerializeObject(pago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
+            Uri uri = new Uri("http://localhost:90/api/Payment360?paymentRequest=" + HttpUtility.UrlEncode(pago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -574,10 +574,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionPago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("http://localhost:90/api/Adhesion360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -629,10 +629,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string adhesionPago360Js = JsonConvert.SerializeObject(adhesionCardPago360);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
+            Uri uri = new Uri("http://localhost:90/api/AdhesionCard360?adhesionRequest=" + HttpUtility.UrlEncode(adhesionPago360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -684,10 +684,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                 string respuesta = "";
 
                 //Local
-                Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCbu?id=" + id);
+                //Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCbu?id=" + id);
 
                 //Server
-                //Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCbu?id=" + id);
+                Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCbu?id=" + id);
 
                 HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -738,10 +738,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                 string respuesta = "";
 
                 //Local
-                Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCard?id=" + id);
+                //Uri uri = new Uri("https://localhost:44382/api/CancelAdhesionCard?id=" + id);
 
                 //Server
-                //Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCard?id=" + id);
+                Uri uri = new Uri("http://localhost:90/api/CancelAdhesionCard?id=" + id);
 
                 HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -858,8 +858,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         {
             List<Cuotas> cuotas = new List<Cuotas>();
 
-            //DateTime hoy = DateTime.Today;
-            DateTime hoy = DateTime.Today.AddDays(120);
+            DateTime hoy = DateTime.Today;
             int c = 1;
 
             //var FechaLimite = db.FechaLimiteVentaCartones.Where(x => x.Vigente).FirstOrDefault();
@@ -1588,7 +1587,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         debito.first_total = (decimal)cuotaSolicitud.PrimerPrecioCuota;
                         debito.second_due_date = segundoVencimiento;
                         debito.second_total = (decimal)cuotaSolicitud.SeguntoPrecioCuota;
-                        debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                        debito.description = "LGP. Pago cuota:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
                         metadata.external_reference = cuotaSolicitud.ID;
                         debito.metadata = metadata;
 
@@ -1600,10 +1599,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                         string debit360Js = JsonConvert.SerializeObject(debito);
 
                         //Local
-                        Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                         //Server
-                        //Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                         HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -1681,17 +1680,6 @@ namespace ComprasCartonesLGP.Web.Controllers
             var adheridoCard = db.AdhesionCard.Where(x => x.id == id && x.state == "signed").FirstOrDefault();
             var mesActual = DateTime.Now.ToString("MM");
 
-            int diaDelMes = DateTime.Now.Day;
-            int periodo = 0;
-            if (diaDelMes >= 18)
-            {
-                periodo = Convert.ToInt32(mesActual) + 1;
-            }
-            else
-            {
-                periodo = Convert.ToInt32(mesActual);
-            }
-
             var solicitud = (from oCompras in db.ComprasDeSolicitudes
                              join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                              join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
@@ -1701,12 +1689,38 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (solicitud != null)
             {
-                var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
+                var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false).FirstOrDefault();
                 if (cuotaSolicitud != null)
                 {
                     var solicitudDebito = db.DebitosCard.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
                     if (solicitudDebito == null)
                     {
+                        //Si ya cerraron las tarjetas se envian para el proximo periodo
+                        int diaDelMes = DateTime.Now.Day;
+                        int periodo = 0;
+                        int año = 0;
+
+                        if (diaDelMes >= 18)
+                        {
+                            //periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                            periodo = Convert.ToInt32(mesActual);
+                            if (periodo == 12)
+                            {
+                                periodo = 01;
+                                año = Convert.ToInt32(cuotaSolicitud.AnioCuota) + 1;
+                            }
+                            else
+                            {
+                                periodo = Convert.ToInt32(mesActual) + 1;
+                                año = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                            }
+                        }
+                        else
+                        {
+                            periodo = Convert.ToInt32(mesActual);
+                            año = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                        }
+
                         CardDebitRequest debito = new CardDebitRequest();
                         Metadata metadata = new Metadata();
 
@@ -1714,7 +1728,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         debito.month = periodo;
                         debito.year = Convert.ToInt32(cuotaSolicitud.AnioCuota);
                         debito.amount = cuotaSolicitud.PrimerPrecioCuota;
-                        debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                        debito.description = "LGP. Pago cuota:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
                         metadata.external_reference = cuotaSolicitud.ID;
                         debito.metadata = metadata;
 
@@ -1725,10 +1739,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                         string debit360Js = JsonConvert.SerializeObject(debito);
 
                         //Local
-                        Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                         //Server
-                        //Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+                        Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
 
                         HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -1817,10 +1831,10 @@ namespace ComprasCartonesLGP.Web.Controllers
             string nextBusinessDay360Js = JsonConvert.SerializeObject(nextBusinessDay);
 
             //Local
-            Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+            //Uri uri = new Uri("https://localhost:44382/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
 
             //Server
-            //Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
+            Uri uri = new Uri("http://localhost:90/api/RequestNextBusinessDay?nextBusinessDay=" + HttpUtility.UrlEncode(nextBusinessDay360Js));
 
             HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
 

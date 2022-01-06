@@ -126,7 +126,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                             debito.first_total = (decimal)cuotaSolicitud.PrimerPrecioCuota;
                             debito.second_due_date = segundoVencimiento;
                             debito.second_total = (decimal)cuotaSolicitud.SeguntoPrecioCuota;
-                            debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                            debito.description = "LGP. Pago cuota:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
                             metadata.external_reference = cuotaSolicitud.ID;
                             debito.metadata = metadata;
 
@@ -229,7 +229,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
                 if(solicitud != null)
                 {
-                    var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
+                    var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false).FirstOrDefault();
                     if(cuotaSolicitud != null)
                     {
                         var solicitudDebito = db.DebitosCard.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
@@ -242,7 +242,8 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
                             if (diaDelMes >= 18)
                             {
-                                periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                                //periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                                periodo = Convert.ToInt32(mesActual);
                                 if (periodo == 12)
                                 {
                                     periodo = 01;
@@ -250,13 +251,13 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                 }
                                 else
                                 {
-                                    periodo = Convert.ToInt32(cuotaSolicitud.MesCuota) + 1;
+                                    periodo = Convert.ToInt32(mesActual) + 1;
                                     año = Convert.ToInt32(cuotaSolicitud.AnioCuota);
                                 }
                             }
                             else
                             {
-                                periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                                periodo = Convert.ToInt32(mesActual);
                                 año = Convert.ToInt32(cuotaSolicitud.AnioCuota);
                             }
 
@@ -267,7 +268,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                             debito.month = periodo;
                             debito.year = año;
                             debito.amount = cuotaSolicitud.PrimerPrecioCuota;
-                            debito.description = "LGP. Pago cuota del mes:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
+                            debito.description = "LGP. Pago cuota:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
                             metadata.external_reference = cuotaSolicitud.ID;
                             debito.metadata = metadata;
 
