@@ -107,13 +107,12 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             string primerVencimiento = ObtenerDiaHabil(date, days);
             string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
             var adheridosCbu = db.AdhesionCbu.Where(x => x.state == "signed").ToList();
-            var mesActual = dateTime.ToString("MM");
             foreach (var adherido in adheridosCbu)
             {
                 var solicitud = db.ComprasDeSolicitudes.Where(x => x.NroSolicitud == adherido.external_reference && x.PagoRealizdo == false && x.PagoCancelado == false).FirstOrDefault();
                 if(solicitud != null)
                 {
-                    var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesActual).FirstOrDefault();
+                    var cuotaSolicitud = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false).FirstOrDefault();
                     if(cuotaSolicitud != null)
                     {
                         var solicitudDebito = db.DebitosCBU.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
