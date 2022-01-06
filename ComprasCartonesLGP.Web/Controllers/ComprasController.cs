@@ -1051,7 +1051,6 @@ namespace ComprasCartonesLGP.Web.Controllers
                 anio = DateTime.Now.Year;
             }
 
-            //VER
             var pago = db.Pagos.Where(x => x.external_reference == detalle.NroSolicitud && x.created_at.Year == anio).FirstOrDefault();
 
             if (detalle.TipoDePago.ID == 1 && detalle.PagoRealizdo == false && pago.state == "pending")
@@ -1062,7 +1061,6 @@ namespace ComprasCartonesLGP.Web.Controllers
             }
             if (detalle.TipoDePago.ID == 2)
             {
-                //VER
                 var adhesionCbu = db.AdhesionCbu.Where(x => x.external_reference == detalle.NroSolicitud && x.created_at.Year == anio).FirstOrDefault();
                 var UltimoNrosCbu = adhesionCbu.cbu_number.Substring(18, 4);
                 ViewBag.DatosAdhesion = "(CBU: XXXXXXXXXXXXXXXXXX" + UltimoNrosCbu + ")";
