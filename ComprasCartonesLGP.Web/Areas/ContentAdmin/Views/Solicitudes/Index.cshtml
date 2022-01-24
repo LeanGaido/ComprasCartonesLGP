@@ -45,6 +45,7 @@
                 <th scope="col">
                     <div align="center">Promoción</div>
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody class="text-center tableBody">
@@ -60,6 +61,7 @@
                     <td class="">
                         @Html.DisplayFor(modelItem => item.Promocion.Anio)
                     </td>
+                    <td width="5%"><a href="@Url.Action("Delete", new { id = item.ID, page = ViewBag.page, currentFilter = ViewBag.CurrentFilter })"><div align="center"><i class="fa fa-trash" aria-hidden="true"></i></div></a></td>
                 </tr>
             }
         </tbody>

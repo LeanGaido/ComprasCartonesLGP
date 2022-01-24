@@ -132,6 +132,21 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             {
                 return HttpNotFound();
             }
+            DateTime hoy = DateTime.Now;
+            var compra = (from oCompras in db.ComprasDeSolicitudes
+                          join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
+                          join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
+                          where (!oCompras.PagoCancelado &&
+                                oPromocion.Anio == hoy.Year)
+                                || (oCompras.PagoRealizado != 0 && oCompras.PagoCancelado)
+                          select oCompras).ToList();
+
+            var solicitudComprada = compra.Where(x => x.SolicitudID == id).FirstOrDefault();
+            if(solicitudComprada != null)
+            {
+                ViewBag.MensajeSolicitudComprada = "La solicitud " + solicitudComprada.NroSolicitud + " no se puede eliminar ya que ha sido comprada por un usuario."; 
+                return View();
+            }
             return View(solicitud);
         }
 

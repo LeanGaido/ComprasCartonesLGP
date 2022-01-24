@@ -362,6 +362,7 @@
     <Content Include="Areas\ContentAdmin\Views\Home\HabilitarCompra.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Home\CompraHabilitadaExitosamente.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Solicitudes\ImportadoExitoso.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Solicitudes\Delete.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
