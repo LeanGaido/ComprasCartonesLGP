@@ -597,7 +597,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
         public JsonResult getLocalidades(int ProvinciaId)
         {
-            var localidades = db.Localidades.Where(x => x.ProvinciaID == ProvinciaId).ToList();
+            var localidades = db.Localidades.Where(x => x.ProvinciaID == ProvinciaId).OrderBy(x => x.Descripcion).ToList();
 
             return Json(localidades, JsonRequestBehavior.AllowGet);
         }
