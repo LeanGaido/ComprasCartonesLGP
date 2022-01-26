@@ -14,14 +14,27 @@
         <div id="sum_box" class="row mbl">
             <div class="col-lg-12 col-sm-12 col-md-12">
                 <div align="center">
-                    @using (Html.BeginForm())
+                    @if (Model == null)
                     {
-                        @Html.AntiForgeryToken()
-                        <h3>¿Desea realmente eliminar la solicitud seleccionada?</h3>
-                        @Html.HiddenFor(model => model.ID);
-                        <p>
-                            <button type="submit" class="btn botonPrincipal">SÍ</button>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("Index", new { currentFilter = @ViewBag.CurrentFilter, page = @ViewBag.page })" class="btn botonPrincipal">NO</a>
+                        <br />
+                        <div class="text-center"><h4>La solicitud no puede ser eliminada ya que ha sido adquirida por un asociado</h4></div>
+                        <br /><br />
+                        <p class="text-center">
+                            <a href="@Url.Action("Index", new { currentFilter = @ViewBag.CurrentFilter, page = @ViewBag.page })" class="btn btn-primary">VOLVER</a>
                         </p>
+                        <br />
+                    }
+                    else
+                    {
+                        using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <h3>¿Desea realmente eliminar la solicitud seleccionada?</h3>
+                            @Html.HiddenFor(model => model.ID);
+                            <p>
+                                <button type="submit" class="btn botonPrincipal">SÍ</button>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("Index", new { currentFilter = @ViewBag.CurrentFilter, page = @ViewBag.page })" class="btn botonPrincipal">NO</a>
+                            </p>
+                        }
                     }
                 </div>
                 &nbsp;<br>

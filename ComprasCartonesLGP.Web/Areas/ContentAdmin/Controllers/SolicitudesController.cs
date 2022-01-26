@@ -37,8 +37,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             int pageSize = 30;
             int pageNumber = (page ?? 1);
 
-            //var solicitudes = db.Solicitudes.Include(s => s.Promocion);
-            var solicitudes = db.Solicitudes.OrderByDescending(x => x.Promocion.Anio).ToList();
+            DateTime hoy = DateTime.Now;
+
+            var solicitudes = db.Solicitudes.Where(x => x.Promocion.Anio == hoy.Year).ToList();
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 solicitudes = solicitudes.Where(x => x.NroSolicitud.ToUpper().Contains(searchString.ToUpper())).ToList();
@@ -132,7 +134,9 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             {
                 return HttpNotFound();
             }
+
             DateTime hoy = DateTime.Now;
+
             var compra = (from oCompras in db.ComprasDeSolicitudes
                           join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                           join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
@@ -144,7 +148,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             var solicitudComprada = compra.Where(x => x.SolicitudID == id).FirstOrDefault();
             if(solicitudComprada != null)
             {
-                ViewBag.MensajeSolicitudComprada = "La solicitud " + solicitudComprada.NroSolicitud + " no se puede eliminar ya que ha sido comprada por un usuario."; 
                 return View();
             }
             return View(solicitud);
