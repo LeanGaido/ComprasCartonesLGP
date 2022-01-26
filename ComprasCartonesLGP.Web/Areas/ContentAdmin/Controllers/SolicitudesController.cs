@@ -193,10 +193,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
                 string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
 
-                string path1 = string.Format("{0}/{1}", Server.MapPath("~/Areas/Data/Uploads"), file.FileName);
+                string path1 = string.Format("{0}/{1}", Server.MapPath("~/Areas/ContentAdmin/Data/Uploads"), file.FileName);
                 if (!Directory.Exists(path1))
                 {
-                    Directory.CreateDirectory(Server.MapPath("~/Areas/Data/Uploads"));
+                    Directory.CreateDirectory(Server.MapPath("~/Areas/ContentAdmin/Data/Uploads"));
                 }
 
                 file.SaveAs(path1);
