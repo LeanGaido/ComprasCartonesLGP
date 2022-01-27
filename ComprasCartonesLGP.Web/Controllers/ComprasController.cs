@@ -858,7 +858,8 @@ namespace ComprasCartonesLGP.Web.Controllers
         {
             List<Cuotas> cuotas = new List<Cuotas>();
 
-            DateTime hoy = DateTime.Today;
+            //DateTime hoy = DateTime.Today;
+            DateTime hoy = DateTime.Today.AddDays(120);
             int c = 1;
 
             //var FechaLimite = db.FechaLimiteVentaCartones.Where(x => x.Vigente).FirstOrDefault();
@@ -872,9 +873,20 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 Meses = 10;
                 mesInicio = 1;
-            }
 
-            //int cantCuotas = Meses - mesInicio;
+                if(hoy.Month == 3 && hoy.Day > 20)
+                {
+                    Meses--;
+                }
+            }
+            else
+            {
+                if (hoy.Day > 20)
+                {
+                    Meses--;
+                }
+            }
+            
 
             for (int mes = mesInicio; mes <= Meses; mes++)
             {
