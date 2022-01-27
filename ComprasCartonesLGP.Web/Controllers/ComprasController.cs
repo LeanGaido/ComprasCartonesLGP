@@ -858,8 +858,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         {
             List<Cuotas> cuotas = new List<Cuotas>();
 
-            //DateTime hoy = DateTime.Today;
-            DateTime hoy = DateTime.Today.AddDays(120);
+            DateTime hoy = DateTime.Today;
             int c = 1;
 
             //var FechaLimite = db.FechaLimiteVentaCartones.Where(x => x.Vigente).FirstOrDefault();
