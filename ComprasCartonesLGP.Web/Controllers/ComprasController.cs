@@ -854,14 +854,13 @@ namespace ComprasCartonesLGP.Web.Controllers
             return listaCartones;
         }
 
+        //Maximo de 10 cuotas hasta diciembre, permite solo 1, 2, 5 o 10 cuotas
         public List<Cuotas> ObtenerCuotasDebitoPosibles(int CartonId)
         {
             List<Cuotas> cuotas = new List<Cuotas>();
 
             DateTime hoy = DateTime.Today;
             int c = 1;
-
-            //var FechaLimite = db.FechaLimiteVentaCartones.Where(x => x.Vigente).FirstOrDefault();
 
             var Carton = db.Solicitudes.Where(x => x.ID == CartonId)
                                        .Include(t => t.Promocion).FirstOrDefault();
@@ -891,21 +890,22 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 var cuota = new Cuotas();
 
-                if(c != 1)
+                if(c == 1 || c == 2 || c == 5 || c == 10)
                 {
-                    cuota.key = c;
-                    cuota.value = c + " Cuotas sin interés de $" + Math.Round((Carton.Precio/c),2);
+                    if (c != 1)
+                    {
+                        cuota.key = c;
+                        cuota.value = c + " Cuotas sin interés de $" + Math.Round((Carton.Precio / c), 2);
+                    }
+                    else
+                    {
+                        cuota.key = c;
+                        cuota.value = c + " Cuota sin interés de $" + Math.Round(Carton.Precio, 2);
+                    }
+                    cuotas.Add(cuota);
                 }
-                else
-                {
-                    cuota.key = c;
-                    cuota.value = c + " Cuota sin interés de $" + Math.Round(Carton.Precio,2);
-                }
-
-                cuotas.Add(cuota);
                 c++;
             }
-
             return cuotas;
         }
 
