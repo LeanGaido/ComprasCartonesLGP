@@ -202,7 +202,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 return RedirectToAction("Autenticación");
             }
-            return RedirectToAction("ErrorRegistro", "Clientes", new { MensajeError = "A Ocurrido un error, por favor intente mas tarde" });
+            return RedirectToAction("ErrorRegistro", "Clientes", new { MensajeError = "Ha Ocurrido un error, por favor intente más tarde" });
         }
 
         /***************************************************************************************/
@@ -335,7 +335,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 if (!int.TryParse(Session["ReservaSolicitud"].ToString(), out SolicitudReservadaId))
                 {
-                    return RedirectToAction("ErrorCompra", "Compras", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                    return RedirectToAction("ErrorCompra", "Compras", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
                 }
 
                 var cartonReservado = db.ReservaDeSolicitudes.Where(x => x.SolicitudID == SolicitudReservadaId).FirstOrDefault();
@@ -433,7 +433,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 ViewBag.LocalidadID = new SelectList(db.Localidades, "ID", "Descripcion", asociado.LocalidadID);
 
-                return RedirectToAction("ErrorCompra", "Compras", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                return RedirectToAction("ErrorCompra", "Compras", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
             }
         }
 
