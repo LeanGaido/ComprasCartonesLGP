@@ -255,7 +255,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
                                 if (diaDelMes >= 18)
                                 {
-                                    //periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
                                     periodo = Convert.ToInt32(mesActual);
                                     if (periodo == 12)
                                     {

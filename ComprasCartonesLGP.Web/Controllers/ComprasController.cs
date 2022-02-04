@@ -386,16 +386,15 @@ namespace ComprasCartonesLGP.Web.Controllers
                         {
                             adhesion = GenerarAdhesionCbu(adhesionPago360);
                             db.AdhesionCbu.Add(adhesion);
-
                             db.SaveChanges();
-
                             adhesionId = adhesion.id;
 
-                            int mesInicio = hoy.Month;
                             var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
                             float precioCuota = solicitud.Precio / CantCuotas;
 
-                            for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
+                            int mesInicio = 1;
+
+                            for (int mes = mesInicio; mes <= CantCuotas; mes++)
                             {
                                 CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
 
@@ -449,12 +448,12 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                             adhesionId = adhesion.id;
 
-                            int mesInicio = hoy.Month;
+                            int mesInicio = 1;
 
                             var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
                             float precioCuota = solicitud.Precio / CantCuotas;
 
-                            for (int mes = mesInicio; mes < mesInicio + CantCuotas; mes++)
+                            for (int mes = mesInicio; mes <= CantCuotas; mes++)
                             {
                                 CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
 
