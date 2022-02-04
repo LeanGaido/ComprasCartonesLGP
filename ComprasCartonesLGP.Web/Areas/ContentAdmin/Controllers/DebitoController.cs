@@ -436,8 +436,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
                                             CardDebitResponse debitResponse = new CardDebitResponse();
 
-                                            //var jsonObject = JObject.Parse(response.Content);
-
                                             debitResponse = JsonConvert.DeserializeObject<CardDebitResponse>(respuesta);
                                             if (debitResponse.id != 0)
                                             {
