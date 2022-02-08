@@ -219,6 +219,107 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                     alerts.Add(new Alert("danger", errorMessage, true));
                                 }
                             }
+                            else if (solicitudDebito.state == "pending")
+                            {
+                                int mesCuota = Convert.ToInt32(cuotaSolicitud.MesCuota) + 1;
+                                var cuotaSolicitud2 = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesCuota.ToString()).FirstOrDefault();
+
+                                if(cuotaSolicitud2 != null)
+                                {
+                                    CbuDebitRequest debito = new CbuDebitRequest();
+                                    Metadata metadata = new Metadata();
+
+                                    debito.adhesion_id = adherido.id;
+                                    debito.first_due_date = primerVencimiento;
+                                    debito.first_total = (decimal)cuotaSolicitud2.PrimerPrecioCuota;
+                                    debito.second_due_date = segundoVencimiento;
+                                    debito.second_total = (decimal)cuotaSolicitud2.SeguntoPrecioCuota;
+                                    debito.description = "LGP. Pago cuota:  " + cuotaSolicitud2.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud2.PrimerPrecioCuota;
+                                    metadata.external_reference = cuotaSolicitud2.ID;
+                                    debito.metadata = metadata;
+
+                                    DebitoCBU debitoCbu = new DebitoCBU();
+                                    //Respuesta de la Api
+                                    string respuesta = "";
+
+                                    //
+                                    string debit360Js = JsonConvert.SerializeObject(debito);
+
+                                    //Local
+                                    //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                                    //Server
+                                    Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                                    HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+                                    requestFile.ContentType = "application/html";
+                                    requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+                                    HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+                                    if (requestFile.HaveResponse)
+                                    {
+                                        if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                                        {
+                                            try
+                                            {
+                                                StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                                                respuesta = respReader.ReadToEnd();
+
+                                                CbuDebitResponse debitResponse = new CbuDebitResponse();
+                                                //var jsonObject = JObject.Parse(response.Content);
+
+                                                debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
+
+                                                if (debitResponse.id != 0)
+                                                {
+                                                    debitoCbu.id = debitResponse.id;
+                                                    debitoCbu.type = debitResponse.type;
+                                                    debitoCbu.state = debitResponse.state;
+                                                    debitoCbu.created_at = debitResponse.created_at;
+                                                    debitoCbu.first_due_date = debitResponse.first_due_date;
+                                                    debitoCbu.first_total = debitResponse.first_total;
+                                                    debitoCbu.second_due_date = debito.second_due_date;
+                                                    debitoCbu.second_total = debitResponse.first_total;
+                                                    debitoCbu.description = debitResponse.description;
+                                                    debitoCbu.CuotaId = debitResponse.metadata.external_reference;
+                                                    debitoCbu.adhesionId = debitResponse.adhesion.id;
+
+                                                    db.DebitosCBU.Add(debitoCbu);
+                                                    db.SaveChanges();
+                                                }
+                                                else
+                                                {
+                                                    var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                                    errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                                    alerts.Add(new Alert("danger", errorMessage, true));
+                                                }
+
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                                errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                                alerts.Add(new Alert("danger", errorMessage, true));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                            errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                            alerts.Add(new Alert("danger", errorMessage, true));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                        errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                        alerts.Add(new Alert("danger", errorMessage, true));
+                                    }
+                                }                                
+                            }
                         }
                     }
                 }               
@@ -230,12 +331,12 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         {
             List<Alert> alerts = new List<Alert>();
             string errorMessage;
-
             var adheridosCard = db.AdhesionCard.Where(x => x.state == "signed").ToList();
             var mesActual = DateTime.Now.ToString("MM");
+            int mesComparacion = Convert.ToInt32(mesActual);
+
             foreach (var adherido in adheridosCard)
             {
-                int mesComparacion = Convert.ToInt32(mesActual);
                 var SolicitudEnviada = db.DebitosCard.Where(x => x.adhesionId == adherido.id && x.created_at.Value.Month == mesComparacion).FirstOrDefault();
                 if (SolicitudEnviada == null)
                 {
@@ -255,7 +356,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
                                 if (diaDelMes >= 18)
                                 {
-                                    //periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
                                     periodo = Convert.ToInt32(mesActual);
                                     if (periodo == 12)
                                     {
@@ -363,6 +463,128 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                     errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
                                     alerts.Add(new Alert("danger", errorMessage, true));
                                 }
+                            }
+                            else if (solicitudDebito.state == "pending")
+                            {
+                                int mesCuota = Convert.ToInt32(cuotaSolicitud.MesCuota) + 1;
+                                var cuotaSolicitud2 = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesCuota.ToString()).FirstOrDefault();
+
+                                if (cuotaSolicitud2 != null)
+                                {
+                                    //Si ya cerraron las tarjetas se envian para el proximo periodo
+                                    int diaDelMes = DateTime.Now.Day;
+                                    int periodo = 0;
+                                    int año = 0;
+
+                                    if (diaDelMes >= 18)
+                                    {
+                                        //periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
+                                        periodo = Convert.ToInt32(mesActual);
+                                        if (periodo == 12)
+                                        {
+                                            periodo = 01;
+                                            año = Convert.ToInt32(cuotaSolicitud2.AnioCuota) + 1;
+                                        }
+                                        else
+                                        {
+                                            periodo = Convert.ToInt32(mesActual) + 1;
+                                            año = Convert.ToInt32(cuotaSolicitud2.AnioCuota);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        periodo = Convert.ToInt32(mesActual);
+                                        año = Convert.ToInt32(cuotaSolicitud2.AnioCuota);
+                                    }
+
+                                    CardDebitRequest debito = new CardDebitRequest();
+                                    Metadata metadata = new Metadata();
+
+                                    debito.card_adhesion_id = adherido.id;
+                                    debito.month = periodo;
+                                    debito.year = año;
+                                    debito.amount = cuotaSolicitud2.PrimerPrecioCuota;
+                                    debito.description = "LGP. Pago cuota:  " + cuotaSolicitud2.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud2.PrimerPrecioCuota;
+                                    metadata.external_reference = cuotaSolicitud2.ID;
+                                    debito.metadata = metadata;
+
+                                    DebitoCard debitoCard = new DebitoCard();
+                                    //Respuesta de la Api
+                                    string respuesta = "";
+
+                                    string debit360Js = JsonConvert.SerializeObject(debito);
+
+                                    //Local
+                                    //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                                    //Server
+                                    Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+                                    HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+                                    requestFile.ContentType = "application/html";
+                                    requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+                                    HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+                                    if (requestFile.HaveResponse)
+                                    {
+                                        if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                                        {
+                                            try
+                                            {
+                                                StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                                                respuesta = respReader.ReadToEnd();
+
+                                                CardDebitResponse debitResponse = new CardDebitResponse();
+
+                                                debitResponse = JsonConvert.DeserializeObject<CardDebitResponse>(respuesta);
+                                                if (debitResponse.id != 0)
+                                                {
+                                                    debitoCard.id = debitResponse.id;
+                                                    debitoCard.type = debitResponse.type;
+                                                    debitoCard.state = debitResponse.state;
+                                                    debitoCard.created_at = debitResponse.created_at;
+                                                    debitoCard.amount = debitResponse.amount;
+                                                    debitoCard.month = debitResponse.month;
+                                                    debitoCard.year = debitResponse.year;
+                                                    debitoCard.description = debitResponse.description;
+                                                    debitoCard.CuotaId = debitResponse.metadata.external_reference;
+                                                    debitoCard.adhesionId = debitResponse.card_adhesion.id;
+
+                                                    db.DebitosCard.Add(debitoCard);
+                                                    db.SaveChanges();
+                                                }
+                                                else
+                                                {
+                                                    var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                                    errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                                    alerts.Add(new Alert("danger", errorMessage, true));
+                                                }
+
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                                errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                                alerts.Add(new Alert("danger", errorMessage, true));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                            errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                            alerts.Add(new Alert("danger", errorMessage, true));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var asociado = db.Asociados.Where(x => x.ID == solicitud.AsociadoID).FirstOrDefault();
+                                        errorMessage = "Socio: " + asociado.NombreCompleto + ". Cuota del mes: " + cuotaSolicitud2.MesCuota + ". Solicitud: " + solicitud.NroSolicitud;
+                                        alerts.Add(new Alert("danger", errorMessage, true));
+                                    }
+                                }                                
                             }
                         }
                     }
