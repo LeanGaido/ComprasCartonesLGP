@@ -82,6 +82,7 @@
     <Compile Include="Solicitud.cs" />
     <Compile Include="TipoDePago.cs" />
     <Compile Include="ViewsModels\AsociadoVm.cs" />
+    <Compile Include="ViewsModels\RechazoDebitoVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

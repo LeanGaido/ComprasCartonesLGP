@@ -2,6 +2,7 @@
 using ComprasCartonesLGP.Entities;
 using ComprasCartonesLGP.Entities.Pago360.Request;
 using ComprasCartonesLGP.Entities.Pago360.Response;
+using ComprasCartonesLGP.Entities.ViewsModels;
 using ComprasCartonesLGP.Utilities;
 using Newtonsoft.Json;
 using PagedList;
@@ -417,6 +418,107 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         public ActionResult EnvioSolicitudDebitoExitoso(List<Alert> alerts)
         {
             return View(alerts);
+        }
+
+        public ActionResult Rechazos()
+        {
+            return View();
+        }
+
+        public ActionResult RechazosTarjetaCredito(string searchString, string currentFilter, int? page)
+        {
+            List<RechazoDebitoVm> rechazosVm = new List<RechazoDebitoVm>();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = searchString;
+
+            int pageSize = 20;
+            int pageNumber = (page ?? 1);
+            var rechazos = db.DebitosCard.Where(x => x.state == "rejected").OrderByDescending(x => x.id).ToList();
+
+            foreach(var rechazo in rechazos)
+            {
+                var adhesion = db.AdhesionCard.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
+
+                RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
+
+                rechazoVm.Id = rechazo.id;
+                rechazoVm.NroSolicitud = adhesion.external_reference;
+                rechazoVm.NombreAsociado = adhesion.adhesion_holder_name;
+                rechazoVm.MesCuota = cuota.MesCuota;
+                rechazoVm.FechaRechazo = rechazo.created_at;
+
+                rechazosVm.Add(rechazoVm);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                rechazosVm = rechazosVm.Where(x => x.NombreAsociado.ToUpper().Contains(searchString.ToUpper())).ToList();
+            }
+
+            return View(rechazosVm.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult RechazosCbu(string searchString, string currentFilter, int? page)
+        {
+            List<RechazoDebitoVm> rechazosVm = new List<RechazoDebitoVm>();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = searchString;
+
+            int pageSize = 20;
+            int pageNumber = (page ?? 1);
+            var rechazos = db.DebitosCBU.Where(x => x.state == "rejected").OrderByDescending(x => x.id).ToList();
+
+            foreach (var rechazo in rechazos)
+            {
+                var adhesion = db.AdhesionCbu.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
+
+                RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
+
+                rechazoVm.Id = rechazo.id;
+                rechazoVm.NroSolicitud = adhesion.external_reference;
+                rechazoVm.NombreAsociado = adhesion.adhesion_holder_name;
+                rechazoVm.MesCuota = cuota.MesCuota;
+                rechazoVm.FechaRechazo = rechazo.created_at;
+
+                rechazosVm.Add(rechazoVm);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                rechazosVm = rechazosVm.Where(x => x.NombreAsociado.ToUpper().Contains(searchString.ToUpper())).ToList();
+            }
+
+            return View(rechazosVm.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult DetalleRechazoTarjetaCredito()
+        {
+            return View();
+        }
+
+        public ActionResult DetalleRechazoCbu()
+        {
+            return View();
         }
     }
 }
