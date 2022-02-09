@@ -647,10 +647,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View();
         }
 
-        public ActionResult RechazosTarjetaCredito(string searchString, string currentFilter, int? page)
+        public ActionResult RechazosTarjetaCredito(string searchString, string currentFilter, int? page, int Anio = 0)
         {
             List<RechazoDebitoVm> rechazosVm = new List<RechazoDebitoVm>();
-
+            ViewBag.Anio = new SelectList(db.Promociones.OrderByDescending(x => x.Anio), "Anio", "Anio");
             if (!string.IsNullOrEmpty(searchString))
             {
                 page = 1;
@@ -661,10 +661,15 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             }
             ViewBag.page = page;
             ViewBag.CurrentFilter = searchString;
-
             int pageSize = 20;
             int pageNumber = (page ?? 1);
-            var rechazos = db.DebitosCard.Where(x => x.state == "rejected").OrderByDescending(x => x.id).ToList();
+
+            if (Anio == 0)
+            {
+                Anio = DateTime.Now.Year;
+            }
+          
+            var rechazos = db.DebitosCard.Where(x => x.state == "rejected" && x.created_at.Value.Year == Anio).OrderByDescending(x => x.id).ToList();
 
             foreach(var rechazo in rechazos)
             {
@@ -690,10 +695,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(rechazosVm.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult RechazosCbu(string searchString, string currentFilter, int? page)
+        public ActionResult RechazosCbu(string searchString, string currentFilter, int? page, int Anio = 0)
         {
             List<RechazoDebitoVm> rechazosVm = new List<RechazoDebitoVm>();
-
+            ViewBag.Anio = new SelectList(db.Promociones.OrderByDescending(x => x.Anio), "Anio", "Anio");
             if (!string.IsNullOrEmpty(searchString))
             {
                 page = 1;
@@ -704,10 +709,14 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             }
             ViewBag.page = page;
             ViewBag.CurrentFilter = searchString;
-
             int pageSize = 20;
             int pageNumber = (page ?? 1);
-            var rechazos = db.DebitosCBU.Where(x => x.state == "rejected").OrderByDescending(x => x.id).ToList();
+
+            if (Anio == 0)
+            {
+                Anio = DateTime.Now.Year;
+            }
+            var rechazos = db.DebitosCBU.Where(x => x.state == "rejected" && x.created_at.Year == Anio).OrderByDescending(x => x.id).ToList();
 
             foreach (var rechazo in rechazos)
             {
@@ -733,14 +742,102 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(rechazosVm.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult DetalleRechazoTarjetaCredito()
+        public ActionResult DetalleRechazoTarjetaCredito(int? id, string NombreAsociado, string MesCuota, string currentFilter, int? page, int Anio = 0)
         {
-            return View();
+            ViewBag.DisplayMensaje = "none";
+            ViewBag.DisplayBoton = "none";
+            RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var rechazo = db.DebitosCard.Where(x => x.id == id).FirstOrDefault();
+            var adhesion = db.AdhesionCard.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+
+            rechazoVm.Id = rechazo.id;
+            rechazoVm.NombreAsociado = NombreAsociado;
+            rechazoVm.NroSolicitud = adhesion.external_reference;
+            rechazoVm.MesCuota = MesCuota;
+            rechazoVm.FechaRechazo = rechazo.created_at;
+
+            if (adhesion.state == "signed")
+            {
+                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
+                if(cuota.CuotaPagada == false)
+                {
+                    var solicitudPendiente = db.DebitosCard.Where(x => x.CuotaId == cuota.ID && x.state == "pending").FirstOrDefault();
+                    if(solicitudPendiente == null)
+                    {
+                        ViewBag.DisplayBoton = "";
+                        //PUEDE ENVIAR LA SOLICITUD NUEVAMENTE 
+                    }
+                    else
+                    {
+                        ViewBag.Type = "warning";
+                        ViewBag.Message = "Esta cuota ya tiene otra solicitud de debito pendiente";
+                        ViewBag.DisplayMensaje = "";
+                        //MENSAJE SOLICITUD EN ESTADO PENDIENTE
+                    }
+                }
+                else
+                {
+                    ViewBag.Type = "success";
+                    ViewBag.Message = "La cuota ya ha sido abonada";
+                    ViewBag.DisplayMensaje = "";
+                    //MENSAJE LA CUOTA YA HA SIDO ABONADA
+                }
+            }
+            
+            return View(rechazoVm);
         }
 
-        public ActionResult DetalleRechazoCbu()
+        public ActionResult DetalleRechazoCbu(int? id, string NombreAsociado, string MesCuota, string currentFilter, int? page, int Anio = 0)
         {
-            return View();
+            ViewBag.DisplayMensaje = "none";
+            ViewBag.DisplayBoton = "none";
+            RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var rechazo = db.DebitosCBU.Where(x => x.id == id).FirstOrDefault();
+            var adhesion = db.AdhesionCbu.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+
+            rechazoVm.Id = rechazo.id;
+            rechazoVm.NombreAsociado = NombreAsociado;
+            rechazoVm.NroSolicitud = adhesion.external_reference;
+            rechazoVm.MesCuota = MesCuota;
+            rechazoVm.FechaRechazo = rechazo.created_at;
+
+            if (adhesion.state == "signed")
+            {
+                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
+                if (cuota.CuotaPagada == false)
+                {
+                    var solicitudPendiente = db.DebitosCBU.Where(x => x.CuotaId == cuota.ID && x.state == "pending").FirstOrDefault();
+                    if (solicitudPendiente == null)
+                    {
+                        ViewBag.DisplayBoton = "";
+                        //PUEDE ENVIAR LA SOLICITUD NUEVAMENTE 
+                    }
+                    else
+                    {
+                        ViewBag.Type = "warning";
+                        ViewBag.Message = "ESTA CUOTA YA TIENE OTRA SOLICITUD DE DEBITO PENDIENTE";
+                        ViewBag.DisplayMensaje = "";
+                        //MENSAJE SOLICITUD EN ESTADO PENDIENTE
+                    }
+                }
+                else
+                {
+                    ViewBag.Type = "success";
+                    ViewBag.Message = "LA CUOTA YA HA SIDO ABONADA";
+                    ViewBag.DisplayMensaje = "";
+                    //MENSAJE LA CUOTA YA HA SIDO ABONADA
+                }
+            }
+
+            return View(rechazoVm);
         }
     }
 }

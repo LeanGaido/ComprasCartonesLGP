@@ -1019,7 +1019,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                                join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                                join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
                                where oPromocion.Anio == anio && oCompras.AsociadoID == Cliente.ID
-                               select oCompras).ToList();
+                               select oCompras).OrderByDescending(x => x.ID).ToList();
             }
             ViewBag.AnioSeleccionado = anio;
             return View(solicitudes);
