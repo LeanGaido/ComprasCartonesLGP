@@ -1314,8 +1314,11 @@ namespace ComprasCartonesLGP.Web.Controllers
                             var entity_name = pwebhook.entity_name;
                             var entity_id = pwebhook.entity_id;
                             var created_at = pwebhook.created_at;
+
                             var rechazo = db.DebitosCBU.Where(x => x.id == entity_id).FirstOrDefault();
                             rechazo.state = pwebhook.type;
+                            rechazo.created_at = Convert.ToDateTime(created_at);
+
                             db.Entry(rechazo).State = EntityState.Modified;
                             db.SaveChanges();
                             InformarRechazoDebito(entity_id, entity_name, created_at);
@@ -1379,6 +1382,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                             var rechazo = db.DebitosCard.Where(x => x.id == entity_id).FirstOrDefault();
                             rechazo.state = pwebhook.type;
+                            rechazo.created_at = Convert.ToDateTime(created_at);
                             db.Entry(rechazo).State = EntityState.Modified;
                             db.SaveChanges();
 

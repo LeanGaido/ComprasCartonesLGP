@@ -124,7 +124,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         {
                             //valida que ya no se haya enviado una solicitud para esta cuota
                             var solicitudDebito = db.DebitosCBU.Where(x => x.CuotaId == cuotaSolicitud.ID).FirstOrDefault();
-                            if (solicitudDebito == null)
+                            if (solicitudDebito == null || solicitudDebito.state == "canceled")
                             {
                                 CbuDebitRequest debito = new CbuDebitRequest();
                                 Metadata metadata = new Metadata();
@@ -219,7 +219,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                     alerts.Add(new Alert("danger", errorMessage, true));
                                 }
                             }
-                            else if (solicitudDebito.state == "pending")
+                            else if(solicitudDebito.state == "pending")
                             {
                                 int mesCuota = Convert.ToInt32(cuotaSolicitud.MesCuota) + 1;
                                 var cuotaSolicitud2 = db.CuotasCompraDeSolicitudes.Where(x => x.CompraDeSolicitudID == solicitud.ID && x.CuotaPagada == false && x.MesCuota == mesCuota.ToString()).FirstOrDefault();
@@ -320,6 +320,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                     }
                                 }                                
                             }
+                            //else if (solicitudDebito.state == "rejected")
+                            //{
+
+                            //}
                         }
                     }
                 }               
@@ -800,8 +804,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var rechazo = db.DebitosCBU.Where(x => x.id == id).FirstOrDefault();
             var adhesion = db.AdhesionCbu.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
 
             rechazoVm.Id = rechazo.id;
             rechazoVm.NombreAsociado = NombreAsociado;
@@ -811,7 +817,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
             if (adhesion.state == "signed")
             {
-                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
                 if (cuota.CuotaPagada == false)
                 {
                     var solicitudPendiente = db.DebitosCBU.Where(x => x.CuotaId == cuota.ID && x.state == "pending").FirstOrDefault();
@@ -836,8 +841,150 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     //MENSAJE LA CUOTA YA HA SIDO ABONADA
                 }
             }
-
+            else
+            {
+                if (cuota.CuotaPagada == false)
+                {
+                    ViewBag.Type = "danger";
+                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA IMPAGA";
+                    ViewBag.DisplayMensaje = "";
+                }
+                else
+                {
+                    ViewBag.Type = "success";
+                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA PAGA";
+                    ViewBag.DisplayMensaje = "";
+                }
+            }
             return View(rechazoVm);
+        }
+
+        public ActionResult ConfirmacionEnvioSolicitudRechazoCbu(int? id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
+
+        public ActionResult DebitarRechazoCbu(int? id)
+        {
+            string errorMessage;
+
+            DateTime dateTime = DateTime.Now;
+            string date = dateTime.ToString("dd-MM-yyyy");
+            int days = 3;
+            string primerVencimiento = ObtenerDiaHabil(date, days);
+            string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
+
+            var debitoRechazado = db.DebitosCBU.Where(x => x.id == id).FirstOrDefault();
+            if (debitoRechazado == null)
+            {
+                return HttpNotFound();
+            }
+
+            var adherido = db.AdhesionCbu.Where(x => x.id == debitoRechazado.adhesionId && x.state == "signed").FirstOrDefault();
+            if (adherido == null)
+            {
+                return HttpNotFound();
+            }
+
+            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == debitoRechazado.CuotaId && x.CuotaPagada == false).FirstOrDefault();
+            if (cuota == null)
+            {
+                return HttpNotFound();
+            }
+
+            CbuDebitRequest debito = new CbuDebitRequest();
+            Metadata metadata = new Metadata();
+
+            debito.adhesion_id = adherido.id;
+            debito.first_due_date = primerVencimiento;
+            debito.first_total = (decimal)cuota.PrimerPrecioCuota;
+            debito.second_due_date = segundoVencimiento;
+            debito.second_total = (decimal)cuota.SeguntoPrecioCuota;
+            debito.description = "LGP. Pago cuota:  " + cuota.MesCuota + " a través del débito automático. Monto: $" + cuota.PrimerPrecioCuota;
+            metadata.external_reference = cuota.ID;
+            debito.metadata = metadata;
+
+            DebitoCBU debitoCbu = new DebitoCBU();
+            //Respuesta de la Api
+            string respuesta = "";
+
+            //
+            string debit360Js = JsonConvert.SerializeObject(debito);
+
+            //Local
+            //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+            //Server
+            Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+            requestFile.ContentType = "application/html";
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+            if (requestFile.HaveResponse)
+            {
+                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                {
+                    try
+                    {
+                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                        respuesta = respReader.ReadToEnd();
+
+                        CbuDebitResponse debitResponse = new CbuDebitResponse();
+                        //var jsonObject = JObject.Parse(response.Content);
+
+                        debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
+
+                        if (debitResponse.id != 0)
+                        {
+                            debitoCbu.id = debitResponse.id;
+                            debitoCbu.type = debitResponse.type;
+                            debitoCbu.state = debitResponse.state;
+                            debitoCbu.created_at = debitResponse.created_at;
+                            debitoCbu.first_due_date = debitResponse.first_due_date;
+                            debitoCbu.first_total = debitResponse.first_total;
+                            debitoCbu.second_due_date = debito.second_due_date;
+                            debitoCbu.second_total = debitResponse.first_total;
+                            debitoCbu.description = debitResponse.description;
+                            debitoCbu.CuotaId = debitResponse.metadata.external_reference;
+                            debitoCbu.adhesionId = debitResponse.adhesion.id;
+
+                            db.DebitosCBU.Add(debitoCbu);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            return RedirectToAction("ErrorEnvioSolicitudDebito");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return RedirectToAction("ErrorEnvioSolicitudDebito");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("ErrorEnvioSolicitudDebito");
+                }
+            }
+
+            return RedirectToAction("EnvioSolicitudDebitoRechazoExitoso");
+        }
+
+        public ActionResult ErrorEnvioSolicitudDebito()
+        {
+            return View();
+        }
+
+        public ActionResult EnvioSolicitudDebitoRechazoExitoso()
+        {
+            return View();
         }
     }
 }

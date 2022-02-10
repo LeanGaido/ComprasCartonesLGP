@@ -39,7 +39,7 @@
     </div>
     <div class="form-group row botones-formularios" style="display: @ViewBag.DisplayBoton">
         <div class="margin-botones-formularios">
-            @Html.ActionLink("Generar otra solicitud de debito", "", new { currentFilter = ViewBag.CurrentFilter, page = ViewBag.page, Estado = ViewBag.Estado }, new { @class = "btn botonPrincipal" })
+            @Html.ActionLink("Generar otra solicitud de debito", "ConfirmacionEnvioSolicitudRechazoCbu", new {id = Model.Id, currentFilter = ViewBag.CurrentFilter, page = ViewBag.page, Estado = ViewBag.Estado }, new { @class = "btn botonPrincipal" })
         </div>
     </div>
     <div class="form-group row botones-formularios">

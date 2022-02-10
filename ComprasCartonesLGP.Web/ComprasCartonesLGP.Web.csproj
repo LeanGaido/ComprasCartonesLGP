@@ -369,6 +369,9 @@
     <Content Include="Areas\ContentAdmin\Views\Debito\RechazosCbu.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\DetalleRechazoTarjetaCredito.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\DetalleRechazoCbu.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Debito\ConfirmacionEnvioSolicitudRechazoCbu.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Debito\ErrorEnvioSolicitudDebito.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Debito\EnvioSolicitudDebitoRechazoExitoso.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
