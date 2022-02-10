@@ -672,10 +672,9 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             {
                 Anio = DateTime.Now.Year;
             }
-          
             var rechazos = db.DebitosCard.Where(x => x.state == "rejected" && x.created_at.Value.Year == Anio).OrderByDescending(x => x.id).ToList();
 
-            foreach(var rechazo in rechazos)
+            foreach (var rechazo in rechazos)
             {
                 var adhesion = db.AdhesionCard.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
                 var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
@@ -755,8 +754,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var rechazo = db.DebitosCard.Where(x => x.id == id).FirstOrDefault();
             var adhesion = db.AdhesionCard.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
 
             rechazoVm.Id = rechazo.id;
             rechazoVm.NombreAsociado = NombreAsociado;
@@ -766,11 +767,10 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
             if (adhesion.state == "signed")
             {
-                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
-                if(cuota.CuotaPagada == false)
+                if (cuota.CuotaPagada == false)
                 {
                     var solicitudPendiente = db.DebitosCard.Where(x => x.CuotaId == cuota.ID && x.state == "pending").FirstOrDefault();
-                    if(solicitudPendiente == null)
+                    if (solicitudPendiente == null)
                     {
                         ViewBag.DisplayBoton = "";
                         //PUEDE ENVIAR LA SOLICITUD NUEVAMENTE 
@@ -778,7 +778,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     else
                     {
                         ViewBag.Type = "warning";
-                        ViewBag.Message = "Esta cuota ya tiene otra solicitud de debito pendiente";
+                        ViewBag.Message = "ESTA CUOTA YA TIENE OTRA SOLICITUD DE DEBITO PENDIENTE";
                         ViewBag.DisplayMensaje = "";
                         //MENSAJE SOLICITUD EN ESTADO PENDIENTE
                     }
@@ -786,12 +786,26 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 else
                 {
                     ViewBag.Type = "success";
-                    ViewBag.Message = "La cuota ya ha sido abonada";
+                    ViewBag.Message = "LA CUOTA YA HA SIDO ABONADA";
                     ViewBag.DisplayMensaje = "";
                     //MENSAJE LA CUOTA YA HA SIDO ABONADA
                 }
             }
-            
+            else
+            {
+                if (cuota.CuotaPagada == false)
+                {
+                    ViewBag.Type = "danger";
+                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA IMPAGA";
+                    ViewBag.DisplayMensaje = "";
+                }
+                else
+                {
+                    ViewBag.Type = "success";
+                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA PAGA";
+                    ViewBag.DisplayMensaje = "";
+                }
+            }
             return View(rechazoVm);
         }
 
