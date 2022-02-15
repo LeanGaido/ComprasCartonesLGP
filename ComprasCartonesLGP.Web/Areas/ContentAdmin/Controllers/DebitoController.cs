@@ -879,10 +879,14 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View();
         }
 
+        public ActionResult ConfirmacionEnvioSolicitudRechazoTarjetaCredito(int? id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
+
         public ActionResult DebitarRechazoCbu(int? id)
         {
-            string errorMessage;
-
             DateTime dateTime = DateTime.Now;
             string date = dateTime.ToString("dd-MM-yyyy");
             int days = 3;
@@ -989,6 +993,141 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             }
 
             return RedirectToAction("EnvioSolicitudDebitoRechazoExitoso");
+        }
+
+        public ActionResult DebitarRechazoTarjetaCredito(int? id)
+        {
+            var mesActual = DateTime.Now.ToString("MM");
+            var debitoRechazado = db.DebitosCard.Where(x => x.id == id).FirstOrDefault();
+            if (debitoRechazado == null)
+            {
+                return HttpNotFound();
+            }
+
+            var adherido = db.AdhesionCard.Where(x => x.id == debitoRechazado.adhesionId && x.state == "signed").FirstOrDefault();
+            if (adherido == null)
+            {
+                return HttpNotFound();
+            }
+
+            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == debitoRechazado.CuotaId && x.CuotaPagada == false).FirstOrDefault();
+            if (cuota == null)
+            {
+                return HttpNotFound();
+            }
+
+            //Si ya cerraron las tarjetas se envian para el proximo periodo
+            int diaDelMes = DateTime.Now.Day;
+            int periodo = 0;
+            int año = 0;
+
+            if (diaDelMes >= 18)
+            {
+                periodo = Convert.ToInt32(mesActual);
+                if (periodo == 12)
+                {
+                    periodo = 01;
+                    año = Convert.ToInt32(cuota.AnioCuota) + 1;
+                }
+                else
+                {
+                    periodo = Convert.ToInt32(mesActual) + 1;
+                    año = Convert.ToInt32(cuota.AnioCuota);
+                }
+            }
+            else
+            {
+                periodo = Convert.ToInt32(mesActual);
+                año = Convert.ToInt32(cuota.AnioCuota);
+            }
+
+            CardDebitRequest debito = new CardDebitRequest();
+            Metadata metadata = new Metadata();
+
+            debito.card_adhesion_id = adherido.id;
+            debito.month = periodo;
+            debito.year = año;
+            debito.amount = cuota.PrimerPrecioCuota;
+            debito.description = "LGP. Pago cuota:  " + cuota.MesCuota + " a través del débito automático. Monto: $" + cuota.PrimerPrecioCuota;
+            metadata.external_reference = cuota.ID;
+            debito.metadata = metadata;
+
+            DebitoCard debitoCard = new DebitoCard();
+            //Respuesta de la Api
+            string respuesta = "";
+
+            string debit360Js = JsonConvert.SerializeObject(debito);
+
+            //Local
+            //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+            //Server
+            Uri uri = new Uri("http://localhost:90/api/RequestDebitCard?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+            requestFile.ContentType = "application/html";
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+            if (requestFile.HaveResponse)
+            {
+                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                {
+                    try
+                    {
+                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                        respuesta = respReader.ReadToEnd();
+
+                        CardDebitResponse debitResponse = new CardDebitResponse();
+
+                        debitResponse = JsonConvert.DeserializeObject<CardDebitResponse>(respuesta);
+                        if (debitResponse.id != 0)
+                        {
+                            debitoCard.id = debitResponse.id;
+                            debitoCard.type = debitResponse.type;
+                            debitoCard.state = debitResponse.state;
+                            debitoCard.created_at = debitResponse.created_at;
+                            debitoCard.amount = debitResponse.amount;
+                            debitoCard.month = debitResponse.month;
+                            debitoCard.year = debitResponse.year;
+                            debitoCard.description = debitResponse.description;
+                            debitoCard.CuotaId = debitResponse.metadata.external_reference;
+                            debitoCard.adhesionId = debitResponse.card_adhesion.id;
+
+                            db.DebitosCard.Add(debitoCard);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            return RedirectToAction("ErrorEnvioSolicitudDebitoTarjetaCredito");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return RedirectToAction("ErrorEnvioSolicitudDebitoTarjetaCredito");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("ErrorEnvioSolicitudDebitoTarjetaCredito");
+                }
+            }
+
+            return View();
+        }
+
+        public ActionResult ErrorEnvioSolicitudDebitoTarjetaCredito()
+        {
+            return View();
+        }
+
+        public ActionResult EnvioSolicitudDebitoRechazoExitosoTarjetaCredito()
+        {
+            return View();
         }
 
         public ActionResult ErrorEnvioSolicitudDebito()

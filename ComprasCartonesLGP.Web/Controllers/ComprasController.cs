@@ -1714,7 +1714,6 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                         if (diaDelMes >= 18)
                         {
-                            //periodo = Convert.ToInt32(cuotaSolicitud.MesCuota);
                             periodo = Convert.ToInt32(mesActual);
                             if (periodo == 12)
                             {
@@ -1738,7 +1737,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                         debito.card_adhesion_id = adheridoCard.id;
                         debito.month = periodo;
-                        debito.year = Convert.ToInt32(cuotaSolicitud.AnioCuota);
+                        debito.year = año;
                         debito.amount = cuotaSolicitud.PrimerPrecioCuota;
                         debito.description = "LGP. Pago cuota:  " + cuotaSolicitud.MesCuota + " a través del débito automático. Monto: $" + cuotaSolicitud.PrimerPrecioCuota;
                         metadata.external_reference = cuotaSolicitud.ID;
