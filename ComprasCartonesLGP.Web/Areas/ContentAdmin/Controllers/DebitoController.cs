@@ -699,58 +699,15 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(rechazosVm.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult RechazosCbu(string searchString, string currentFilter, int? page, int Anio = 0)
-        {
-            List<RechazoDebitoVm> rechazosVm = new List<RechazoDebitoVm>();
-            ViewBag.Anio = new SelectList(db.Promociones.OrderByDescending(x => x.Anio), "Anio", "Anio");
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-            ViewBag.page = page;
-            ViewBag.CurrentFilter = searchString;
-            int pageSize = 20;
-            int pageNumber = (page ?? 1);
-
-            if (Anio == 0)
-            {
-                Anio = DateTime.Now.Year;
-            }
-            var rechazos = db.DebitosCBU.Where(x => x.state == "rejected" && x.created_at.Year == Anio).OrderByDescending(x => x.id).ToList();
-
-            foreach (var rechazo in rechazos)
-            {
-                var adhesion = db.AdhesionCbu.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
-                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
-
-                RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
-
-                rechazoVm.Id = rechazo.id;
-                rechazoVm.NroSolicitud = adhesion.external_reference;
-                rechazoVm.NombreAsociado = adhesion.adhesion_holder_name;
-                rechazoVm.MesCuota = cuota.MesCuota;
-                rechazoVm.FechaCreacion = rechazo.created_at;
-                rechazoVm.FechaRechazo = rechazo.fechaRechazo;
-
-                rechazosVm.Add(rechazoVm);
-            }
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                rechazosVm = rechazosVm.Where(x => x.NombreAsociado.ToUpper().Contains(searchString.ToUpper())).ToList();
-            }
-
-            return View(rechazosVm.ToPagedList(pageNumber, pageSize));
-        }
-
         public ActionResult DetalleRechazoTarjetaCredito(int? id, string NombreAsociado, string MesCuota, string currentFilter, int? page, int Anio = 0)
         {
             ViewBag.DisplayMensaje = "none";
             ViewBag.DisplayBoton = "none";
+
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = currentFilter;
+            ViewBag.Anio = Anio;
+
             RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
             if (id == null)
             {
@@ -812,190 +769,14 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View(rechazoVm);
         }
 
-        public ActionResult DetalleRechazoCbu(int? id, string NombreAsociado, string MesCuota, string currentFilter, int? page, int Anio = 0)
+        public ActionResult ConfirmacionEnvioSolicitudRechazoTarjetaCredito(int? id, string currentFilter, int? page, int Anio = 0)
         {
-            ViewBag.DisplayMensaje = "none";
-            ViewBag.DisplayBoton = "none";
-            RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = currentFilter;
+            ViewBag.Anio = Anio;
 
-            var rechazo = db.DebitosCBU.Where(x => x.id == id).FirstOrDefault();
-            var adhesion = db.AdhesionCbu.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
-            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
-
-            rechazoVm.Id = rechazo.id;
-            rechazoVm.NombreAsociado = NombreAsociado;
-            rechazoVm.NroSolicitud = adhesion.external_reference;
-            rechazoVm.MesCuota = MesCuota;
-            rechazoVm.FechaCreacion = rechazo.created_at;
-            rechazoVm.FechaRechazo = rechazo.fechaRechazo;
-
-            if (adhesion.state == "signed")
-            {
-                if (cuota.CuotaPagada == false)
-                {
-                    var solicitudPendiente = db.DebitosCBU.Where(x => x.CuotaId == cuota.ID && x.state == "pending").FirstOrDefault();
-                    if (solicitudPendiente == null)
-                    {
-                        ViewBag.DisplayBoton = "";
-                        //PUEDE ENVIAR LA SOLICITUD NUEVAMENTE 
-                    }
-                    else
-                    {
-                        ViewBag.Type = "warning";
-                        ViewBag.Message = "ESTA CUOTA YA TIENE OTRA SOLICITUD DE DEBITO PENDIENTE";
-                        ViewBag.DisplayMensaje = "";
-                        //MENSAJE SOLICITUD EN ESTADO PENDIENTE
-                    }
-                }
-                else
-                {
-                    ViewBag.Type = "success";
-                    ViewBag.Message = "LA CUOTA YA HA SIDO ABONADA";
-                    ViewBag.DisplayMensaje = "";
-                    //MENSAJE LA CUOTA YA HA SIDO ABONADA
-                }
-            }
-            else
-            {
-                if (cuota.CuotaPagada == false)
-                {
-                    ViewBag.Type = "danger";
-                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA IMPAGA";
-                    ViewBag.DisplayMensaje = "";
-                }
-                else
-                {
-                    ViewBag.Type = "success";
-                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA PAGA";
-                    ViewBag.DisplayMensaje = "";
-                }
-            }
-            return View(rechazoVm);
-        }
-
-        public ActionResult ConfirmacionEnvioSolicitudRechazoCbu(int? id)
-        {
             ViewBag.id = id;
             return View();
-        }
-
-        public ActionResult ConfirmacionEnvioSolicitudRechazoTarjetaCredito(int? id)
-        {
-            ViewBag.id = id;
-            return View();
-        }
-
-        public ActionResult DebitarRechazoCbu(int? id)
-        {
-            DateTime dateTime = DateTime.Now;
-            string date = dateTime.ToString("dd-MM-yyyy");
-            int days = 3;
-            string primerVencimiento = ObtenerDiaHabil(date, days);
-            string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
-
-            var debitoRechazado = db.DebitosCBU.Where(x => x.id == id).FirstOrDefault();
-            if (debitoRechazado == null)
-            {
-                return HttpNotFound();
-            }
-
-            var adherido = db.AdhesionCbu.Where(x => x.id == debitoRechazado.adhesionId && x.state == "signed").FirstOrDefault();
-            if (adherido == null)
-            {
-                return HttpNotFound();
-            }
-
-            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == debitoRechazado.CuotaId && x.CuotaPagada == false).FirstOrDefault();
-            if (cuota == null)
-            {
-                return HttpNotFound();
-            }
-
-            CbuDebitRequest debito = new CbuDebitRequest();
-            Metadata metadata = new Metadata();
-
-            debito.adhesion_id = adherido.id;
-            debito.first_due_date = primerVencimiento;
-            debito.first_total = (decimal)cuota.PrimerPrecioCuota;
-            debito.second_due_date = segundoVencimiento;
-            debito.second_total = (decimal)cuota.SeguntoPrecioCuota;
-            debito.description = "LGP. Pago cuota:  " + cuota.MesCuota + " a través del débito automático. Monto: $" + cuota.PrimerPrecioCuota;
-            metadata.external_reference = cuota.ID;
-            debito.metadata = metadata;
-
-            DebitoCBU debitoCbu = new DebitoCBU();
-            //Respuesta de la Api
-            string respuesta = "";
-
-            //
-            string debit360Js = JsonConvert.SerializeObject(debito);
-
-            //Local
-            //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
-
-            //Server
-            Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
-
-            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
-
-            requestFile.ContentType = "application/html";
-            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
-
-            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
-
-            if (requestFile.HaveResponse)
-            {
-                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
-                {
-                    try
-                    {
-                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
-
-                        respuesta = respReader.ReadToEnd();
-
-                        CbuDebitResponse debitResponse = new CbuDebitResponse();
-
-                        debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
-
-                        if (debitResponse.id != 0)
-                        {
-                            debitoCbu.id = debitResponse.id;
-                            debitoCbu.type = debitResponse.type;
-                            debitoCbu.state = debitResponse.state;
-                            debitoCbu.created_at = debitResponse.created_at;
-                            debitoCbu.first_due_date = debitResponse.first_due_date;
-                            debitoCbu.first_total = debitResponse.first_total;
-                            debitoCbu.second_due_date = debito.second_due_date;
-                            debitoCbu.second_total = debitResponse.first_total;
-                            debitoCbu.description = debitResponse.description;
-                            debitoCbu.CuotaId = debitResponse.metadata.external_reference;
-                            debitoCbu.adhesionId = debitResponse.adhesion.id;
-
-                            db.DebitosCBU.Add(debitoCbu);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            return RedirectToAction("ErrorEnvioSolicitudDebito");
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        return RedirectToAction("ErrorEnvioSolicitudDebito");
-                    }
-                }
-                else
-                {
-                    return RedirectToAction("ErrorEnvioSolicitudDebito");
-                }
-            }
-
-            return RedirectToAction("EnvioSolicitudDebitoRechazoExitoso");
         }
 
         public ActionResult DebitarRechazoTarjetaCredito(int? id)
@@ -1131,6 +912,242 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         public ActionResult EnvioSolicitudDebitoRechazoExitosoTarjetaCredito()
         {
             return View();
+        }
+
+        public ActionResult RechazosCbu(string searchString, string currentFilter, int? page, int Anio = 0)
+        {
+            List<RechazoDebitoVm> rechazosVm = new List<RechazoDebitoVm>();
+            ViewBag.Anio = new SelectList(db.Promociones.OrderByDescending(x => x.Anio), "Anio", "Anio");
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 20;
+            int pageNumber = (page ?? 1);
+
+            if (Anio == 0)
+            {
+                Anio = DateTime.Now.Year;
+            }
+            var rechazos = db.DebitosCBU.Where(x => x.state == "rejected" && x.created_at.Year == Anio).OrderByDescending(x => x.id).ToList();
+
+            foreach (var rechazo in rechazos)
+            {
+                var adhesion = db.AdhesionCbu.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+                var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
+
+                RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
+
+                rechazoVm.Id = rechazo.id;
+                rechazoVm.NroSolicitud = adhesion.external_reference;
+                rechazoVm.NombreAsociado = adhesion.adhesion_holder_name;
+                rechazoVm.MesCuota = cuota.MesCuota;
+                rechazoVm.FechaCreacion = rechazo.created_at;
+                rechazoVm.FechaRechazo = rechazo.fechaRechazo;
+
+                rechazosVm.Add(rechazoVm);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                rechazosVm = rechazosVm.Where(x => x.NombreAsociado.ToUpper().Contains(searchString.ToUpper())).ToList();
+            }
+
+            return View(rechazosVm.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult DetalleRechazoCbu(int? id, string NombreAsociado, string MesCuota, string currentFilter, int? page, int Anio = 0)
+        {
+            ViewBag.DisplayMensaje = "none";
+            ViewBag.DisplayBoton = "none";
+
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = currentFilter;
+            ViewBag.Anio = Anio;
+            RechazoDebitoVm rechazoVm = new RechazoDebitoVm();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var rechazo = db.DebitosCBU.Where(x => x.id == id).FirstOrDefault();
+            var adhesion = db.AdhesionCbu.Where(x => x.id == rechazo.adhesionId).FirstOrDefault();
+            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == rechazo.CuotaId).FirstOrDefault();
+
+            rechazoVm.Id = rechazo.id;
+            rechazoVm.NombreAsociado = NombreAsociado;
+            rechazoVm.NroSolicitud = adhesion.external_reference;
+            rechazoVm.MesCuota = MesCuota;
+            rechazoVm.FechaCreacion = rechazo.created_at;
+            rechazoVm.FechaRechazo = rechazo.fechaRechazo;
+
+            if (adhesion.state == "signed")
+            {
+                if (cuota.CuotaPagada == false)
+                {
+                    var solicitudPendiente = db.DebitosCBU.Where(x => x.CuotaId == cuota.ID && x.state == "pending").FirstOrDefault();
+                    if (solicitudPendiente == null)
+                    {
+                        ViewBag.DisplayBoton = "";
+                        //PUEDE ENVIAR LA SOLICITUD NUEVAMENTE 
+                    }
+                    else
+                    {
+                        ViewBag.Type = "warning";
+                        ViewBag.Message = "ESTA CUOTA YA TIENE OTRA SOLICITUD DE DEBITO PENDIENTE";
+                        ViewBag.DisplayMensaje = "";
+                        //MENSAJE SOLICITUD EN ESTADO PENDIENTE
+                    }
+                }
+                else
+                {
+                    ViewBag.Type = "success";
+                    ViewBag.Message = "LA CUOTA YA HA SIDO ABONADA";
+                    ViewBag.DisplayMensaje = "";
+                    //MENSAJE LA CUOTA YA HA SIDO ABONADA
+                }
+            }
+            else
+            {
+                if (cuota.CuotaPagada == false)
+                {
+                    ViewBag.Type = "danger";
+                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA IMPAGA";
+                    ViewBag.DisplayMensaje = "";
+                }
+                else
+                {
+                    ViewBag.Type = "success";
+                    ViewBag.Message = "LA ADHESIÓN REFERIDA A ESTA SOLICITUD YA SE HA DADO DE BAJA. LA CUOTA SE ENCUENTRA PAGA";
+                    ViewBag.DisplayMensaje = "";
+                }
+            }
+            return View(rechazoVm);
+        }
+
+        public ActionResult ConfirmacionEnvioSolicitudRechazoCbu(int? id, string currentFilter, int? page, int Anio = 0)
+        {
+            ViewBag.page = page;
+            ViewBag.CurrentFilter = currentFilter;
+            ViewBag.Anio = Anio;
+
+            ViewBag.id = id;
+            return View();
+        }
+
+        public ActionResult DebitarRechazoCbu(int? id)
+        {
+            DateTime dateTime = DateTime.Now;
+            string date = dateTime.ToString("dd-MM-yyyy");
+            int days = 3;
+            string primerVencimiento = ObtenerDiaHabil(date, days);
+            string segundoVencimiento = ObtenerDiaHabil(primerVencimiento, days);
+
+            var debitoRechazado = db.DebitosCBU.Where(x => x.id == id).FirstOrDefault();
+            if (debitoRechazado == null)
+            {
+                return HttpNotFound();
+            }
+
+            var adherido = db.AdhesionCbu.Where(x => x.id == debitoRechazado.adhesionId && x.state == "signed").FirstOrDefault();
+            if (adherido == null)
+            {
+                return HttpNotFound();
+            }
+
+            var cuota = db.CuotasCompraDeSolicitudes.Where(x => x.ID == debitoRechazado.CuotaId && x.CuotaPagada == false).FirstOrDefault();
+            if (cuota == null)
+            {
+                return HttpNotFound();
+            }
+
+            CbuDebitRequest debito = new CbuDebitRequest();
+            Metadata metadata = new Metadata();
+
+            debito.adhesion_id = adherido.id;
+            debito.first_due_date = primerVencimiento;
+            debito.first_total = (decimal)cuota.PrimerPrecioCuota;
+            debito.second_due_date = segundoVencimiento;
+            debito.second_total = (decimal)cuota.SeguntoPrecioCuota;
+            debito.description = "LGP. Pago cuota:  " + cuota.MesCuota + " a través del débito automático. Monto: $" + cuota.PrimerPrecioCuota;
+            metadata.external_reference = cuota.ID;
+            debito.metadata = metadata;
+
+            DebitoCBU debitoCbu = new DebitoCBU();
+            //Respuesta de la Api
+            string respuesta = "";
+
+            //
+            string debit360Js = JsonConvert.SerializeObject(debito);
+
+            //Local
+            //Uri uri = new Uri("https://localhost:44382/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+            //Server
+            Uri uri = new Uri("http://localhost:90/api/RequestDebitCbu?debitRequest=" + HttpUtility.UrlEncode(debit360Js));
+
+            HttpWebRequest requestFile = (HttpWebRequest)WebRequest.Create(uri);
+
+            requestFile.ContentType = "application/html";
+            requestFile.Headers.Add("authorization", "Bearer YjZlOTg2MWMxMzcxYTAwMDUwNmQzZWJlMWUwY2EyZWZjMzU3M2Y3NGE0ZjRkZWU0ZmRlZjcxOGQ4YmY4Yzc4ZQ");
+
+            HttpWebResponse webResp = requestFile.GetResponse() as HttpWebResponse;
+
+            if (requestFile.HaveResponse)
+            {
+                if (webResp.StatusCode == HttpStatusCode.OK || webResp.StatusCode == HttpStatusCode.Accepted)
+                {
+                    try
+                    {
+                        StreamReader respReader = new StreamReader(webResp.GetResponseStream(), Encoding.GetEncoding("utf-8" /*"iso-8859-1"*/));
+
+                        respuesta = respReader.ReadToEnd();
+
+                        CbuDebitResponse debitResponse = new CbuDebitResponse();
+
+                        debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
+
+                        if (debitResponse.id != 0)
+                        {
+                            debitoCbu.id = debitResponse.id;
+                            debitoCbu.type = debitResponse.type;
+                            debitoCbu.state = debitResponse.state;
+                            debitoCbu.created_at = debitResponse.created_at;
+                            debitoCbu.first_due_date = debitResponse.first_due_date;
+                            debitoCbu.first_total = debitResponse.first_total;
+                            debitoCbu.second_due_date = debito.second_due_date;
+                            debitoCbu.second_total = debitResponse.first_total;
+                            debitoCbu.description = debitResponse.description;
+                            debitoCbu.CuotaId = debitResponse.metadata.external_reference;
+                            debitoCbu.adhesionId = debitResponse.adhesion.id;
+
+                            db.DebitosCBU.Add(debitoCbu);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            return RedirectToAction("ErrorEnvioSolicitudDebito");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return RedirectToAction("ErrorEnvioSolicitudDebito");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("ErrorEnvioSolicitudDebito");
+                }
+            }
+
+            return RedirectToAction("EnvioSolicitudDebitoRechazoExitoso");
         }
 
         public ActionResult ErrorEnvioSolicitudDebito()

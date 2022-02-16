@@ -19,7 +19,7 @@
                         @Html.AntiForgeryToken()
                         <h3>¿Enviar solicitud de débito automático?</h3>
                         <p>
-                            <a href="@Url.Action("DebitarRechazoTarjetaCredito","Debito",new { id = ViewBag.id })" type="submit" class="btn btn-primary">SÍ</a>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("RechazosCbu","Debito")" class="btn btn-primary">NO</a>
+                            <a href="@Url.Action("DebitarRechazoTarjetaCredito","Debito",new { id = ViewBag.id, currentFilter = ViewBag.CurrentFilter, page = ViewBag.page, Anio = ViewBag.Anio })" type="submit" class="btn btn-primary">SÍ</a>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("RechazosCbu","Debito")" class="btn btn-primary">NO</a>
                         </p>
                     }
                 </div>
