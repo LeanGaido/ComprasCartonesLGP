@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <h1 class="mt-4 text-center"><b>MIS SOLICITUDES</b></h1>
             <div class="col-md-12 row">
-                <div class="col-md-9">
+                <div class="col-md-3">
                     <br />
                     <p>
                         @using (Html.BeginForm())
@@ -23,7 +23,14 @@
                     <p>
                         <a href="@Url.Action("ElegirCarton","Compras")" class="btn btn-primary btn-block">COMPRAR SOLICITUD</a>
                     </p>
-                </div>                 
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-center">
+                    <br />
+                    <p>
+                        <a href="@Url.Action("RemoverSession","Clientes")" class="btn btn-primary btn-block">CERRAR SESIÓN</a>
+                    </p>
+                </div>
             </div>
             <br />
             <div class="table-responsive">

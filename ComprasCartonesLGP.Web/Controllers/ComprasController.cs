@@ -1874,6 +1874,6 @@ namespace ComprasCartonesLGP.Web.Controllers
         public ActionResult TerminosYCondiciones()
         {
             return View();
-        }
+        }       
     }
 }

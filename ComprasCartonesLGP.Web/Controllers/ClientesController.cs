@@ -620,5 +620,14 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return View();
             }
         }
+
+        public ActionResult RemoverSession()
+        {
+            Session.Remove("ClienteDni");
+            Session.Remove("ClienteContacto");
+            Session.Remove("ClienteSexo");
+
+            return RedirectToAction("VerificarCodigoUnicoAcceso");
+        }
     }
 }
