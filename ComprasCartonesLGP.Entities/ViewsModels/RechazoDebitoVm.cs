@@ -12,6 +12,7 @@ namespace ComprasCartonesLGP.Entities.ViewsModels
         public string NroSolicitud { get; set; }
         public string NombreAsociado { get; set; }
         public string MesCuota { get; set; }
+        public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaRechazo { get; set; }
     }
 }

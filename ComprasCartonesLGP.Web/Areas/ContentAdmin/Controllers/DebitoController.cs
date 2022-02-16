@@ -685,7 +685,8 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 rechazoVm.NroSolicitud = adhesion.external_reference;
                 rechazoVm.NombreAsociado = adhesion.adhesion_holder_name;
                 rechazoVm.MesCuota = cuota.MesCuota;
-                rechazoVm.FechaRechazo = rechazo.created_at;
+                rechazoVm.FechaCreacion = rechazo.created_at;
+                rechazoVm.FechaRechazo = rechazo.fechaRechazo;
 
                 rechazosVm.Add(rechazoVm);
             }
@@ -732,7 +733,8 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 rechazoVm.NroSolicitud = adhesion.external_reference;
                 rechazoVm.NombreAsociado = adhesion.adhesion_holder_name;
                 rechazoVm.MesCuota = cuota.MesCuota;
-                rechazoVm.FechaRechazo = rechazo.created_at;
+                rechazoVm.FechaCreacion = rechazo.created_at;
+                rechazoVm.FechaRechazo = rechazo.fechaRechazo;
 
                 rechazosVm.Add(rechazoVm);
             }
@@ -763,7 +765,8 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             rechazoVm.NombreAsociado = NombreAsociado;
             rechazoVm.NroSolicitud = adhesion.external_reference;
             rechazoVm.MesCuota = MesCuota;
-            rechazoVm.FechaRechazo = rechazo.created_at;
+            rechazoVm.FechaCreacion = rechazo.created_at;
+            rechazoVm.FechaRechazo = rechazo.fechaRechazo;
 
             if (adhesion.state == "signed")
             {
@@ -827,7 +830,8 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             rechazoVm.NombreAsociado = NombreAsociado;
             rechazoVm.NroSolicitud = adhesion.external_reference;
             rechazoVm.MesCuota = MesCuota;
-            rechazoVm.FechaRechazo = rechazo.created_at;
+            rechazoVm.FechaCreacion = rechazo.created_at;
+            rechazoVm.FechaRechazo = rechazo.fechaRechazo;
 
             if (adhesion.state == "signed")
             {
@@ -954,7 +958,6 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         respuesta = respReader.ReadToEnd();
 
                         CbuDebitResponse debitResponse = new CbuDebitResponse();
-                        //var jsonObject = JObject.Parse(response.Content);
 
                         debitResponse = JsonConvert.DeserializeObject<CbuDebitResponse>(respuesta);
 
@@ -1117,7 +1120,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 }
             }
 
-            return View();
+            return RedirectToAction("EnvioSolicitudDebitoRechazoExitosoTarjetaCredito");
         }
 
         public ActionResult ErrorEnvioSolicitudDebitoTarjetaCredito()

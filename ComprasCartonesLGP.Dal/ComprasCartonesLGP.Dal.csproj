@@ -89,6 +89,14 @@
     <Compile Include="Migrations\202111091749367_parametros.Designer.cs">
       <DependentUpon>202111091749367_parametros.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202202161009108_FechaRechazo.cs" />
+    <Compile Include="Migrations\202202161009108_FechaRechazo.Designer.cs">
+      <DependentUpon>202202161009108_FechaRechazo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202202161040518_nullDatetime.cs" />
+    <Compile Include="Migrations\202202161040518_nullDatetime.Designer.cs">
+      <DependentUpon>202202161040518_nullDatetime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -132,6 +140,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111091749367_parametros.resx">
       <DependentUpon>202111091749367_parametros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202202161009108_FechaRechazo.resx">
+      <DependentUpon>202202161009108_FechaRechazo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202202161040518_nullDatetime.resx">
+      <DependentUpon>202202161040518_nullDatetime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

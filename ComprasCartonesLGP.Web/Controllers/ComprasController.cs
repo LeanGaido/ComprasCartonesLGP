@@ -1317,7 +1317,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                             var rechazo = db.DebitosCBU.Where(x => x.id == entity_id).FirstOrDefault();
                             rechazo.state = pwebhook.type;
-                            rechazo.created_at = Convert.ToDateTime(created_at);
+                            rechazo.fechaRechazo = Convert.ToDateTime(created_at);
 
                             db.Entry(rechazo).State = EntityState.Modified;
                             db.SaveChanges();
@@ -1382,7 +1382,7 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                             var rechazo = db.DebitosCard.Where(x => x.id == entity_id).FirstOrDefault();
                             rechazo.state = pwebhook.type;
-                            rechazo.created_at = Convert.ToDateTime(created_at);
+                            rechazo.fechaRechazo = Convert.ToDateTime(created_at);
                             db.Entry(rechazo).State = EntityState.Modified;
                             db.SaveChanges();
 

@@ -24,5 +24,6 @@ namespace ComprasCartonesLGP.Entities
         public int adhesionId { get; set; }
         public int CuotaId { get; set; }
         public virtual AdhesionCard adhesion { get; set; }//card_adhesion	Object	Objeto con el detalle de la Adhesión en Tarjeta.
+        public DateTime? fechaRechazo { get; set; }
     }
 }

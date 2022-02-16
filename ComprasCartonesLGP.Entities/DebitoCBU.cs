@@ -24,6 +24,7 @@ namespace ComprasCartonesLGP.Entities
         [ForeignKey("adhesion")]
         public int adhesionId { get; set; }
         public int CuotaId { get; set; }
-        public virtual AdhesionCbu adhesion { get; set; }//adhesion	Object	Objeto con el detalle de la Adhesión. .
+        public virtual AdhesionCbu adhesion { get; set; }//adhesion	Object	Objeto con el detalle de la Adhesión.
+        public DateTime? fechaRechazo { get; set; }
     }
 }
