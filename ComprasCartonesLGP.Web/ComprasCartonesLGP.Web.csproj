@@ -189,6 +189,7 @@
     <Compile Include="Areas\ContentAdmin\Controllers\ClientesController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\ComprasController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\DebitoController.cs" />
+    <Compile Include="Areas\ContentAdmin\Controllers\ExportarController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\HomeController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\PromocionesController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\SolicitudesController.cs" />
@@ -375,6 +376,7 @@
     <Content Include="Areas\ContentAdmin\Views\Debito\ConfirmacionEnvioSolicitudRechazoTarjetaCredito.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\ErrorEnvioSolicitudDebitoTarjetaCredito.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\EnvioSolicitudDebitoRechazoExitosoTarjetaCredito.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Exportar\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

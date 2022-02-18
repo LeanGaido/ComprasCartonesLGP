@@ -1267,6 +1267,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
                             adherido.state = pwebhook.type;
+                            adherido.canceled_at = DateTime.Now;
                             db.Entry(solicitudComprada).State = EntityState.Modified;
                             db.Entry(adherido).State = EntityState.Modified;
                             db.SaveChanges();
@@ -1298,7 +1299,8 @@ namespace ComprasCartonesLGP.Web.Controllers
 
                             solicitudComprada.PagoCancelado = true;
                             solicitudComprada.FechaCancelado = DateTime.Now;
-                            adherido.state = pwebhook.type;                            
+                            adherido.state = pwebhook.type;
+                            adherido.canceled_at = DateTime.Now;
                             db.Entry(solicitudComprada).State = EntityState.Modified;
                             db.Entry(adherido).State = EntityState.Modified;
                             db.SaveChanges();
@@ -1368,6 +1370,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         {
                             var pago = db.DebitosCBU.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
                             pago.state = pwebhook.type;
+                            pago.fechaRechazo = Convert.ToDateTime(pwebhook.created_at);
                             db.Entry(pago).State = EntityState.Modified;
                             db.SaveChanges();
                         }
@@ -1435,6 +1438,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         {
                             var pago = db.DebitosCard.Where(x => x.id == pwebhook.entity_id).FirstOrDefault();
                             pago.state = pwebhook.type;
+                            pago.fechaRechazo = Convert.ToDateTime(pwebhook.created_at);
                             db.Entry(pago).State = EntityState.Modified;
                             db.SaveChanges();
                         }
