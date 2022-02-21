@@ -377,6 +377,7 @@
     <Content Include="Areas\ContentAdmin\Views\Debito\ErrorEnvioSolicitudDebitoTarjetaCredito.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Debito\EnvioSolicitudDebitoRechazoExitosoTarjetaCredito.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Exportar\Index.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarClientes.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

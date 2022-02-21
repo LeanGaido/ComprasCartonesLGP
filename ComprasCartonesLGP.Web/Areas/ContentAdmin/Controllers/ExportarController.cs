@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ExportarController : Controller
     {
         // GET: ContentAdmin/Exportar
@@ -14,6 +15,14 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             return View();
         }
 
+        public ActionResult ExportarClientes()
+        {
+            return View();
+        }
 
+        //public FileContentResult ExportarExcelClientes()
+        //{
+
+        //}
     }
 }
