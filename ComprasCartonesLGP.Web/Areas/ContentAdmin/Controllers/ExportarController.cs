@@ -54,7 +54,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     int fila = 2;//"fila" es la fila del excel en la estaria escribiendo y la inicializo en 1
                     foreach (var asociado in Asociados)
                     {                        
-                        //Escriobo en la fila y en la columna que corresponde para cada valor
+                        //Escribo en la fila y en la columna que corresponde para cada valor
                         worksheet.Cell(fila, 1).SetValue<string>(Convert.ToString(asociado.NombreCompleto));
                         worksheet.Cell(fila, 2).SetValue<string>(Convert.ToString(asociado.FechaNacimiento.ToString("dd-MM-yyyy")));
 
@@ -143,7 +143,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     {
                         var asociado = db.Asociados.Where(x => x.ID == compra.AsociadoID).FirstOrDefault();
 
-                        //Escriobo en la fila y en la columna que corresponde para cada valor
+                        //Escribo en la fila y en la columna que corresponde para cada valor
                         worksheet.Cell(fila, 1).SetValue<string>(Convert.ToString(compra.FechaVenta.ToString("dd-MM-yyyy")));
                         worksheet.Cell(fila, 2).SetValue<string>(Convert.ToString(compra.NroSolicitud));               
                         worksheet.Cell(fila, 3).SetValue<string>(Convert.ToString(asociado.NombreCompleto));
@@ -212,6 +212,136 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         fila++;//Avanzo a la sig fila
                     }
                     string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Compras/"), "compra.xlsx");
+                    workbook.SaveAs(newFile);
+
+                    String mimeType = MimeMapping.GetMimeMapping(newFile);
+                    byte[] stream = System.IO.File.ReadAllBytes(newFile);
+
+                    return File(stream, mimeType);
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public ActionResult ExportarAdheridosTarjeta()
+        {
+            return View();
+        }
+
+        public FileContentResult ExportarExcelAdheridosTarjeta(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<AdhesionCard> adheridos = new List<AdhesionCard>();
+            try
+            {
+                adheridos = db.AdhesionCard.Where(x => x.created_at >= fechaInicio && x.created_at <= fechaFin).ToList();
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("LGP");
+
+                    worksheet.Cell(1, 1).SetValue<string>(Convert.ToString("Nº Solicitud"));
+                    worksheet.Cell(1, 2).SetValue<string>(Convert.ToString("Nombre del titular del servicio"));
+                    worksheet.Cell(1, 3).SetValue<string>(Convert.ToString("Nombre del titular de la Tarjeta"));
+                    worksheet.Cell(1, 4).SetValue<string>(Convert.ToString("Tarjeta"));
+                    worksheet.Cell(1, 5).SetValue<string>(Convert.ToString("Email"));
+                    worksheet.Cell(1, 6).SetValue<string>(Convert.ToString("Fecha Adhesión"));
+                    worksheet.Cell(1, 7).SetValue<string>(Convert.ToString("Estado Adhesión"));
+                    int fila = 2;//"fila" es la fila del excel en la estaria escribiendo y la inicializo en 1
+                    foreach (var adherido in adheridos)
+                    {
+                        //Escribo en la fila y en la columna que corresponde para cada valor
+                        worksheet.Cell(fila, 1).SetValue<string>(Convert.ToString(adherido.external_reference));
+                        worksheet.Cell(fila, 2).SetValue<string>(Convert.ToString(adherido.adhesion_holder_name));
+                        worksheet.Cell(fila, 3).SetValue<string>(Convert.ToString(adherido.card_holder_name));
+                        worksheet.Cell(fila, 4).SetValue<string>(Convert.ToString(adherido.card));
+                        worksheet.Cell(fila, 5).SetValue<string>(Convert.ToString(adherido.email));
+                        worksheet.Cell(fila, 6).SetValue<string>(Convert.ToString(adherido.created_at.ToString("dd-MM-yyyy")));
+
+                        var estado = "";
+                        switch (adherido.state)
+                        {
+                            case "signed":
+                                estado = "Adherida";
+                                break;
+                            case "canceled":
+                                estado = "Cancelada";
+                                break;
+                            case "pending_to_sign":
+                                estado= "Pendiente de adhesión";
+                                break;
+                        }
+
+                        worksheet.Cell(fila, 7).SetValue<string>(Convert.ToString(estado));
+                        fila++;//Avanzo a la sig fila
+                    }
+                    string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/AdheridosCard/"), "adheridosTarjetaCredito.xlsx");
+                    workbook.SaveAs(newFile);
+
+                    String mimeType = MimeMapping.GetMimeMapping(newFile);
+                    byte[] stream = System.IO.File.ReadAllBytes(newFile);
+
+                    return File(stream, mimeType);
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public ActionResult ExportarAdheridosCbu()
+        {
+            return View();
+        }
+
+        public FileContentResult ExportarExcelAdheridosCbu(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<AdhesionCbu> adheridos = new List<AdhesionCbu>();
+            try
+            {
+                adheridos = db.AdhesionCbu.Where(x => x.created_at >= fechaInicio && x.created_at <= fechaFin).ToList();
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("LGP");
+
+                    worksheet.Cell(1, 1).SetValue<string>(Convert.ToString("Nº Solicitud"));
+                    worksheet.Cell(1, 2).SetValue<string>(Convert.ToString("Nombre del titular del servicio"));
+                    worksheet.Cell(1, 3).SetValue<string>(Convert.ToString("Nombre del titular de la Tarjeta"));
+                    worksheet.Cell(1, 4).SetValue<string>(Convert.ToString("Banco"));
+                    worksheet.Cell(1, 5).SetValue<string>(Convert.ToString("Email"));
+                    worksheet.Cell(1, 6).SetValue<string>(Convert.ToString("Fecha Adhesión"));
+                    worksheet.Cell(1, 7).SetValue<string>(Convert.ToString("Estado Adhesión"));
+                    int fila = 2;//"fila" es la fila del excel en la estaria escribiendo y la inicializo en 1
+                    foreach (var adherido in adheridos)
+                    {
+                        //Escribo en la fila y en la columna que corresponde para cada valor
+                        worksheet.Cell(fila, 1).SetValue<string>(Convert.ToString(adherido.external_reference));
+                        worksheet.Cell(fila, 2).SetValue<string>(Convert.ToString(adherido.adhesion_holder_name));
+                        worksheet.Cell(fila, 3).SetValue<string>(Convert.ToString(adherido.cbu_holder_name));
+                        worksheet.Cell(fila, 4).SetValue<string>(Convert.ToString(adherido.bank));
+                        worksheet.Cell(fila, 5).SetValue<string>(Convert.ToString(adherido.email));
+                        worksheet.Cell(fila, 6).SetValue<string>(Convert.ToString(adherido.created_at.ToString("dd-MM-yyyy")));
+
+                        var estado = "";
+                        switch (adherido.state)
+                        {
+                            case "signed":
+                                estado = "Adherida";
+                                break;
+                            case "canceled":
+                                estado = "Cancelada";
+                                break;
+                            case "pending_to_sign":
+                                estado = "Pendiente de adhesión";
+                                break;
+                        }
+
+                        worksheet.Cell(fila, 7).SetValue<string>(Convert.ToString(estado));
+                        fila++;//Avanzo a la sig fila
+                    }
+                    string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/AdheridosCard/"), "adheridosTarjetaCredito.xlsx");
                     workbook.SaveAs(newFile);
 
                     String mimeType = MimeMapping.GetMimeMapping(newFile);

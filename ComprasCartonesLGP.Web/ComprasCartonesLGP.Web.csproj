@@ -401,6 +401,9 @@
     <Content Include="Areas\ContentAdmin\Data\Archivos\Clientes\cliente.xlsx" />
     <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarCompras.cshtml" />
     <Content Include="Areas\ContentAdmin\Data\Archivos\Compras\compra.xlsx" />
+    <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarAdheridosTarjeta.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarAdheridosCbu.cshtml" />
+    <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCard\adheridosTarjetaCredito.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
