@@ -595,24 +595,24 @@ namespace ComprasCartonesLGP.Web.Controllers
             return Json(localidades, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult VerificarCodigoUnicoAcceso()
-        {
-            return View();
-        }
+        //public ActionResult VerificarCodigoUnicoAcceso()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        public ActionResult VerificarCodigoUnicoAcceso(int? codigo)
-        {
-            if (codigo == 1996)
-            {
-                return RedirectToAction("Identificarse", "Clientes", new { codigo = codigo });
-            }
-            else
-            {
-                ViewBag.MensajeError = "Codigo invalido";
-                return View();
-            }
-        }
+        //[HttpPost]
+        //public ActionResult VerificarCodigoUnicoAcceso(int? codigo)
+        //{
+        //    if (codigo == 1996)
+        //    {
+        //        return RedirectToAction("Identificarse", "Clientes", new { codigo = codigo });
+        //    }
+        //    else
+        //    {
+        //        ViewBag.MensajeError = "Codigo invalido";
+        //        return View();
+        //    }
+        //}
 
         public ActionResult RemoverSession()
         {
@@ -620,7 +620,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             Session.Remove("ClienteContacto");
             Session.Remove("ClienteSexo");
 
-            return RedirectToAction("VerificarCodigoUnicoAcceso");
+            return RedirectToAction("Identificarse");
         }
     }
 }

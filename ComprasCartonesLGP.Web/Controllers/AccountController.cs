@@ -392,7 +392,7 @@ namespace ComprasCartonesLGP.Web.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("VerificarCodigoUnicoAcceso", "Clientes");
+            return RedirectToAction("Identificarse", "Clientes");
         }
 
         //
