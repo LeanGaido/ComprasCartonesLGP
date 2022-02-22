@@ -21,31 +21,24 @@ namespace ComprasCartonesLGP.Web.Controllers
 
         public ActionResult Identificarse(int? codigo)
         {
-            if(codigo != null)
+            ViewBag.Display = "none";
+            var habilitacion = db.Parametros.Where(x => x.Clave == "HabilitarBoton").FirstOrDefault();
+            if (habilitacion.Valor == "false")
             {
-                ViewBag.Display = "none";
-                var habilitacion = db.Parametros.Where(x => x.Clave == "HabilitarBoton").FirstOrDefault();
-                if (habilitacion.Valor == "false")
-                {
-                    var fecha = db.Parametros.Where(x => x.Clave == "FechaHabilitacion").FirstOrDefault();
-                    ViewBag.Fecha = fecha.Valor;
-                    ViewBag.Desabilitado = "disabled";
-                    ViewBag.Display = "";
-                }
-
-                var Cliente = ObtenerCliente();
-
-                if (Cliente != null)
-                {
-                    return RedirectToAction("ComprobarCompra", "Compras");
-                }
-
-                return View();
+                var fecha = db.Parametros.Where(x => x.Clave == "FechaHabilitacion").FirstOrDefault();
+                ViewBag.Fecha = fecha.Valor;
+                ViewBag.Desabilitado = "disabled";
+                ViewBag.Display = "";
             }
-            else
+
+            var Cliente = ObtenerCliente();
+
+            if (Cliente != null)
             {
-                return RedirectToAction("ErrorCodigoUnicoIncorrecto", "Clientes");
+                return RedirectToAction("ComprobarCompra", "Compras");
             }
+
+            return View();
         }
 
         [HttpPost]

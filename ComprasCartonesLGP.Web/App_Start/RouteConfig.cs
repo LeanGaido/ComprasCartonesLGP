@@ -16,7 +16,7 @@ namespace ComprasCartonesLGP.Web
             routes.MapRoute(
                 "Default",
                 "{controller}/{action}/{id}",
-                new { controller = "Clientes", action = "VerificarCodigoUnicoAcceso", id = UrlParameter.Optional },
+                new { controller = "Clientes", action = "Identificarse", id = UrlParameter.Optional },
                 new[] { "ComprasCartonesLGP.Web.Controllers" }
             );
         }
