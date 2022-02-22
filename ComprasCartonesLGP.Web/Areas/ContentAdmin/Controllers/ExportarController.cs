@@ -341,7 +341,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         worksheet.Cell(fila, 7).SetValue<string>(Convert.ToString(estado));
                         fila++;//Avanzo a la sig fila
                     }
-                    string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/AdheridosCard/"), "adheridosTarjetaCredito.xlsx");
+                    string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/AdheridosCbu/"), "adheridosCuentaBancaria.xlsx");
                     workbook.SaveAs(newFile);
 
                     String mimeType = MimeMapping.GetMimeMapping(newFile);
