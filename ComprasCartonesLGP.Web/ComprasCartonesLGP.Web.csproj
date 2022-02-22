@@ -398,6 +398,9 @@
     <Content Include="Areas\ContentAdmin\Views\Debito\EnvioSolicitudDebitoRechazoExitosoTarjetaCredito.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Exportar\Index.cshtml" />
     <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarClientes.cshtml" />
+    <Content Include="Areas\ContentAdmin\Data\Archivos\Clientes\cliente.xlsx" />
+    <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarCompras.cshtml" />
+    <Content Include="Areas\ContentAdmin\Data\Archivos\Compras\compra.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -466,7 +469,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\ContentAdmin\Data\Archivos\Clientes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

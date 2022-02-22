@@ -152,18 +152,18 @@
                     <td class="">
                         @item.FechaVenta.ToString("dd-MM-yyyy")
                     </td>
-                    @if (item.PagoCancelado == true)
+                    @if (item.PagoRealizdo == true)
                     {
                         <td class="">
-                            Cancelado
+                             Completo                            
                         </td>
                     }
                     else
                     {
-                        if (item.PagoRealizdo == true)
+                        if (item.PagoCancelado == true)
                         {
                             <td class="">
-                                Completo
+                                Anulado
                             </td>
                         }
                         else

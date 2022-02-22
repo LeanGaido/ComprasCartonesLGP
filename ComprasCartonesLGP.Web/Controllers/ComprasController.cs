@@ -31,12 +31,6 @@ namespace ComprasCartonesLGP.Web.Controllers
 
             if (Cliente != null)
             {
-                //var compra = db.ComprasDeSolicitudes.Include(t => t.Solicitud)
-                //                                    .Include(t => t.Solicitud.Promocion)
-                //                                    .Where(x => x.AsociadoID == Cliente.ID &&
-                //                                                x.Solicitud.Promocion.Anio == hoy.Year &&
-                //                                                x.PagoCancelado == false).ToList();
-
                 var compras = (from oCompras in db.ComprasDeSolicitudes
                                join oSolicitud in db.Solicitudes on oCompras.SolicitudID equals oSolicitud.ID
                                join oPromocion in db.Promociones on oSolicitud.PromocionId equals oPromocion.ID
@@ -1264,7 +1258,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                                                      where oPromocion.Anio == anio && oCompras.NroSolicitud == adherido.external_reference && oCompras.PagoCancelado == false
                                                      select oCompras).FirstOrDefault();
 
-                            solicitudComprada.PagoCancelado = true;
+                            if (solicitudComprada.PagoRealizdo != true)
+                            {
+                                solicitudComprada.PagoCancelado = true;
+                            }
                             solicitudComprada.FechaCancelado = DateTime.Now;
                             adherido.state = pwebhook.type;
                             adherido.canceled_at = DateTime.Now;
@@ -1297,7 +1294,10 @@ namespace ComprasCartonesLGP.Web.Controllers
                                                      where oPromocion.Anio == anio && oCompras.NroSolicitud == adherido.external_reference && oCompras.PagoCancelado == false
                                                      select oCompras).FirstOrDefault();
 
-                            solicitudComprada.PagoCancelado = true;
+                            if(solicitudComprada.PagoRealizdo != true)
+                            {
+                                solicitudComprada.PagoCancelado = true;
+                            }
                             solicitudComprada.FechaCancelado = DateTime.Now;
                             adherido.state = pwebhook.type;
                             adherido.canceled_at = DateTime.Now;

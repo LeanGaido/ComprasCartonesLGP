@@ -83,15 +83,15 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                 return HttpNotFound();
             }
             var asociado = db.Asociados.Where(x => x.ID == compra.AsociadoID).FirstOrDefault();
-            if(compra.PagoCancelado == true)
+            if(compra.PagoRealizdo == true)
             {
-                ViewBag.EstadoPago = "Cancelado";
+                ViewBag.EstadoPago = "Completo";
             }
             else
             {
-                if (compra.PagoRealizdo == true)
+                if (compra.PagoCancelado == true)
                 {
-                    ViewBag.EstadoPago = "Completo";
+                    ViewBag.EstadoPago = "Anulado";
                 }
                 else
                 {
