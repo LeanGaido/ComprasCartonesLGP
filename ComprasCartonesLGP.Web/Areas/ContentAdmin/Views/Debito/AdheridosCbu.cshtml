@@ -87,7 +87,7 @@
                 <td colspan="12">
                     <p></p>
                     <div align="center">
-                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                        @Html.PagedListPager(Model, page => Url.Action("AdheridosCbu",
                         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
                     </div>
                     <p></p>

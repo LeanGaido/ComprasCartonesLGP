@@ -11,6 +11,13 @@
         <li class="breadcrumb-item textoBlanco" aria-current="page"><h4>@ViewBag.Title</h4></li>
     </ol>
 </nav>
+<div class="container col-md-12 row">
+    <div class="col-md-12 form-control alert-danger">
+        <p>
+            <strong>ADVERTENCIA: Enviar las solicitudes de debito de los rechazos despues del 15 de cada mes y esperar al menos 5 días del rechazo</strong>
+        </p>
+    </div>
+</div>
 @using (Html.BeginForm())
 {
     <div class="container col-md-12 row">
@@ -89,7 +96,7 @@
                 <td colspan="12">
                     <p></p>
                     <div align="center">
-                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                        @Html.PagedListPager(Model, page => Url.Action("RechazosTarjetaCredito",
                         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
                     </div>
                     <p></p>
