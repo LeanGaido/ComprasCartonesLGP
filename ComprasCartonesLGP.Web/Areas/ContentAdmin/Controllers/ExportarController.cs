@@ -143,73 +143,76 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     {
                         var asociado = db.Asociados.Where(x => x.ID == compra.AsociadoID).FirstOrDefault();
 
-                        //Escribo en la fila y en la columna que corresponde para cada valor
-                        worksheet.Cell(fila, 1).SetValue<string>(Convert.ToString(compra.FechaVenta.ToString("dd-MM-yyyy")));
-                        worksheet.Cell(fila, 2).SetValue<string>(Convert.ToString(compra.NroSolicitud));               
-                        worksheet.Cell(fila, 3).SetValue<string>(Convert.ToString(asociado.NombreCompleto));
-                        worksheet.Cell(fila, 4).SetValue<string>(Convert.ToString(asociado.Dni));
-                        worksheet.Cell(fila, 5).SetValue<string>(Convert.ToString(asociado.Cuit));
-                        worksheet.Cell(fila, 6).SetValue<string>(Convert.ToString(asociado.FechaNacimiento.ToString("dd-MM-yyyy")));
+                        if(asociado != null)
+                        {
+                            //Escribo en la fila y en la columna que corresponde para cada valor
+                            worksheet.Cell(fila, 1).SetValue<string>(Convert.ToString(compra.FechaVenta.ToString("dd-MM-yyyy")));
+                            worksheet.Cell(fila, 2).SetValue<string>(Convert.ToString(compra.NroSolicitud));
+                            worksheet.Cell(fila, 3).SetValue<string>(Convert.ToString(asociado.NombreCompleto));
+                            worksheet.Cell(fila, 4).SetValue<string>(Convert.ToString(asociado.Dni));
+                            worksheet.Cell(fila, 5).SetValue<string>(Convert.ToString(asociado.Cuit));
+                            worksheet.Cell(fila, 6).SetValue<string>(Convert.ToString(asociado.FechaNacimiento.ToString("dd-MM-yyyy")));
 
-                        string sexo = "";
-                        if (asociado.Sexo == "1")
-                        {
-                            sexo = "Femenino";
-                        }
-                        if (asociado.Sexo == "2")
-                        {
-                            sexo = "Masculino";
-                        }
-
-                        worksheet.Cell(fila, 7).SetValue<string>(Convert.ToString(sexo));
-                        worksheet.Cell(fila, 8).SetValue<string>(Convert.ToString(asociado.Direccion));
-                        worksheet.Cell(fila, 9).SetValue<string>(Convert.ToString(asociado.Altura));
-                        worksheet.Cell(fila, 10).SetValue<string>(Convert.ToString(asociado.Torre));
-                        worksheet.Cell(fila, 11).SetValue<string>(Convert.ToString(asociado.Piso));
-                        worksheet.Cell(fila, 12).SetValue<string>(Convert.ToString(asociado.Dpto));
-                        worksheet.Cell(fila, 13).SetValue<string>(Convert.ToString(asociado.Localidad.Provincia.Descripcion));
-                        worksheet.Cell(fila, 14).SetValue<string>(Convert.ToString(asociado.Localidad.Descripcion));
-                        worksheet.Cell(fila, 15).SetValue<string>(Convert.ToString(asociado.AreaTelefonoFijo));
-                        worksheet.Cell(fila, 16).SetValue<string>(Convert.ToString(asociado.NumeroTelefonoFijo));
-                        worksheet.Cell(fila, 17).SetValue<string>(Convert.ToString(asociado.AreaCelular));
-                        worksheet.Cell(fila, 18).SetValue<string>(Convert.ToString(asociado.NumeroCelular));
-                        worksheet.Cell(fila, 19).SetValue<string>(Convert.ToString(asociado.Email));
-
-                        string tipoPago = "";
-                        if(compra.TipoDePagoID == 1)
-                        {
-                            tipoPago = "En un pago";
-                        }
-                        else
-                        {
-                            tipoPago = "Plan de cuotas";
-                        }
-
-                        worksheet.Cell(fila, 20).SetValue<string>(Convert.ToString(tipoPago));
-                        worksheet.Cell(fila, 21).SetValue<string>(Convert.ToString(compra.TipoDePago.Descripcion));
-
-                        var estadoPago = "";
-                        if (compra.PagoRealizdo == true)
-                        {
-                            estadoPago = "Completo";
-                        }
-                        else
-                        {
-                            if (compra.PagoCancelado == true)
+                            string sexo = "";
+                            if (asociado.Sexo == "1")
                             {
-                                estadoPago = "Anulado";
+                                sexo = "Femenino";
+                            }
+                            if (asociado.Sexo == "2")
+                            {
+                                sexo = "Masculino";
+                            }
+
+                            worksheet.Cell(fila, 7).SetValue<string>(Convert.ToString(sexo));
+                            worksheet.Cell(fila, 8).SetValue<string>(Convert.ToString(asociado.Direccion));
+                            worksheet.Cell(fila, 9).SetValue<string>(Convert.ToString(asociado.Altura));
+                            worksheet.Cell(fila, 10).SetValue<string>(Convert.ToString(asociado.Torre));
+                            worksheet.Cell(fila, 11).SetValue<string>(Convert.ToString(asociado.Piso));
+                            worksheet.Cell(fila, 12).SetValue<string>(Convert.ToString(asociado.Dpto));
+                            worksheet.Cell(fila, 13).SetValue<string>(Convert.ToString(asociado.Localidad.Provincia.Descripcion));
+                            worksheet.Cell(fila, 14).SetValue<string>(Convert.ToString(asociado.Localidad.Descripcion));
+                            worksheet.Cell(fila, 15).SetValue<string>(Convert.ToString(asociado.AreaTelefonoFijo));
+                            worksheet.Cell(fila, 16).SetValue<string>(Convert.ToString(asociado.NumeroTelefonoFijo));
+                            worksheet.Cell(fila, 17).SetValue<string>(Convert.ToString(asociado.AreaCelular));
+                            worksheet.Cell(fila, 18).SetValue<string>(Convert.ToString(asociado.NumeroCelular));
+                            worksheet.Cell(fila, 19).SetValue<string>(Convert.ToString(asociado.Email));
+
+                            string tipoPago = "";
+                            if (compra.TipoDePagoID == 1)
+                            {
+                                tipoPago = "En un pago";
                             }
                             else
                             {
-                                estadoPago = "Pendiente";
+                                tipoPago = "Plan de cuotas";
                             }
-                        }
 
-                        worksheet.Cell(fila, 22).SetValue<string>(Convert.ToString(estadoPago));
-                        worksheet.Cell(fila, 23).SetValue<string>(Convert.ToString(compra.CantCuotas));
-                        worksheet.Cell(fila, 24).SetValue<string>(Convert.ToString(compra.TotalAPagar));
-                        worksheet.Cell(fila, 25).SetValue<string>(Convert.ToString(compra.CodigoVendedor));
-                        fila++;//Avanzo a la sig fila
+                            worksheet.Cell(fila, 20).SetValue<string>(Convert.ToString(tipoPago));
+                            worksheet.Cell(fila, 21).SetValue<string>(Convert.ToString(compra.TipoDePago.Descripcion));
+
+                            var estadoPago = "";
+                            if (compra.PagoRealizdo == true)
+                            {
+                                estadoPago = "Completo";
+                            }
+                            else
+                            {
+                                if (compra.PagoCancelado == true)
+                                {
+                                    estadoPago = "Anulado";
+                                }
+                                else
+                                {
+                                    estadoPago = "Pendiente";
+                                }
+                            }
+
+                            worksheet.Cell(fila, 22).SetValue<string>(Convert.ToString(estadoPago));
+                            worksheet.Cell(fila, 23).SetValue<string>(Convert.ToString(compra.CantCuotas));
+                            worksheet.Cell(fila, 24).SetValue<string>(Convert.ToString(compra.TotalAPagar));
+                            worksheet.Cell(fila, 25).SetValue<string>(Convert.ToString(compra.CodigoVendedor));
+                            fila++;//Avanzo a la sig fila
+                        }                        
                     }
                     string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Compras/"), "compra.xlsx");
                     workbook.SaveAs(newFile);
