@@ -1024,6 +1024,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             ViewBag.BotonVisible = "none";
             ViewBag.AlertConfirmacionAdhesion = "none";
             ViewBag.AlertPagoContado = "none";
+            ViewBag.AlertDesahbilitarBajaAdeshion = "none";
             var detalle = db.ComprasDeSolicitudes.Where(x => x.ID == id).FirstOrDefault();
             if (detalle == null)
             {
@@ -1073,6 +1074,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                 if (detalle.PagoCancelado == false && adhesionCbu.state == "signed")
                 {
                     ViewBag.BotonVisible = "";
+                    var debitoPendiente = db.DebitosCBU.Where(x => x.adhesionId == adhesionCbu.id && x.state == "pending").FirstOrDefault();
+                    if(debitoPendiente != null)
+                    {
+                        ViewBag.AlertDesahbilitarBajaAdeshion = "";
+                        //ViewBag.DeshabilitarBtnAdhesion = "cursor: not-allowed; pointer-events: none;";
+                    }
                 }
                 if (detalle.PagoCancelado == false && adhesionCbu.state == "pending_to_sign")
                 {

@@ -19,7 +19,14 @@
             <b>Tipo de Pago:</b> @Model.TipoDePago.Descripcion. @ViewBag.DatosAdhesion
         </div>
         <div class="col-md-6" id="btnCancelarAdhesion" style="display: @ViewBag.BotonVisible">
-            <a data-toggle="modal" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion" href="#" class='btn btn-primary btn-block col-md-6'>CANCELAR ADHESIÓN</a>
+            <a data-toggle="modal" style="@ViewBag.DeshabilitarBtnAdhesion" data-target="#ModalCancelarAdhesion" data-tipopagoid="@ViewBag.TipoPagoId" data-idadhesion="@ViewBag.IdAdhesion" href="#" class='btn btn-primary btn-block col-md-6'>CANCELAR ADHESIÓN</a>
+        </div>
+        <br />
+        <div class="col-md-1"></div>
+        <div class="alert alert-danger col-md-10" style="display: @ViewBag.AlertDesahbilitarBajaAdeshion; margin-top: 5px">
+            <h6>
+                En este momento no se puede cancelar la adhesión al débito automático ya que tiene una solicitud de débito en proceso.
+            </h6>
         </div>
     </div>
     <div class="alert alert-danger" style="display: @ViewBag.AlertConfirmacionAdhesion">
