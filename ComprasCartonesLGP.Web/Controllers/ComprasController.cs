@@ -1078,7 +1078,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                     if(debitoPendiente != null)
                     {
                         ViewBag.AlertDesahbilitarBajaAdeshion = "";
-                        //ViewBag.DeshabilitarBtnAdhesion = "cursor: not-allowed; pointer-events: none;";
+                        ViewBag.DeshabilitarBtnAdhesion = "cursor: not-allowed; pointer-events: none;";
                     }
                 }
                 if (detalle.PagoCancelado == false && adhesionCbu.state == "pending_to_sign")
@@ -1096,6 +1096,12 @@ namespace ComprasCartonesLGP.Web.Controllers
                 if (detalle.PagoCancelado == false && adhesionCard.state == "signed")
                 {
                     ViewBag.BotonVisible = "";
+                    var debitoPendiente = db.DebitosCard.Where(x => x.adhesionId == adhesionCard.id && x.state == "pending").FirstOrDefault();
+                    if (debitoPendiente != null)
+                    {
+                        ViewBag.AlertDesahbilitarBajaAdeshion = "";
+                        ViewBag.DeshabilitarBtnAdhesion = "cursor: not-allowed; pointer-events: none;";
+                    }
                 }
                 if (detalle.PagoCancelado == false && adhesionCard.state == "pending_to_sign")
                 {
