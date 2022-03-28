@@ -379,34 +379,46 @@ namespace ComprasCartonesLGP.Web.Controllers
                         try
                         {
                             adhesion = GenerarAdhesionCbu(adhesionPago360);
-                            db.AdhesionCbu.Add(adhesion);
-                            db.SaveChanges();
-                            adhesionId = adhesion.id;
-
-                            var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
-                            float precioCuota = solicitud.Precio / CantCuotas;
-
-                            int mesInicio = 1;
-
-                            for (int mes = mesInicio; mes <= CantCuotas; mes++)
+                            if(adhesion.id != 0)
                             {
-                                CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
+                                db.AdhesionCbu.Add(adhesion);
+                                db.SaveChanges();
+                                adhesionId = adhesion.id;
 
-                                cuota.CompraDeSolicitudID = CartonComprado.ID;
-                                cuota.MesCuota = mes.ToString();
-                                cuota.AnioCuota = hoy.Year.ToString();
-                                cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
-                                cuota.PrimerPrecioCuota = precioCuota;
-                                cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
-                                cuota.SeguntoPrecioCuota = precioCuota;
+                                var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
+                                float precioCuota = solicitud.Precio / CantCuotas;
 
-                                db.CuotasCompraDeSolicitudes.Add(cuota);
+                                int mesInicio = 1;
+
+                                for (int mes = mesInicio; mes <= CantCuotas; mes++)
+                                {
+                                    CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
+
+                                    cuota.CompraDeSolicitudID = CartonComprado.ID;
+                                    cuota.MesCuota = mes.ToString();
+                                    cuota.AnioCuota = hoy.Year.ToString();
+                                    cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
+                                    cuota.PrimerPrecioCuota = precioCuota;
+                                    cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
+                                    cuota.SeguntoPrecioCuota = precioCuota;
+
+                                    db.CuotasCompraDeSolicitudes.Add(cuota);
+                                }
+
+                                db.ReservaDeSolicitudes.Remove(ReservaCarton);
+
+                                db.SaveChanges();
+                                return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
                             }
-
-                            db.ReservaDeSolicitudes.Remove(ReservaCarton);
-
-                            db.SaveChanges();
-                            return RedirectToAction("ResumenCompra", new { nroSolicitud = CartonComprado.NroSolicitud });
+                            else
+                            {
+                                if (CartonVendidoId != 0)
+                                {
+                                    db.ComprasDeSolicitudes.Remove(cartonVendido);
+                                    db.SaveChanges();
+                                }
+                                return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
+                            }
                         }
                         catch (Exception e)
                         {
@@ -436,34 +448,45 @@ namespace ComprasCartonesLGP.Web.Controllers
                         try
                         {
                             adhesion = GenerarAdhesionCard(adhesionPago360);
-                            db.AdhesionCard.Add(adhesion);
-
-                            db.SaveChanges();
-
-                            adhesionId = adhesion.id;
-
-                            int mesInicio = 1;
-
-                            var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
-                            float precioCuota = solicitud.Precio / CantCuotas;
-
-                            for (int mes = mesInicio; mes <= CantCuotas; mes++)
+                            if(adhesion.id != 0)
                             {
-                                CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
+                                db.AdhesionCard.Add(adhesion);
 
-                                cuota.CompraDeSolicitudID = CartonComprado.ID;
-                                cuota.MesCuota = mes.ToString();
-                                cuota.AnioCuota = hoy.Year.ToString();
-                                cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
-                                cuota.PrimerPrecioCuota = precioCuota;
-                                cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
-                                cuota.SeguntoPrecioCuota = precioCuota;
+                                db.SaveChanges();
 
-                                db.CuotasCompraDeSolicitudes.Add(cuota);
+                                adhesionId = adhesion.id;
+
+                                int mesInicio = 1;
+
+                                var solicitud = db.Solicitudes.Where(x => x.ID == CartonComprado.SolicitudID).FirstOrDefault();
+                                float precioCuota = solicitud.Precio / CantCuotas;
+
+                                for (int mes = mesInicio; mes <= CantCuotas; mes++)
+                                {
+                                    CuotaCompraDeSolicitud cuota = new CuotaCompraDeSolicitud();
+
+                                    cuota.CompraDeSolicitudID = CartonComprado.ID;
+                                    cuota.MesCuota = mes.ToString();
+                                    cuota.AnioCuota = hoy.Year.ToString();
+                                    cuota.PrimerVencimiento = new DateTime(2000, 1, 1);
+                                    cuota.PrimerPrecioCuota = precioCuota;
+                                    cuota.SeguntoVencimiento = new DateTime(2000, 1, 1);
+                                    cuota.SeguntoPrecioCuota = precioCuota;
+
+                                    db.CuotasCompraDeSolicitudes.Add(cuota);
+                                }
+                                db.ReservaDeSolicitudes.Remove(ReservaCarton);
+                                db.SaveChanges();
                             }
-
-                            db.ReservaDeSolicitudes.Remove(ReservaCarton);
-                            db.SaveChanges();
+                            else
+                            {
+                                if (CartonVendidoId != 0)
+                                {
+                                    db.ComprasDeSolicitudes.Remove(cartonVendido);
+                                    db.SaveChanges();
+                                }
+                                return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente más tarde" });
+                            }
                         }
                         catch (Exception e)
                         {
