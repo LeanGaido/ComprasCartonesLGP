@@ -332,16 +332,33 @@ namespace ComprasCartonesLGP.Web.Controllers
                         try
                         {
                             pago = Pagar(pago360);
+                            if(pago.ID != 0)
+                            {
+                                db.Pagos.Add(pago);
 
-                            db.Pagos.Add(pago);
+                                PagoUnaCuota.PagoID = pago.ID;
 
-                            PagoUnaCuota.PagoID = pago.ID;
+                                db.ReservaDeSolicitudes.Remove(ReservaCarton);
 
-                            db.ReservaDeSolicitudes.Remove(ReservaCarton);
+                                db.SaveChanges();
 
-                            db.SaveChanges();
+                                return Redirect(pago.checkout_url);
+                            }
+                            else
+                            {
+                                if (PagoCartonId != 0)
+                                {
+                                    db.CuotasCompraDeSolicitudes.Remove(PagoUnaCuota);
+                                    db.SaveChanges();
+                                }
 
-                            return Redirect(pago.checkout_url);
+                                if (CartonVendidoId != 0)
+                                {
+                                    db.ComprasDeSolicitudes.Remove(cartonVendido);
+                                    db.SaveChanges();
+                                }
+                                return RedirectToAction("ErrorCompra", new { MensajeError = "Ocurrio un Error, Por Favor intente mas tarde" });
+                            }                            
                         }
                         catch (Exception e)
                         {
