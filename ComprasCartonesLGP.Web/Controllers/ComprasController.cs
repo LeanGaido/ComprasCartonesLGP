@@ -923,8 +923,8 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 var cuota = new Cuotas();
 
-                if(c == 1 || c == 2 || c == 5 || c == 10)
-                {
+                //if(c == 1 || c == 2 || c == 5 || c == 10)
+                //{
                     if (c != 1)
                     {
                         cuota.key = c;
@@ -936,7 +936,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         cuota.value = c + " Cuota sin interés de $" + Math.Round(Carton.Precio, 2);
                     }
                     cuotas.Add(cuota);
-                }
+                //}
                 c++;
             }
             return cuotas;
