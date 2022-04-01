@@ -898,7 +898,7 @@ namespace ComprasCartonesLGP.Web.Controllers
             var Carton = db.Solicitudes.Where(x => x.ID == CartonId)
                                        .Include(t => t.Promocion).FirstOrDefault();
 
-            int Meses = 12, mesInicio = hoy.Month;
+            int Meses = 11, mesInicio = hoy.Month;
 
             if (mesInicio < 4)
             {
@@ -923,8 +923,8 @@ namespace ComprasCartonesLGP.Web.Controllers
             {
                 var cuota = new Cuotas();
 
-                //if(c == 1 || c == 2 || c == 5 || c == 10)
-                //{
+                if (c == 1 || c == 2 || c == 3 || c == 4 || c == 5 || c == 6)
+                {
                     if (c != 1)
                     {
                         cuota.key = c;
@@ -936,7 +936,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                         cuota.value = c + " Cuota sin interés de $" + Math.Round(Carton.Precio, 2);
                     }
                     cuotas.Add(cuota);
-                //}
+                }
                 c++;
             }
             return cuotas;
@@ -1557,7 +1557,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 Email email = new Email();
                 email.SendEmail(to,subject, emailBody);
 
-                string to2 = "promocionilusion@gmail.com";
+                string to2 = "lgpdevoto@hotmail.com";
                 string subject2 = "Rechazo débito automático. Asociado: " + rechazo.adhesion.adhesion_holder_name;
                 var emailBody2 = "Le informamos que el día " + created_at + " se rechazó el pago de la cuota " + cuota.MesCuota +
                     " del socio: " + rechazo.adhesion.adhesion_holder_name + " a través del debito automatico.Nº Solicitud: " + rechazo.adhesion.external_reference;
@@ -1578,7 +1578,7 @@ namespace ComprasCartonesLGP.Web.Controllers
                 Email email = new Email();
                 email.SendEmail(to, subject, emailBody);
 
-                string to2 = "promocionilusion@gmail.com";
+                string to2 = "lgpdevoto@hotmail.com";
                 string subject2 = "Rechazo débito automático. Asociado: " + rechazo.adhesion.adhesion_holder_name;
                 var emailBody2 = "Le informamos que el día " + created_at + " se rechazó el pago de la cuota " + cuota.MesCuota +
                     " del socio: " + rechazo.adhesion.adhesion_holder_name + " a través del debito automatico.Nº Solicitud: " + rechazo.adhesion.external_reference;
