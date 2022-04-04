@@ -51,6 +51,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     worksheet.Cell(1, 13).SetValue<string>(Convert.ToString("Email"));
                     worksheet.Cell(1, 14).SetValue<string>(Convert.ToString("Nº Celular"));
                     worksheet.Cell(1, 15).SetValue<string>(Convert.ToString("Fecha de alta"));
+                    worksheet.Cell(1, 16).SetValue<string>(Convert.ToString("ID"));
                     int fila = 2;//"fila" es la fila del excel en la estaria escribiendo y la inicializo en 1
                     foreach (var asociado in Asociados)
                     {                        
@@ -81,6 +82,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         worksheet.Cell(fila, 13).SetValue<string>(Convert.ToString(asociado.Email));
                         worksheet.Cell(fila, 14).SetValue<string>(Convert.ToString(asociado.AreaCelular + "-" + asociado.NumeroCelular));
                         worksheet.Cell(fila, 15).SetValue<string>(Convert.ToString(asociado.FechaAlta));
+                        worksheet.Cell(fila, 16).SetValue<string>(Convert.ToString(asociado.ID));
                         fila++;//Avanzo a la sig fila
                     }
                     string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Clientes/"),"cliente.xlsx");
