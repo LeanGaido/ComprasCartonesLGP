@@ -305,6 +305,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ExcelAsociados\UsuariosNoGuardados.xml" />
     <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -405,6 +406,7 @@
     <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarAdheridosCbu.cshtml" />
     <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCard\adheridosTarjetaCredito.xlsx" />
     <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCbu\adheridosCuentaBancaria.xlsx" />
+    <Content Include="Content\ExcelAsociados\Asociados.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
