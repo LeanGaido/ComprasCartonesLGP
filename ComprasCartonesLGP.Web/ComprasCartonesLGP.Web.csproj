@@ -407,6 +407,7 @@
     <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCard\adheridosTarjetaCredito.xlsx" />
     <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCbu\adheridosCuentaBancaria.xlsx" />
     <Content Include="Content\ExcelAsociados\Asociados.xlsx" />
+    <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarTxtVentas.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
