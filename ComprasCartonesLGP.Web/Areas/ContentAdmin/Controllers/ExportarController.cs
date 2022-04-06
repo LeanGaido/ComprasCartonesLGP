@@ -366,8 +366,8 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             var FechaInicioTxtVentas = db.Parametros.Where(x => x.Clave == "FechaInicioTxtVentas").FirstOrDefault();
             var FechaFinTxtVentas = db.Parametros.Where(x => x.Clave == "FechaFinTxtVentas").FirstOrDefault();
 
-            ViewBag.FechaInicioTxtVentas = FechaInicioTxtVentas.Valor;
-            ViewBag.FechaFinTxtVentas = FechaFinTxtVentas.Valor;
+            //ViewBag.FechaInicioTxtVentas = FechaInicioTxtVentas.Valor;
+            //ViewBag.FechaFinTxtVentas = FechaFinTxtVentas.Valor;
             return View();
         }
 
@@ -378,17 +378,20 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             compras = db.ComprasDeSolicitudes.Where(x => x.FechaVenta >= fechaInicio && x.FechaVenta <= fechaFin).ToList();
             try
             {
-                foreach(var compra in compras)
+                using (StreamWriter swi = new StreamWriter(@"C:\RutaArchivos\EscribeLineas2.txt"))
                 {
-                    string newRow = compra.ID.ToString();
-                    swi.WriteLine(newRow);
-                }
+                    foreach (var compra in compras)
+                    {
+                        string newRow = compra.ID.ToString();
+                        swi.WriteLine(newRow);
+                    }
+                }               
+                swi.Close();
             }
             catch (Exception e)
             {
                 return null;
             }
-            swi.Close();
 
             string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Compras/"), "compra.xlsx");
             //workbook.SaveAs(newFile);
