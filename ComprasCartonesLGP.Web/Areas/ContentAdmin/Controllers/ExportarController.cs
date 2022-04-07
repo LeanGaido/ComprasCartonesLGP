@@ -4,7 +4,9 @@ using ComprasCartonesLGP.Entities;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -366,40 +368,71 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
             var FechaInicioTxtVentas = db.Parametros.Where(x => x.Clave == "FechaInicioTxtVentas").FirstOrDefault();
             var FechaFinTxtVentas = db.Parametros.Where(x => x.Clave == "FechaFinTxtVentas").FirstOrDefault();
 
-            //ViewBag.FechaInicioTxtVentas = FechaInicioTxtVentas.Valor;
-            //ViewBag.FechaFinTxtVentas = FechaFinTxtVentas.Valor;
+            ViewBag.FechaInicioTxtVentas = FechaInicioTxtVentas.Valor;
+            ViewBag.FechaFinTxtVentas = FechaFinTxtVentas.Valor;
             return View();
         }
 
         public FileContentResult ExportarTxtVentasSolicitudes(DateTime fechaInicio, DateTime fechaFin)
         {
             List<CompraDeSolicitud> compras = new List<CompraDeSolicitud>();
-            StreamWriter swi = null;
             compras = db.ComprasDeSolicitudes.Where(x => x.FechaVenta >= fechaInicio && x.FechaVenta <= fechaFin).ToList();
             try
             {
-                using (StreamWriter swi = new StreamWriter(@"C:\RutaArchivos\EscribeLineas2.txt"))
+                string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Compras/"), "ventas.txt");
+                using (StreamWriter swi = new StreamWriter(newFile))
                 {
-                    foreach (var compra in compras)
+                    foreach (var com in compras)
                     {
-                        string newRow = compra.ID.ToString();
+                        var compra = db.ComprasDeSolicitudes.FirstOrDefault(x => x.ID == com.ID);
+
+                        var nombreCompleto = compra.Asociado.NombreCompleto;
+
+                        string newRow = "00000" + ";" + compra.Asociado.NombreCompleto + ";" + compra.Asociado.FechaNacimiento.ToString("yyyy-MM-dd") +
+                            ";" + "" + ";" + compra.Asociado.Direccion + ";" + compra.Asociado.Altura + ";" + compra.Asociado.Torre + ";" +
+                            compra.Asociado.Piso + ";" + compra.Asociado.Dpto + ";" + compra.Asociado.Barrio + ";" + compra.Asociado.LocalidadID +
+                            ";" + compra.Asociado.Localidad.ProvinciaID + ";" + compra.Asociado.AreaTelefonoFijo + "" + compra.Asociado.NumeroTelefonoFijo + ";" +
+                            compra.Asociado.Email + ";" + compra.Asociado.Localidad.Descripcion + ";" + compra.Asociado.TipoDeAsociado + ";" +
+                            compra.Asociado.Sexo + ";" + compra.Asociado.Dni + ";" + "1" + ";" + compra.Asociado.Cuit + ";" + "" + ";" + 
+                            "0" + ";" + compra.Asociado.FechaAlta.ToString("yyyy/MM/dd") + ";" + compra.Asociado.AreaCelular + ";" + 
+                            compra.Asociado.NumeroCelular + ";" + compra.Asociado.AreaCelularAux + ";" + compra.Asociado.NumeroCelularAux + ";" +
+                            compra.NroSolicitud + ";" + compra.FechaVenta.ToString("yyyy/MM/dd") + ";" + "1" + compra.CodigoVendedor + ";" + "00";
                         swi.WriteLine(newRow);
                     }
-                }               
-                swi.Close();
+                    swi.Close();
+                }
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                    {
+                        string fileName = "ventas.txt";
+                        var fileRespuesta = archive.CreateEntryFromFile(newFile, fileName);
+                    }
+
+                    var FechaInicioTxtVentas = db.Parametros.Where(x => x.Clave == "FechaInicioTxtVentas").FirstOrDefault();
+                    var FechaFinTxtVentas = db.Parametros.Where(x => x.Clave == "FechaFinTxtVentas").FirstOrDefault();
+
+                    FechaInicioTxtVentas.Valor = fechaInicio.ToString("dd/MM/yyyy");
+                    FechaFinTxtVentas.Valor = fechaFin.ToString("dd/MM/yyyy");
+                    db.Entry(FechaInicioTxtVentas).State = EntityState.Modified;
+                    db.Entry(FechaFinTxtVentas).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return File(memoryStream.ToArray(), "application/zip", "txtSisLocal.zip");
+                }
             }
             catch (Exception e)
             {
                 return null;
             }
 
-            string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Compras/"), "compra.xlsx");
             //workbook.SaveAs(newFile);
 
-            String mimeType = MimeMapping.GetMimeMapping(newFile);
-            byte[] stream = System.IO.File.ReadAllBytes(newFile);
+            //String mimeType = MimeMapping.GetMimeMapping(newFile);
+            //byte[] stream = System.IO.File.ReadAllBytes(newFile);
 
-            return File(stream, mimeType);
+            //return File(stream, mimeType);
         }
     }
 }
