@@ -387,6 +387,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         var asociado = db.Asociados.Where(x => x.ID == compra.AsociadoID).SingleOrDefault();
                         if(asociado != null)
                         {
+                            var nroAsociado = asociado.NumeroDeAsociado;
                             var nombreAsociado = asociado.Nombre + " " + asociado.Apellido;
                             var direccionAsociado = asociado.Direccion;
                             var alturaDireccion = asociado.Altura.ToString();
@@ -478,7 +479,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                 }
                             }
 
-                            string newRow = "00000" + ";" + nombreAsociado + ";" + asociado.FechaNacimiento.ToString("yyyy-MM-dd") +
+                            string newRow = nroAsociado + ";" + nombreAsociado + ";" + asociado.FechaNacimiento.ToString("yyyy-MM-dd") +
                                             ";" + "" + ";" + direccionAsociado + ";" + alturaDireccion + ";" + asociado.Torre + ";" +
                                             asociado.Piso + ";" + asociado.Dpto + ";" + asociado.Barrio + ";" + asociado.LocalidadID +
                                             ";" + asociado.Localidad.ProvinciaID + ";" + telefonoFijo + ";" +

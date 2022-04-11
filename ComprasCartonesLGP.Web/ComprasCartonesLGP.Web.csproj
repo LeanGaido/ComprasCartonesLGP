@@ -221,6 +221,7 @@
     <Compile Include="Areas\ContentAdmin\Controllers\DebitoController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\ExportarController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\ContentAdmin\Controllers\ImportarController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\PromocionesController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\SolicitudesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -418,6 +419,9 @@
     <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCbu\adheridosCuentaBancaria.xlsx" />
     <Content Include="Content\ExcelAsociados\Asociados.xlsx" />
     <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarTxtVentas.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Importar\Index.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Importar\ImportarLocalidades.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Importar\ImportadoExitoso.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
