@@ -79,7 +79,17 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
       <Private>True</Private>
@@ -211,6 +221,7 @@
     <Compile Include="Areas\ContentAdmin\Controllers\DebitoController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\ExportarController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\ContentAdmin\Controllers\ImportarController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\PromocionesController.cs" />
     <Compile Include="Areas\ContentAdmin\Controllers\SolicitudesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -407,6 +418,10 @@
     <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCard\adheridosTarjetaCredito.xlsx" />
     <Content Include="Areas\ContentAdmin\Data\Archivos\AdheridosCbu\adheridosCuentaBancaria.xlsx" />
     <Content Include="Content\ExcelAsociados\Asociados.xlsx" />
+    <Content Include="Areas\ContentAdmin\Views\Exportar\ExportarTxtVentas.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Importar\Index.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Importar\ImportarLocalidades.cshtml" />
+    <Content Include="Areas\ContentAdmin\Views\Importar\ImportadoExitoso.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

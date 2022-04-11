@@ -4,7 +4,9 @@ using ComprasCartonesLGP.Entities;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -51,7 +53,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     worksheet.Cell(1, 13).SetValue<string>(Convert.ToString("Email"));
                     worksheet.Cell(1, 14).SetValue<string>(Convert.ToString("Nº Celular"));
                     worksheet.Cell(1, 15).SetValue<string>(Convert.ToString("Fecha de alta"));
-                    worksheet.Cell(1, 16).SetValue<string>(Convert.ToString("ID"));
+                    //worksheet.Cell(1, 16).SetValue<string>(Convert.ToString("ID"));
                     int fila = 2;//"fila" es la fila del excel en la estaria escribiendo y la inicializo en 1
                     foreach (var asociado in Asociados)
                     {                        
@@ -82,7 +84,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         worksheet.Cell(fila, 13).SetValue<string>(Convert.ToString(asociado.Email));
                         worksheet.Cell(fila, 14).SetValue<string>(Convert.ToString(asociado.AreaCelular + "-" + asociado.NumeroCelular));
                         worksheet.Cell(fila, 15).SetValue<string>(Convert.ToString(asociado.FechaAlta));
-                        worksheet.Cell(fila, 16).SetValue<string>(Convert.ToString(asociado.ID));
+                        //worksheet.Cell(fila, 16).SetValue<string>(Convert.ToString(asociado.ID));
                         fila++;//Avanzo a la sig fila
                     }
                     string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Clientes/"),"cliente.xlsx");
@@ -353,6 +355,163 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                     byte[] stream = System.IO.File.ReadAllBytes(newFile);
 
                     return File(stream, mimeType);
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public ActionResult ExportarTxtVentas()
+        {
+            var FechaInicioTxtVentas = db.Parametros.Where(x => x.Clave == "FechaInicioTxtVentas").FirstOrDefault();
+            var FechaFinTxtVentas = db.Parametros.Where(x => x.Clave == "FechaFinTxtVentas").FirstOrDefault();
+
+            ViewBag.FechaInicioTxtVentas = FechaInicioTxtVentas.Valor;
+            ViewBag.FechaFinTxtVentas = FechaFinTxtVentas.Valor;
+            return View();
+        }
+
+        public FileContentResult ExportarTxtVentasSolicitudes(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<CompraDeSolicitud> compras = new List<CompraDeSolicitud>();
+            compras = db.ComprasDeSolicitudes.Where(x => x.FechaVenta >= fechaInicio && x.FechaVenta <= fechaFin).ToList();
+            try
+            {
+                string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Compras/"), "ventas.txt");
+                using (StreamWriter swi = new StreamWriter(newFile))
+                {
+                    foreach (var compra in compras)
+                    {
+                        var asociado = db.Asociados.Where(x => x.ID == compra.AsociadoID).SingleOrDefault();
+                        if(asociado != null)
+                        {
+                            var nroAsociado = asociado.NumeroDeAsociado;
+                            var nombreAsociado = asociado.Nombre + " " + asociado.Apellido;
+                            var direccionAsociado = asociado.Direccion;
+                            var alturaDireccion = asociado.Altura.ToString();
+                            var telefonoFijo = asociado.AreaTelefonoFijo + "" + asociado.NumeroTelefonoFijo;
+                            var email = asociado.Email;
+                            var localidad = asociado.Localidad.Descripcion;
+                            var dni = asociado.Dni;
+                            var cuit = asociado.Cuit;
+                            var codigoVendedor = compra.CodigoVendedor.ToString();
+
+                            if (!string.IsNullOrEmpty(asociado.Nombre) && !string.IsNullOrEmpty(asociado.Apellido))
+                            {
+                                nombreAsociado = nombreAsociado.Trim();
+                                if (nombreAsociado.Length > 30)
+                                {
+                                    nombreAsociado = nombreAsociado.Substring(0, 30);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(direccionAsociado))
+                            {
+                                direccionAsociado = direccionAsociado.Trim();
+                                if (direccionAsociado.Length > 25)
+                                {
+                                    direccionAsociado = direccionAsociado.Substring(0, 25);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(alturaDireccion))
+                            {
+                                alturaDireccion = alturaDireccion.Trim();
+                                if (alturaDireccion.Length > 5)
+                                {
+                                    alturaDireccion = alturaDireccion.Substring(0, 5);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(telefonoFijo))
+                            {
+                                telefonoFijo = telefonoFijo.Trim();
+                                if (telefonoFijo.Length > 30)
+                                {
+                                    telefonoFijo = telefonoFijo.Substring(0, 30);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(email))
+                            {
+                                email = email.Trim();
+                                if (email.Length > 40)
+                                {
+                                    email = email.Substring(0, 40);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(localidad))
+                            {
+                                localidad = localidad.Trim();
+                                if (localidad.Length > 25)
+                                {
+                                    localidad = localidad.Substring(0, 25);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(dni))
+                            {
+                                dni = dni.Trim();
+                                if (dni.Length > 10)
+                                {
+                                    dni = dni.Substring(0, 10);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(cuit))
+                            {
+                                cuit = cuit.Trim();
+                                if (cuit.Length > 11)
+                                {
+                                    cuit = cuit.Substring(0, 11);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(codigoVendedor))
+                            {
+                                codigoVendedor = codigoVendedor.Trim();
+                                if (codigoVendedor.Length > 3)
+                                {
+                                    codigoVendedor = codigoVendedor.Substring(0, 3);
+                                }
+                            }
+
+                            string newRow = nroAsociado + ";" + nombreAsociado + ";" + asociado.FechaNacimiento.ToString("yyyy-MM-dd") +
+                                            ";" + "" + ";" + direccionAsociado + ";" + alturaDireccion + ";" + asociado.Torre + ";" +
+                                            asociado.Piso + ";" + asociado.Dpto + ";" + asociado.Barrio + ";" + asociado.LocalidadID +
+                                            ";" + asociado.Localidad.ProvinciaID + ";" + telefonoFijo + ";" +
+                                            email + ";" + localidad + ";" + asociado.TipoDeAsociado + ";" +
+                                            asociado.Sexo + ";" + dni + ";" + "1" + ";" + cuit + ";" + "" + ";" +
+                                            "0" + ";" + asociado.FechaAlta.ToString("yyyy/MM/dd") + ";" + asociado.AreaCelular + ";" +
+                                            asociado.NumeroCelular + ";" + asociado.AreaCelularAux + ";" + asociado.NumeroCelularAux + ";" +
+                                            compra.NroSolicitud + ";" + compra.FechaVenta.ToString("yyyy/MM/dd") + ";" + "1" + ";" + codigoVendedor + ";" + "00";
+                            swi.WriteLine(newRow);
+                        }                       
+                    }
+                    swi.Close();
+                }
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                    {
+                        string fileName = "ventas.txt";
+                        var fileRespuesta = archive.CreateEntryFromFile(newFile, fileName);
+                    }
+
+                    var FechaInicioTxtVentas = db.Parametros.Where(x => x.Clave == "FechaInicioTxtVentas").FirstOrDefault();
+                    var FechaFinTxtVentas = db.Parametros.Where(x => x.Clave == "FechaFinTxtVentas").FirstOrDefault();
+
+                    FechaInicioTxtVentas.Valor = fechaInicio.ToString("dd/MM/yyyy");
+                    FechaFinTxtVentas.Valor = fechaFin.ToString("dd/MM/yyyy");
+                    db.Entry(FechaInicioTxtVentas).State = EntityState.Modified;
+                    db.Entry(FechaFinTxtVentas).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return File(memoryStream.ToArray(), "application/zip", "txtSisLocal.zip");
                 }
             }
             catch (Exception e)

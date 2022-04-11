@@ -128,6 +128,13 @@ namespace ComprasCartonesLGP.Web.Controllers
                 return RedirectToAction("ElegirCarton", new { MensajeError = "El Carton esta Reservado o Comprado" });
             }
 
+            if(CodigoVendedor.Length > 3)
+            {
+                ViewBag.MensajeError = "El codigo del vendedor no puede tener más de 3 caracteres";
+
+                return RedirectToAction("ElegirCarton", new { MensajeError = "El codigo del vendedor no puede tener más de 3 caracteres" });
+            }
+
             ReservaDeSolicitud cartonReservado = db.ReservaDeSolicitudes.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
 
             if (cartonReservado == null) cartonReservado = new ReservaDeSolicitud();
