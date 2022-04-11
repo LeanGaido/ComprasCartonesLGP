@@ -375,6 +375,15 @@ namespace ComprasCartonesLGP.Web.Controllers
                 string area = Session["ClienteArea"].ToString();
                 string numero = Session["ClienteNumero"].ToString();
 
+                Cuil cuit = new Cuil(asociado.Cuit);
+                if (!cuit.EsValido)
+                {
+                    return RedirectToAction("ErrorRegistro", new { MensajeError = "El Cuit no es valido" });
+
+                    //ModelState.AddModelError("Cuil", "El Cuil no es valido");
+                    //return View(model);
+                }
+
                 var cliente = db.Asociados.Where(x => x.Dni == dni && x.Sexo == sexo).FirstOrDefault();
                 if (cliente != null)
                 {
