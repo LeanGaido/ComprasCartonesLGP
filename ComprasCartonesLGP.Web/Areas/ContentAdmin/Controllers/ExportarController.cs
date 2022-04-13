@@ -388,7 +388,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                         if(asociado != null)
                         {
                             var nroAsociado = asociado.NumeroDeAsociado;
-                            var nombreAsociado = asociado.Nombre + " " + asociado.Apellido;
+                            var nombreAsociado = asociado.Apellido.ToUpper() + " " + asociado.Nombre.ToUpper();
                             var direccionAsociado = asociado.Direccion;
                             var alturaDireccion = asociado.Altura.ToString();
                             var telefonoFijo = asociado.AreaTelefonoFijo + "" + asociado.NumeroTelefonoFijo;
