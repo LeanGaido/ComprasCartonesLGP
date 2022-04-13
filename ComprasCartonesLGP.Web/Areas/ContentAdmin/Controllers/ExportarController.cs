@@ -394,9 +394,11 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                             var telefonoFijo = asociado.AreaTelefonoFijo + "" + asociado.NumeroTelefonoFijo;
                             var email = asociado.Email;
                             var localidad = asociado.Localidad.Descripcion;
+                            var provincia = asociado.Localidad.ProvinciaID.ToString();
                             var dni = asociado.Dni;
                             var cuit = asociado.Cuit;
                             var codigoVendedor = compra.CodigoVendedor.ToString();
+                            var NroSolicitud = compra.NroSolicitud.ToString();
 
                             if (!string.IsNullOrEmpty(asociado.Nombre) && !string.IsNullOrEmpty(asociado.Apellido))
                             {
@@ -452,6 +454,15 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                 }
                             }
 
+                            if (!string.IsNullOrEmpty(provincia))
+                            {
+                                provincia = provincia.Trim();
+                                if (provincia.Length == 1)
+                                {
+                                    provincia = "0" + provincia;
+                                }
+                            }
+
                             if (!string.IsNullOrEmpty(dni))
                             {
                                 dni = dni.Trim();
@@ -477,17 +488,36 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                 {
                                     codigoVendedor = codigoVendedor.Substring(0, 3);
                                 }
+                                else if(codigoVendedor.Length < 3)
+                                {
+                                    for (int i = 0; i <= 3 - codigoVendedor.Length; i++)
+                                    {
+                                        codigoVendedor = "0" + codigoVendedor;
+                                    }
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(NroSolicitud))
+                            {
+                                NroSolicitud = NroSolicitud.Trim();
+                                if(NroSolicitud.Length < 5)
+                                {
+                                    for(int i = 0; i <= 5 - NroSolicitud.Length; i++)
+                                    {
+                                        NroSolicitud = "0" + NroSolicitud;
+                                    }
+                                }
                             }
 
                             string newRow = nroAsociado + ";" + nombreAsociado + ";" + asociado.FechaNacimiento.ToString("yyyy-MM-dd") +
                                             ";" + "" + ";" + direccionAsociado + ";" + alturaDireccion + ";" + asociado.Torre + ";" +
                                             asociado.Piso + ";" + asociado.Dpto + ";" + asociado.Barrio + ";" + asociado.LocalidadID +
-                                            ";" + asociado.Localidad.ProvinciaID + ";" + telefonoFijo + ";" +
+                                            ";" + provincia + ";" + telefonoFijo + ";" +
                                             email + ";" + localidad + ";" + asociado.TipoDeAsociado + ";" +
                                             asociado.Sexo + ";" + dni + ";" + "1" + ";" + cuit + ";" + "" + ";" +
-                                            "0" + ";" + asociado.FechaAlta.ToString("yyyy/MM/dd") + ";" + asociado.AreaCelular + ";" +
+                                            "0" + ";" + asociado.FechaAlta.ToString("yyyy-MM-dd") + ";" + asociado.AreaCelular + ";" +
                                             asociado.NumeroCelular + ";" + asociado.AreaCelularAux + ";" + asociado.NumeroCelularAux + ";" +
-                                            compra.NroSolicitud + ";" + compra.FechaVenta.ToString("yyyy/MM/dd") + ";" + "1" + ";" + codigoVendedor + ";" + "00";
+                                            NroSolicitud + ";" + compra.FechaVenta.ToString("yyyy-MM-dd") + ";" + "1" + ";" + codigoVendedor + ";" + "00";
                             swi.WriteLine(newRow);
                         }                       
                     }
