@@ -486,7 +486,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                 codigoVendedor = codigoVendedor.Trim();
                                 if (codigoVendedor.Length > 3)
                                 {
-                                    codigoVendedor = codigoVendedor.Substring(0, 3);
+                                    codigoVendedor = "125";
                                 }
                                 else if(codigoVendedor.Length < 3)
                                 {
