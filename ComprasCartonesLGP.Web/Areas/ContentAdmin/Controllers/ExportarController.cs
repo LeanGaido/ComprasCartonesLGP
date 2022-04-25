@@ -399,6 +399,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                             var cuit = asociado.Cuit;
                             var codigoVendedor = compra.CodigoVendedor.ToString();
                             var NroSolicitud = compra.NroSolicitud.ToString();
+                            var barrio = asociado.Barrio;
 
                             if (!string.IsNullOrEmpty(asociado.Nombre) && !string.IsNullOrEmpty(asociado.Apellido))
                             {
@@ -411,7 +412,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
 
                             if (!string.IsNullOrEmpty(direccionAsociado))
                             {
-                                direccionAsociado = direccionAsociado.Trim();
+                                direccionAsociado = direccionAsociado.Trim().ToUpper();
                                 if (direccionAsociado.Length > 25)
                                 {
                                     direccionAsociado = direccionAsociado.Substring(0, 25);
@@ -509,15 +510,20 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
                                 }
                             }
 
+                            if (!string.IsNullOrEmpty(barrio))
+                            {
+                                barrio = barrio.ToUpper();
+                            }
+
                             string newRow = nroAsociado + ";" + nombreAsociado + ";" + asociado.FechaNacimiento.ToString("yyyy-MM-dd") +
                                             ";" + "" + ";" + direccionAsociado + ";" + alturaDireccion + ";" + asociado.Torre + ";" +
-                                            asociado.Piso + ";" + asociado.Dpto + ";" + asociado.Barrio + ";" + asociado.LocalidadID +
+                                            asociado.Piso + ";" + asociado.Dpto + ";" + barrio + ";" + asociado.LocalidadID +
                                             ";" + provincia + ";" + telefonoFijo + ";" +
                                             email + ";" + localidad + ";" + asociado.TipoDeAsociado + ";" +
                                             asociado.Sexo + ";" + dni + ";" + "1" + ";" + cuit + ";" + "" + ";" +
                                             "0" + ";" + asociado.FechaAlta.ToString("yyyy-MM-dd") + ";" + asociado.AreaCelular + ";" +
                                             asociado.NumeroCelular + ";" + asociado.AreaCelularAux + ";" + asociado.NumeroCelularAux + ";" +
-                                            NroSolicitud + ";" + compra.FechaVenta.ToString("yyyy-MM-dd") + ";" + "1" + ";" + codigoVendedor + ";" + "00";
+                                            NroSolicitud + ";" + compra.FechaVenta.ToString("yyyy-MM-dd") + ";" + "1" + ";" + codigoVendedor + ";" + "10";
                             swi.WriteLine(newRow);
                         }                       
                     }
