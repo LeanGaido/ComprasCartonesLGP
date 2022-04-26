@@ -376,7 +376,7 @@ namespace ComprasCartonesLGP.Web.Areas.ContentAdmin.Controllers
         public FileContentResult ExportarTxtVentasSolicitudes(DateTime fechaInicio, DateTime fechaFin)
         {
             List<CompraDeSolicitud> compras = new List<CompraDeSolicitud>();
-            compras = db.ComprasDeSolicitudes.Where(x => x.FechaVenta >= fechaInicio && x.FechaVenta <= fechaFin).ToList();
+            compras = db.ComprasDeSolicitudes.Where(x => x.FechaVenta >= fechaInicio && x.FechaVenta <= fechaFin && x.PagoCancelado == false).ToList();
             try
             {
                 string newFile = Path.Combine(Server.MapPath("~/Areas/ContentAdmin/Data/Archivos/Compras/"), "ventas.txt");
