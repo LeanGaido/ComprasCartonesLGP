@@ -14,18 +14,19 @@
         <div id="sum_box" class="row mbl">
             <div class="col-lg-12 col-sm-12 col-md-12">
                 <div align="center">
+                    <h3 id="TextoEnviando"></h3>
                     @using (Html.BeginForm())
                     {
                         @Html.AntiForgeryToken()
-                        <h3>¿Enviar solicitud de débito automático?</h3>
+                        <h3 id="title">¿Enviar solicitud de débito automático?</h3>
                         <p>
-                            <a href="@Url.Action("DebitarCbu","Debito")" type="submit" class="btn btn-primary">SÍ</a>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("AdheridosTarjetaCredito","Debito")" class="btn btn-primary">NO</a>
+                            <a @*href="@Url.Action("DebitarCbu","Debito")"*@ href="#" id="submitButton" type="submit" class="btn btn-primary">SÍ</a>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("AdheridosTarjetaCredito","Debito")" id="volverButton" class="btn btn-primary">NO</a>
                         </p>
                     }
                 </div>
                 &nbsp;<br>
             </div>
-            <div class="col-lg-12 col-sm-12 col-md-12">
+            <div class="col-lg-12 col-sm-12 col-md-12" id="fechaSolicitud">
                 <div align="center">
                     <h5>Última solicitud enviada: @ViewBag.UltimaSolicitud</h5>
                 </div>
@@ -34,3 +35,13 @@
         </div>
     </div>
 </div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $("#submitButton").click(function () {
+        $("#submitButton").remove();
+        $("#volverButton").remove();
+        $("#title").remove();
+        $("#fechaSolicitud").remove();
+        $("#TextoEnviando").text('Enviando las solicitudes de débito. Aguarde unos instantes.');
+    });
+</script>
